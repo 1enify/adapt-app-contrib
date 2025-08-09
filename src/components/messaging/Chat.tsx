@@ -52,7 +52,7 @@ import {ExtendedColor, Invite} from "../../types/guild";
 import GuildIcon from "../guilds/GuildIcon";
 import UserPlus from "../icons/svg/UserPlus";
 import {joinGuild} from "../../pages/guilds/Invite";
-import {useNavigate} from "@solidjs/router";
+import {useNavigate, useParams} from "@solidjs/router";
 import BookmarkFilled from "../icons/svg/BookmarkFilled";
 import {UserFlags} from "../../api/Bitflags";
 import {ReactiveSet} from "@solid-primitives/set";
@@ -64,6 +64,9 @@ import EllipsisVertical from "../icons/svg/EllipsisVertical";
 import FaceSmile from "../icons/svg/FaceSmile";
 import Reply from "../icons/svg/Reply";
 import EmojiPicker from "./EmojiPicker";
+import Spinner from "../icons/svg/Spinner";
+import Link from "../icons/svg/Link";
+import ArrowDown from "../icons/svg/ArrowDown";
 void tooltip
 
 const CONVEY = 'https://convey.adapt.chat'
@@ -431,6 +434,15 @@ function MessageContextMenu(
 ) {
   const api = getApi()!
   const {showModal} = useModal()
+  const navigate = useNavigate()
+
+  const getMessageLink = () => {
+    if (guildId) {
+      return `https://app.adapt.chat/guilds/${guildId}/${message.channel_id}/${message.id}`
+    } else {
+      return `https://app.adapt.chat/dms/${message.channel_id}/${message.id}`
+    }
+  }
 
   return (
     <ContextMenu>
@@ -457,6 +469,18 @@ function MessageContextMenu(
         icon={Code}
         label="Copy Message ID"
         onClick={() => navigator.clipboard.writeText(message.id.toString())}
+      />
+      <ContextMenuButton
+        icon={Link}
+        label="Copy Message Link"
+        onClick={() => toast.promise(
+          navigator.clipboard.writeText(getMessageLink()),
+          {
+            loading: "Copying message link...",
+            success: "Copied to your clipboard!",
+            error: "Failed to copy message link, try again later.",
+          }
+        )}
       />
       <Show when={editing != null && message.author_id == api.cache!.clientId}>
         <ContextMenuButton
@@ -640,6 +664,9 @@ function QuickActions(props: { message: Message, offset?: number, guildId?: bigi
 export default function Chat(props: { channelId: bigint, guildId?: bigint, title: string, startMessage: JSX.Element }) {
   const api = getApi()!
   const contextMenu = useContextMenu()!
+  const params = useParams()
+  const navigate = useNavigate()
+  const messageId = createMemo(() => params.messageId ? BigInt(params.messageId) : null)
 
   const [messageInputFocused, setMessageInputFocused] = createSignal(false)
   const [messageInputFocusTimeout, setMessageInputFocusTimeout] = createSignal<number | null>(null)
@@ -650,6 +677,13 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
   const [emojiPickerVisible, setEmojiPickerVisible] = createSignal(false)
   let emojiPickerRef: HTMLDivElement | undefined
   let emojiToggleRef: HTMLButtonElement | undefined
+  let messageInputRef: HTMLDivElement | undefined
+  let messageAreaRef: HTMLDivElement | undefined
+
+  const [showViewNewerMessages, setShowViewNewerMessages] = createSignal(false);
+  const [scrollingToBottom, setScrollingToBottom] = createSignal(false);
+  const [messageContextDistance, setMessageContextDistance] = createSignal(0);
+  const [lastScrollPosition, setLastScrollPosition] = createSignal(0);
 
   const updateSendable = () => setSendable(!!messageInputRef?.innerText?.trim() || uploadedAttachments().length > 0)
   const mobile = /Android|webOS|iPhone|iP[ao]d|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -699,8 +733,6 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
     await typingKeepAlive.stop()
   })
 
-  let messageInputRef: HTMLDivElement | null = null
-  let messageAreaRef: HTMLDivElement | null = null
   const createMessage = async () => {
     if (!sendable()) return;
     const content = messageInputRef!.innerText!.trim()
@@ -938,21 +970,206 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
 
   const contentProps = () => ({ grouper: grouper(), editing })
 
+  // message jump handler
+  createEffect(async () => {
+    const targetId = messageId()
+    if (!targetId || !messageAreaRef) return    
+    if (loading()) return
+
+    let messageElement = messageAreaRef.querySelector(`[data-message-id="${targetId}"]`)
+    
+    // If not found in DOM and grouper is available, try to find and load the message
+    if (!messageElement) {
+      const indices = await grouper().findMessage(targetId)
+      if (!indices) return
+      
+      // Check again after finding the message
+      messageElement = messageAreaRef.querySelector(`[data-message-id="${targetId}"]`)
+      if (!messageElement) return
+    }
+
+    messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    
+    // highlight the message
+    const messageContainer = messageElement.closest('.group')
+    if (messageContainer) {
+      messageContainer.classList.add('bg-accent/10')
+      setTimeout(() => {
+        messageContainer.classList.remove('bg-accent/10')
+
+        if (props.guildId) 
+          navigate(`/guilds/${props.guildId}/${props.channelId}`, { replace: true })
+        else
+          navigate(`/dms/${props.channelId}`, { replace: true })
+      }, 3000)
+    }
+  })
+
+  const handleEmojiSelect = (emoji: string) => {
+    if (!messageInputRef) return
+    if (document.activeElement !== messageInputRef) {
+      messageInputRef.focus()
+    }
+
+    // Insert emoji at current cursor position
+    const selection = window.getSelection()
+    const range = selection?.getRangeAt(0)
+    
+    if (range && messageInputRef) {
+      // Create a text node with the emoji
+      const textNode = document.createTextNode(emoji)
+      range.insertNode(textNode)
+      
+      // Move cursor after the inserted emoji
+      range.setStartAfter(textNode)
+      range.setEndAfter(textNode)
+      selection?.removeAllRanges()
+      selection?.addRange(range)
+      
+      messageInputRef.focus()
+      updateSendable()
+
+      // Close the emoji picker if shift is not held
+      const event = window.event as MouseEvent
+      if (!event || !event.shiftKey) {
+        setEmojiPickerVisible(false)
+      }
+    }
+  }
+
   return (
     <div class="flex flex-col justify-end w-full h-0 flex-grow">
       <div
         ref={messageAreaRef!}
-        class="overflow-auto flex flex-col-reverse pb-5"
+        class="overflow-auto flex flex-col-reverse pb-5 relative"
         onScroll={async (event) => {
-          if (event.target.scrollTop + event.target.scrollHeight <= event.target.clientHeight + 10) {
-            await grouper().fetchMessages()
+          const target = event.target as HTMLDivElement
+          const currentScrollPosition = target.scrollTop;
+
+          const findOldestVisibleMessage = (): bigint | undefined => {
+            const visibleMessages = messageAreaRef!.querySelectorAll('[data-message-id]');
+            if (visibleMessages.length > 0) {
+              const oldestVisibleMessage = visibleMessages[visibleMessages.length - 1];
+              return BigInt(oldestVisibleMessage.getAttribute('data-message-id') || '0');
+            }
+            return undefined;
           }
-          if (event.target.scrollTop > -5)
-            await ack()
+          
+          const findNewestVisibleMessage = (): bigint | undefined => {
+            const visibleMessages = messageAreaRef!.querySelectorAll('[data-message-id]');
+            if (visibleMessages.length > 0) {
+              const newestVisibleMessage = visibleMessages[0];
+              return BigInt(newestVisibleMessage.getAttribute('data-message-id') || '0');
+            }
+            return undefined;
+          }
+          
+          // Track how far we've scrolled for deciding when to show the jump button
+          if (!scrollingToBottom()) {
+            // Count the number of visible messages to determine scroll distance
+            const visibleMessages = messageAreaRef!.querySelectorAll('[data-message-id]');
+            setMessageContextDistance(prev => Math.max(prev, visibleMessages.length));
+            
+            // Show "View Newer Messages" button only when we've scrolled through enough messages (>30)
+            // AND we're not near the bottom of the scroll area
+            const isScrolledUp = currentScrollPosition < -1200; // Check if we're sufficiently scrolled up
+            setShowViewNewerMessages(messageContextDistance() > 30 && isScrolledUp);
+          }
+          
+          // Detect scroll direction
+          const scrollingUp = currentScrollPosition < lastScrollPosition();
+          setLastScrollPosition(currentScrollPosition);
+          
+          // Load older messages when reaching the top
+          if (target.scrollTop + target.scrollHeight <= target.clientHeight + 10) {
+            // When at the top, load older messages
+            if (messageId()) {
+              // If we jumped to a specific message, load messages before the oldest in our context
+              const oldestMessage = findOldestVisibleMessage();
+              if (oldestMessage) {
+                await grouper().fetchMessages(oldestMessage, false, true);
+              } else {
+                await grouper().fetchMessages();
+              }
+            } else {
+              await grouper().fetchMessages();
+            }
+          }
+          
+          // Load newer messages when near the bottom
+          if (target.scrollTop > -5) {
+            setShowViewNewerMessages(false);
+            await ack();
+          }
+          
+          // When there's a message ID in the URL (jumping to specific message)
+          if (messageId()) {
+            // Calculate scroll position - negative values mean scrolling down
+            const viewportHeight = target.clientHeight;
+            
+            // If scrolling down (towards newer messages) from an old message context
+            if (!scrollingUp && currentScrollPosition > -viewportHeight * 0.7) {
+              // Get the newest visible message
+              const newestMessageId = findNewestVisibleMessage();
+              if (newestMessageId) {
+                // Load messages after this message to bridge the gap
+                await grouper().fetchMessages(newestMessageId, true);
+              }
+            } 
+            // If scrolling up (towards older messages) from an old message context
+            else if (scrollingUp && currentScrollPosition < -viewportHeight * 0.8) {
+              // Get the oldest visible message
+              const oldestMessageId = findOldestVisibleMessage();
+              if (oldestMessageId) {
+                // Load messages before this message
+                await grouper().fetchMessages(oldestMessageId, false, true);
+              }
+            }
+            
+            // Check for gaps when jumping to old message contexts
+            if (grouper().hasMessageGap) {
+              setShowViewNewerMessages(true);
+            }
+          }
         }}
         onClick={ack}
         onFocus={ack}
       >
+        {/* "View Newer Messages" button */}
+        <Show when={showViewNewerMessages()}>
+          <div class="sticky bottom-4 w-full flex justify-center z-10">
+            <button 
+              class="btn bg-accent hover:bg-accent/90 text-white py-2 px-4 rounded-full shadow-lg flex items-center gap-2"
+              onClick={async () => {
+                setScrollingToBottom(true);
+                
+                if (grouper().hasMessageGap) {
+                  // If there's a gap, fetch the next chunk of messages
+                  await grouper().fetchNextChunk();
+                } else {
+                  // If no gap, just jump to the latest messages
+                  await grouper().fetchLatestMessages();
+                }
+                
+                // Scroll to bottom smoothly
+                messageAreaRef!.scrollTo({
+                  top: 0,
+                  behavior: 'smooth'
+                });
+                
+                // Reset state after scrolling
+                setTimeout(() => {
+                  setScrollingToBottom(false);
+                  setShowViewNewerMessages(false);
+                }, 500);
+              }}
+            >
+              <Icon icon={ArrowDown} class="w-4 h-4 fill-white" />
+              View Newer Messages
+            </button>
+          </div>
+        </Show>
+
         <div class="flex flex-col gap-y-4">
           <Show when={grouper().noMoreMessages() && !loading()} keyed={false}>
             <div class="pl-4 pt-8">
@@ -1082,36 +1299,7 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
               "opacity-100 translate-y-0": emojiPickerVisible()
             }}
           >
-            <EmojiPicker onSelect={(emoji) => {
-              // Focus the message input if not already focused
-              if (document.activeElement !== messageInputRef) {
-                messageInputRef!.focus();
-              }
-
-              // Insert emoji at current cursor position
-              const selection = window.getSelection();
-              const range = selection?.getRangeAt(0);
-              
-              if (range && messageInputRef) {
-                // Create a text node with the emoji
-                const textNode = document.createTextNode(emoji);
-                range.insertNode(textNode);
-                
-                // Move cursor after the inserted emoji
-                range.setStartAfter(textNode);
-                range.setEndAfter(textNode);
-                selection?.removeAllRanges();
-                selection?.addRange(range);
-                
-                messageInputRef!.focus();
-                updateSendable();
-
-                // Close the emoji picker if shift is not held
-                if (!window.event || !window.event.shiftKey) {
-                  setEmojiPickerVisible(false);
-                }
-              }
-            }} />
+            <EmojiPicker onSelect={handleEmojiSelect} />
           </div>
           <button
             class="w-9 h-9 flex flex-shrink-0 items-center justify-center rounded-full bg-3 mr-2 transition-all duration-200 hover:bg-accent"
@@ -1343,6 +1531,14 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
           <span class="text-fg/50 font-medium"> {typing().users.size === 1 ? 'is' : 'are'} typing...</span>
         </Show>
       </div>
+
+      {/* Loading indicator */}
+      <Show when={grouper().isLoading}>
+        <div class="fixed bottom-24 right-4 bg-bg-2 text-fg px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
+          <Icon icon={Spinner} class="w-4 h-4 animate-spin" />
+          Loading messages...
+        </div>
+      </Show>
     </div>
   )
 }

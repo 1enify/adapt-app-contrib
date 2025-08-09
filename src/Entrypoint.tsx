@@ -195,8 +195,8 @@ const Entrypoint: Component = () => {
                   <Route path="/loading" component={Loading} />
                   <Route path="/friends/requests" component={FriendRequests} />
                   <Route path="/friends/*" component={FriendsList} />
-                  <Route path="/dms/:channelId" component={DmChannel} />
-                  <Route path="/guilds/:guildId/:channelId" component={GuildChannel} />
+                  <Route path="/dms/:channelId/:messageId?" component={DmChannel} />
+                  <Route path="/guilds/:guildId/:channelId/:messageId?" component={GuildChannel} />
                   <Route path="/guilds/:guildId" component={GuildHome} />
                   <Route path="/invite/:code" component={Invite} />
                   <Route path="/" component={Home} />

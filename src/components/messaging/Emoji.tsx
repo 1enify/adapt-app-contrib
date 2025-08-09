@@ -1,6 +1,7 @@
 import {gemoji, type Gemoji} from "gemoji";
 import {createMemo} from "solid-js";
 import {getApi} from "../../api/Api";
+import { snowflakes } from "../../utils";
 
 const unicodeLookup = new Map<string, Gemoji>(gemoji.map((emoji) => [emoji.emoji, emoji]))
 
@@ -42,17 +43,16 @@ export function lookupUnicodeEmoji(emoji: string): Gemoji | null {
 export default function Emoji(props: { emoji: string, jumbo?: boolean }) {
   const api = getApi()!;
   
-  // Check if this is a custom emoji (format: :EMOJI_ID:)
+  // Check if this is a custom emoji (:EMOJI_ID:)
   const customEmojiMatch = props.emoji.match(/^:(\d+):$/);
   
   const emojiUrl = createMemo(() => {
-    if (customEmojiMatch) {
-      const emojiId = BigInt(customEmojiMatch[1]);
-      const customEmoji = api.cache?.customEmojis.get(emojiId);
-      if (customEmoji) {
+    try{
+      if (customEmojiMatch && snowflakes.modelType(BigInt(customEmojiMatch[1])) === snowflakes.ModelType.Emoji) {
+        const emojiId = BigInt(customEmojiMatch[1]);
         return getCustomEmojiUrl(emojiId);
       }
-    }
+    } catch {}
     return getUnicodeEmojiUrl(props.emoji);
   });
 
@@ -63,7 +63,7 @@ export default function Emoji(props: { emoji: string, jumbo?: boolean }) {
     <span class="emoji inline-block cursor-pointer align-bottom relative">
       <img
         src={emojiUrl()}
-        alt={props.emoji}
+        alt={props.emoji.length < 4 ? props.emoji : ""}
         width={size()}
         height={size()}
         draggable={false}

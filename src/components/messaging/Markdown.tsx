@@ -71,6 +71,7 @@ const underline: Plugin<any[], HtmlRoot> = () => (tree, file) => {
 
 function Anchor(props: JSX.HTMLAttributes<HTMLAnchorElement> & { isImage?: boolean }) {
   const navigate = useNavigate()
+  const params = useParams()
   const handler: JSX.EventHandler<HTMLAnchorElement, MouseEvent> = (e) => {
     if (e.ctrlKey || e.metaKey)
       return e.preventDefault()
@@ -85,10 +86,33 @@ function Anchor(props: JSX.HTMLAttributes<HTMLAnchorElement> & { isImage?: boole
     }
     else if (url.hostname === 'app.adapt.chat') {
       e.preventDefault()
-      return navigate(url.pathname + url.search + url.hash)
-    }
-    else if (url.hostname.endsWith('adapt.chat'))
+      // Handle message jump URLs
+      const pathParts = url.pathname.split('/')
+      const messageId = pathParts[pathParts.length - 1]
+
+      let parsed: bigint | null = null
+      try {
+        parsed = BigInt(messageId)
+      } catch {
+        parsed = null
+      }
+      if (parsed && snowflakes.modelType(parsed) === snowflakes.ModelType.Message) {
+        // If we're already in the same channel, just update the message ID
+        if (pathParts[pathParts.length - 2] === params.channelId) {
+          navigate(`/guilds/${params.guildId}/${params.channelId}/${messageId}`, { replace: true })
+        } else {
+          // Otherwise navigate to the full path
+          navigate(url.pathname + url.search + url.hash)
+        }
+        return
+      }
+      // For non-message URLs, navigate normally
+      navigate(url.pathname + url.search + url.hash)
       return
+    }
+    else if (url.hostname.endsWith('adapt.chat')) {
+      return
+    }
 
     if (!window.confirm(`You are about to leave Adapt and go to ${href}. Are you sure?`)) {
       e.preventDefault()
