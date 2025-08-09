@@ -75,6 +75,7 @@ type SkeletalData = {
   headerWidth: string,
   contentLines: string[],
 }
+
 function generateSkeletalData(n: number = 10): SkeletalData[] {
   const data: SkeletalData[] = []
   for (let i = 0; i < n; i++) {
@@ -90,34 +91,6 @@ function generateSkeletalData(n: number = 10): SkeletalData[] {
     data.push({ headerWidth, contentLines })
   }
   return data
-}
-
-function getCaretPosition(editableDiv: HTMLDivElement) {
-  let caretPos = 0, selection, range
-
-  if (window.getSelection) {
-    selection = window.getSelection();
-    if (selection?.rangeCount) {
-      range = selection.getRangeAt(0);
-      if (range.commonAncestorContainer.parentNode == editableDiv) {
-        caretPos = range.endOffset;
-      }
-    }
-  }
-  // @ts-ignore
-  else if (document.selection && document.selection.createRange) {
-    // @ts-ignore
-    range = document.selection.createRange();
-    if (range.parentElement == editableDiv) {
-      const tempEl = document.createElement("span");
-      editableDiv.insertBefore(tempEl, editableDiv.firstChild);
-      const tempRange = range.duplicate();
-      tempRange.moveToElementText(tempEl);
-      tempRange.setEndPoint("EndToEnd", range);
-      caretPos = tempRange.text.length;
-    }
-  }
-  return caretPos;
 }
 
 function MessageLoadingSkeleton() {
@@ -186,7 +159,7 @@ export function MessageContent(props: MessageContentProps) {
 
   let editAreaRef: HTMLDivElement | null = null
   const editMessage = async () => {
-    const editedContent = editAreaRef!.innerText.trim()
+    const editedContent = editAreaRef!.textContent!.trim()
     if (!editedContent) return
 
     const msg = {
@@ -205,7 +178,7 @@ export function MessageContent(props: MessageContentProps) {
   }
   createEffect(() => {
     if (props.editing?.has(message().id)) {
-      editAreaRef!.innerText = message().content!
+      editAreaRef!.textContent = message().content!
       editAreaRef!.focus()
     }
   })
@@ -685,7 +658,7 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
   const [messageContextDistance, setMessageContextDistance] = createSignal(0);
   const [lastScrollPosition, setLastScrollPosition] = createSignal(0);
 
-  const updateSendable = () => setSendable(!!messageInputRef?.innerText?.trim() || uploadedAttachments().length > 0)
+  const updateSendable = () => setSendable(!!messageInputRef?.textContent?.trim() || uploadedAttachments().length > 0)
   const mobile = /Android|webOS|iPhone|iP[ao]d|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
   const grouper = createMemo(() => {
     const { grouper, cached } = getApi()!.cache!.useChannelMessages(props.channelId)
@@ -735,7 +708,7 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
 
   const createMessage = async () => {
     if (!sendable()) return;
-    const content = messageInputRef!.innerText!.trim()
+    const content = messageInputRef!.textContent!.trim()
     const attachments = uploadedAttachments()
 
     setUploadedAttachments([])
@@ -795,8 +768,16 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
     ['#', AutocompleteType.ChannelMention],
     [':', AutocompleteType.Emoji],
   ] as const
+  let caretPosition = 0
+  const cacheCaretPosition = () => {
+    const sel = window.getSelection()
+    if (sel?.rangeCount) {
+      caretPosition = sel.getRangeAt(0).endOffset
+    }
+  }
+  let autocompleteTimeout: number | undefined
   const updateAutocompleteState = () => {
-    const [currentWord, index] = getWordAt(messageInputRef?.innerText!, getCaretPosition(messageInputRef!) - 1)
+    const [currentWord, index] = getWordAt(messageInputRef?.textContent!, caretPosition - 1)
     for (const [char, type] of MAPPING) {
       if (currentWord.startsWith(char)) {
         setAutocompleteState({
@@ -809,6 +790,14 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
       }
     }
     setAutocompleteState(null)
+  }
+  const scheduleAutocompleteUpdate = () => {
+    clearTimeout(autocompleteTimeout)
+    autocompleteTimeout = window.setTimeout(updateAutocompleteState, 50)
+  }
+  const handleCaretUpdate = () => {
+    cacheCaretPosition()
+    scheduleAutocompleteUpdate()
   }
 
   const members = createMemo(() => {
@@ -918,10 +907,10 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
     const replace = (repl: string) => {
       const { index: wordIndex } = autocompleteState()!.data!
 
-      const text = messageInputRef!.innerText!
+      const text = messageInputRef!.textContent!
       const before = text.slice(0, wordIndex) + repl
       const after = text.slice(wordIndex + value.length + 1)
-      messageInputRef!.innerText = before + after
+      messageInputRef!.textContent = before + after
 
       messageInputRef!.focus()
       setSelectionRange(messageInputRef!, before.length)
@@ -1435,14 +1424,14 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
                     return setAutocompleteSelection(oldState.selected + 1)
                   }
 
-                updateAutocompleteState()
+                handleCaretUpdate()
               }}
               onKeyDown={(event) => {
                 const oldState = autocompleteState()
                 if (oldState && (event.key === 'ArrowUp' || event.key === 'ArrowDown'))
                   event.preventDefault()
 
-                else if (event.key === 'ArrowUp' && !event.currentTarget.innerText.trim()) {
+                else if (event.key === 'ArrowUp' && !event.currentTarget.textContent?.trim()) {
                   event.preventDefault()
                   const lastMessage = grouper().lastMessage
                   if (lastMessage && lastMessage.author_id == api.cache?.clientId)
@@ -1461,12 +1450,13 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
                   await createMessage()
                 }
               }}
-              onMouseUp={updateAutocompleteState}
-              onTouchStart={updateAutocompleteState}
-              onSelect={updateAutocompleteState}
+              onMouseUp={handleCaretUpdate}
+              onTouchStart={handleCaretUpdate}
+              onSelect={handleCaretUpdate}
               onInput={() => {
                 void typingKeepAlive.ackTyping()
                 updateSendable()
+                handleCaretUpdate()
               }}
               onFocus={() => {
                 const timeout = messageInputFocusTimeout()
