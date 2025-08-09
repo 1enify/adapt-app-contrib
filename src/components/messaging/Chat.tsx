@@ -770,8 +770,12 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
   let caretPosition = 0
   const cacheCaretPosition = () => {
     const sel = window.getSelection()
-    if (sel?.rangeCount) {
-      caretPosition = sel.getRangeAt(0).endOffset
+    if (sel?.rangeCount && messageInputRef && messageInputRef.contains(sel.anchorNode)) {
+      const range = sel.getRangeAt(0)
+      const preRange = range.cloneRange()
+      preRange.selectNodeContents(messageInputRef)
+      preRange.setEnd(range.endContainer, range.endOffset)
+      caretPosition = preRange.toString().length
     }
   }
   let autocompleteTimeout: number | undefined

@@ -44,7 +44,23 @@ export default function EmojiPicker(props: { onSelect?: (emoji: string) => void 
   const [visibleEmojis, setVisibleEmojis] = createSignal<Set<string>>(new Set())
   const [searchQuery, setSearchQuery] = createSignal("")
   const [selectedCategory, setSelectedCategory] = createSignal<string | null>(null)
-  let observer: IntersectionObserver | null = null
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const emoji = entry.target.getAttribute('data-emoji')
+          if (emoji) {
+            setVisibleEmojis(prev => {
+              const next = new Set(prev)
+              next.add(emoji)
+              return next
+            })
+          }
+        }
+      })
+    },
+    { rootMargin: '50px' }
+  )
   let fuse: Fuse<Gemoji | { id: bigint, name: string, guild_id: bigint }> | null = null
 
   onMount(() => {
@@ -106,39 +122,8 @@ export default function EmojiPicker(props: { onSelect?: (emoji: string) => void 
     }
   })
 
-  onMount(() => {
-    observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const emoji = entry.target.getAttribute('data-emoji')
-            if (emoji) {
-              setVisibleEmojis(prev => {
-                const next = new Set(prev)
-                next.add(emoji)
-                return next
-              })
-            }
-          }
-        })
-      },
-      { rootMargin: '50px' }
-    )
-
-    // Observe emojis in expanded categories on mount
-    setTimeout(() => {
-      unicodeCategories().forEach((emojis, category) => {
-        if (!collapsedUnicodeCategories.has(category)) {
-          emojis.forEach(emoji => {
-            const element = document.querySelector(`[data-emoji="${'emoji' in emoji ? emoji.emoji : `:${emoji.id}:`}"]`)
-            if (element) observer?.observe(element)
-          })
-        }
-      })
-    }, 0)
-  })
   onCleanup(() => {
-    observer?.disconnect()
+    observer.disconnect()
   })
 
   const toggleCategory = (category: string) => {
@@ -223,8 +208,18 @@ export default function EmojiPicker(props: { onSelect?: (emoji: string) => void 
                         const emojiUrl = isCustom ? getCustomEmojiUrl(emoji.id) : getUnicodeEmojiUrl(emoji.emoji)
                         const emojiName = isCustom ? emoji.name : emoji.names[0]
                         
+                        let emojiRef: HTMLButtonElement | undefined
+
+                        onMount(() => {
+                          if (emojiRef) observer.observe(emojiRef)
+                        })
+                        onCleanup(() => {
+                          if (emojiRef) observer.unobserve(emojiRef)
+                        })
+
                         return (
                           <button
+                            ref={emojiRef!}
                             class="p-1 rounded-lg hover:bg-fg/10 transition inline-block align-bottom relative"
                             onMouseEnter={() => setHovered(emoji)}
                             onMouseLeave={() => setHovered(undefined)}
