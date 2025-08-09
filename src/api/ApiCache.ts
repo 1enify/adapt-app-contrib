@@ -48,6 +48,7 @@ export default class ApiCache {
   guildListReactor: Signal<bigint[]> // TODO this should sort by order
   members: ReactiveMap<bigint, Member>
   memberReactor: ReactiveMap<bigint, bigint[]>
+  userGuilds: ReactiveMap<bigint, bigint[]>
   roles: ReactiveMap<bigint, Role>
   channels: ReactiveMap<bigint, Channel>
   guildChannelReactor: ReactiveMap<bigint, bigint[]>
@@ -71,6 +72,7 @@ export default class ApiCache {
     this.guildListReactor = createSignal([] as bigint[])
     this.members = new ReactiveMap()
     this.memberReactor = new ReactiveMap()
+    this.userGuilds = new ReactiveMap()
     this.roles = new ReactiveMap()
     this.channels = new ReactiveMap()
     this.guildChannelReactor = new ReactiveMap()
@@ -192,6 +194,13 @@ export default class ApiCache {
   }
 
   removeGuild(guildId: bigint) {
+    const members = this.memberReactor.get(guildId) ?? []
+    for (const userId of members) {
+      const guilds = this.userGuilds.get(userId) ?? []
+      if (guilds.includes(guildId))
+        this.userGuilds.set(userId, guilds.filter(id => id !== guildId))
+    }
+    this.memberReactor.delete(guildId)
     this.guilds.delete(guildId)
     this.guildListReactor[1](prev => prev.filter(id => id !== guildId))
   }
@@ -215,6 +224,14 @@ export default class ApiCache {
     if (member.joined_at) base.joined_at = member.joined_at
 
     this.members.set(key, {...base})
+
+    const guilds = this.userGuilds.get(member.id) ?? []
+    if (!guilds.includes(member.guild_id)) {
+      const index = sortedIndex(guilds, member.guild_id)
+      const next = [...guilds]
+      next.splice(index, 0, member.guild_id)
+      this.userGuilds.set(member.id, next)
+    }
   }
 
   updateRole(role: Role) {
@@ -291,6 +308,14 @@ export default class ApiCache {
     const next = [...previous]
     next.splice(index, 0, userId)
     this.memberReactor.set(guildId, next)
+
+    const userGuilds = this.userGuilds.get(userId) ?? []
+    if (!userGuilds.includes(guildId)) {
+      const guildIndex = sortedIndex(userGuilds, guildId)
+      const nextGuilds = [...userGuilds]
+      nextGuilds.splice(guildIndex, 0, guildId)
+      this.userGuilds.set(userId, nextGuilds)
+    }
   }
 
   untrackMember(guildId: bigint, userId: bigint) {
@@ -298,6 +323,10 @@ export default class ApiCache {
     if (!previous.includes(userId)) return
 
     this.memberReactor.set(guildId, previous.filter(id => id !== userId))
+
+    const guilds = this.userGuilds.get(userId) ?? []
+    if (guilds.includes(guildId))
+      this.userGuilds.set(userId, guilds.filter(id => id !== guildId))
   }
 
   get guildList(): bigint[] {

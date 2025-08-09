@@ -19,7 +19,6 @@ import MessageGrouper, {authorDefault, type MessageGroup} from "../../api/Messag
 import {
   displayName,
   extendedColor,
-  filterIterator,
   filterMapIterator,
   flatMapIterator,
   humanizeFullTimestamp,
@@ -831,17 +830,19 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
     if (props.guildId) {
       return [...cache.guilds.get(props.guildId)?.channels?.values() ?? []]
     } else {
-      const mutuals = filterIterator(
-        cache.guilds.values(),
-        // performance here is O(n^2), this could be improved
-        (guild) => guild.members?.some((member) => member.id == recipientId()) ?? false
-      )
-      return [...flatMapIterator(
-        mutuals,
-        (guild) => guild
-          .channels
-          ?.map(channel => ({...channel, key: `${channel.name}:${guild.name}`}) as unknown as GuildChannel) ?? []
-      )]
+      const mutualGuildIds = cache.userGuilds.get(recipientId()!) ?? []
+      return [
+        ...flatMapIterator(
+          mutualGuildIds,
+          (guildId) => {
+            const guild = cache.guilds.get(guildId)
+            return (
+              guild?.channels
+                ?.map(channel => ({...channel, key: `${channel.name}:${guild.name}`}) as unknown as GuildChannel) ?? []
+            )
+          }
+        ),
+      ]
     }
   })
   const fuseChannelIndex = createMemo(() => new Fuse(channels()!, {
