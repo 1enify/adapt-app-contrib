@@ -58,6 +58,7 @@ export default class MessageGrouper {
   private setNewestMessageId: Setter<bigint | undefined>
   private hasGap: Accessor<boolean>
   private setHasGap: Setter<boolean>
+ private readonly messageIds: Set<bigint>
 
   constructor(
     private readonly api: Api,
@@ -65,6 +66,7 @@ export default class MessageGrouper {
   ) {
     this.groupsSignal = createSignal([] as MessageGroup[])
     this.nonced = new Map();
+    this.messageIds = new Set();
     [this.noMoreMessages, this.setNoMoreMessages] = createSignal(false);
     [this.loading, this.setLoading] = createSignal(false);
     [this.oldestMessageId, this.setOldestMessageId] = createSignal<bigint | undefined>(undefined);
@@ -146,6 +148,8 @@ export default class MessageGrouper {
    * Pushes a message into the timestamp.
    */
   pushMessage(message: Message): [number, number] {
+    if (this.messageIds.has(message.id)) return this.findCloseMessageIndex(message.id)
+
     if (this.currentGroup == null) this.finishGroup()
     const behavior = this.nextMessageBehavior({ message })
 
@@ -157,6 +161,7 @@ export default class MessageGrouper {
       groups[groups.length - 1] = this.currentGroup = [...this.currentGroup!, message]
       return groups
     })
+ this.messageIds.add(message.id)
     return [this.groups.length - 1, this.currentGroup!.length - 1]
   }
 
@@ -175,6 +180,7 @@ export default class MessageGrouper {
       if (group.length === 0) groups.splice(groupIndex, 1)
       return groups
     })
+ this.messageIds.delete(id)
   }
 
   /**
@@ -220,20 +226,10 @@ export default class MessageGrouper {
   insertMessages(messages: Message[]) {
     if (messages.length === 0) return
 
-    // Create a set of existing message IDs to avoid duplicates
-    const existingMessageIds = new Set<string>();
-    for (const group of this.groups) {
-      if (group.isDivider) continue;
-      
-      for (const message of group) {
-        existingMessageIds.add(message.id.toString());
-      }
-    }
-    
-    // Filter out duplicate messages
-    const uniqueMessages = messages.filter(message => !existingMessageIds.has(message.id.toString()));
-    
-    if (uniqueMessages.length === 0) return;
+    // Filter out messages that have already been inserted
+    const uniqueMessages = messages.filter(message => !this.messageIds.has(message.id));
+
+    if (uniqueMessages.length === 0) return
 
     let groups = this.groups
     if (this.currentGroup == null) groups.push([])
@@ -277,6 +273,7 @@ export default class MessageGrouper {
 
       const target = <Message[]> groups[groupIndex]
       target.splice(++messageIndex, 0, message)
+ this.messageIds.add(message.id)
       lastMessage = message
     }
 
@@ -421,9 +418,10 @@ export default class MessageGrouper {
    * Fetches the latest messages to jump to bottom
    */
   async fetchLatestMessages() {
-    this.setGroups([]);
-    this.fetchBefore = undefined;
-    await this.fetchMessages();
+    this.setGroups([])
+    this.messageIds.clear()
+    this.fetchBefore = undefined
+    await this.fetchMessages()
   }
 
   private nextMessageBehavior(
@@ -491,6 +489,7 @@ export default class MessageGrouper {
   private ackNonceWith(nonce: string, message: Message, f: (message: Message) => void) {
     const [groupIndex, messageIndex] = this.nonced.get(nonce)!
     this.nonced.delete(nonce)
+    const oldId = (<Message[]> this.groups[groupIndex])[messageIndex].id
 
     this.setGroups(prev => {
       let groups = [...prev]
@@ -500,6 +499,8 @@ export default class MessageGrouper {
       groups[groupIndex] = group
       return groups
     })
+    this.messageIds.delete(oldId)
+    this.messageIds.add(message.id)
   }
 
   /**
