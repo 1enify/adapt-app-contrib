@@ -68,6 +68,8 @@ export namespace snowflakes {
     Role = 5,
     // The model is used internally, e.g. a nonce.
     Internal = 6,
+    // The model is a custom emoji.
+    Emoji = 7,
     // Unknown model.
     Unknown = 31,
   }
@@ -181,9 +183,8 @@ export namespace extendedColor {
  * Returns whether two dates fall on the same day.
  */
 export function isSameDay(date: Date, now: Date): boolean {
-  return date.getDate() === now.getDate()
-    && date.getMonth() === now.getMonth()
-    && date.getFullYear() === now.getFullYear()
+  // Compare the date strings directly for more reliable comparison
+  return date.toDateString() === now.toDateString()
 }
 
 /**
@@ -518,6 +519,8 @@ export function uuid(id: string | Uint8Array): string {
 }
 
 function userDisplayName(user: User): string {
+  if (!user)
+    return 'Unknown User'
   return user.display_name ?? user.username
 }
 
@@ -528,7 +531,7 @@ function userDisplayName(user: User): string {
  * @returns The display name of the member or user.
  */
 export function displayName(member: Member | User): string {
-  return (member as Member).nick ?? userDisplayName(member as User)
+  return (member as Member)?.nick ?? userDisplayName(member as User)
 }
 
 export interface ChannelDisplayMetadata {
