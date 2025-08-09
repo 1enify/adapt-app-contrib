@@ -158,7 +158,7 @@ export function MessageContent(props: MessageContentProps) {
 
   let editAreaRef: HTMLDivElement | null = null
   const editMessage = async () => {
-    const editedContent = editAreaRef!.textContent!.trim()
+    const editedContent = editAreaRef!.innerText!.trim()
     if (!editedContent) return
 
     const msg = {
@@ -177,7 +177,7 @@ export function MessageContent(props: MessageContentProps) {
   }
   createEffect(() => {
     if (props.editing?.has(message().id)) {
-      editAreaRef!.textContent = message().content!
+      editAreaRef!.innerText = message().content!
       editAreaRef!.focus()
     }
   })
@@ -657,7 +657,7 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
   const [messageContextDistance, setMessageContextDistance] = createSignal(0);
   const [lastScrollPosition, setLastScrollPosition] = createSignal(0);
 
-  const updateSendable = () => setSendable(!!messageInputRef?.textContent?.trim() || uploadedAttachments().length > 0)
+  const updateSendable = () => setSendable(!!messageInputRef?.innerText?.trim() || uploadedAttachments().length > 0)
   const mobile = /Android|webOS|iPhone|iP[ao]d|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
   const grouper = createMemo(() => {
     const { grouper, cached } = getApi()!.cache!.useChannelMessages(props.channelId)
@@ -707,7 +707,7 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
 
   const createMessage = async () => {
     if (!sendable()) return;
-    const content = messageInputRef!.textContent!.trim()
+    const content = messageInputRef!.innerText!.trim()
     const attachments = uploadedAttachments()
 
     setUploadedAttachments([])
@@ -780,7 +780,7 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
   }
   let autocompleteTimeout: number | undefined
   const updateAutocompleteState = () => {
-    const [currentWord, index] = getWordAt(messageInputRef?.textContent!, caretPosition - 1)
+    const [currentWord, index] = getWordAt(messageInputRef?.innerText!, caretPosition - 1)
     for (const [char, type] of MAPPING) {
       if (currentWord.startsWith(char)) {
         setAutocompleteState({
@@ -912,10 +912,10 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
     const replace = (repl: string) => {
       const { index: wordIndex } = autocompleteState()!.data!
 
-      const text = messageInputRef!.textContent!
+      const text = messageInputRef!.innerText!
       const before = text.slice(0, wordIndex) + repl
       const after = text.slice(wordIndex + value.length + 1)
-      messageInputRef!.textContent = before + after
+      messageInputRef!.innerText = before + after
 
       messageInputRef!.focus()
       setSelectionRange(messageInputRef!, before.length)
@@ -1436,7 +1436,7 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
                 if (oldState && (event.key === 'ArrowUp' || event.key === 'ArrowDown'))
                   event.preventDefault()
 
-                else if (event.key === 'ArrowUp' && !event.currentTarget.textContent?.trim()) {
+                else if (event.key === 'ArrowUp' && !event.currentTarget.innerText?.trim()) {
                   event.preventDefault()
                   const lastMessage = grouper().lastMessage
                   if (lastMessage && lastMessage.author_id == api.cache?.clientId)
