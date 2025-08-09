@@ -331,6 +331,8 @@ export default class MessageGrouper {
     if (this.fetchLock)
       return
 
+    console.log(targetId, after, before)
+
     this.fetchLock = true
     this.setLoading(true)
     const params: Record<string, any> = { limit: MESSAGE_HISTORY_LIMIT }
@@ -370,6 +372,7 @@ export default class MessageGrouper {
       if (messages.length === 0) {
         this.fetchLock = false
         this.setLoading(false)
+        this.setNoMoreMessages(true)
         return
       }
 

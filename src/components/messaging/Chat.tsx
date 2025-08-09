@@ -646,7 +646,7 @@ export function MessagePreview(
   const author = createMemo(() =>
     message().author ?? api.cache!.users.get(message().author_id!) ?? authorDefault()
   )
-  const authorColor = guildId()
+  const authorColor = guildId() && message().author_id
     ? api.cache!.getMemberColor(guildId(), message().author_id!)
     : undefined
 
