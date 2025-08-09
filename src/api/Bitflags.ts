@@ -10,6 +10,7 @@ interface _BitflagsMapping<Flags> {
 interface _BitflagsValue<Flags> {
   value: bigint
   has(flag: keyof Flags): boolean
+  hasAll(...flags: (keyof Flags)[]): boolean
   add(...targets: (keyof Flags)[]): this
   remove(...targets: (keyof Flags)[]): this
   toggle(...targets: (keyof Flags)[]): this
@@ -66,6 +67,10 @@ export function generateBitflags<
 
     has(flag: keyof Flags) {
       return (this.value & flags[flag]) === flags[flag]
+    }
+
+    hasAll(...flags: (keyof Flags)[]) {
+      return flags.every(flag => this.has(flag))
     }
 
     add(...targets: (keyof Flags)[]) {

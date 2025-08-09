@@ -471,9 +471,13 @@ function MessageContextMenu({ message, guildId, editing, onReply }: MessageConte
     }
   }
 
+  const perms = () => guildId ? api.cache!.getClientPermissions(guildId, message.channel_id) : null
+
   return (
     <ContextMenu>
-      <Show when={onReply}>
+      <Show when={onReply && (
+        !guildId || perms()?.hasAll('SEND_MESSAGES', 'VIEW_MESSAGE_HISTORY')
+      )}>
         <ContextMenuButton icon={Reply} label="Reply" onClick={() => onReply!(message)} />
       </Show>
       <ContextMenuButton
@@ -520,10 +524,7 @@ function MessageContextMenu({ message, guildId, editing, onReply }: MessageConte
         />
       </Show>
       <Show when={
-        message.author_id == api.cache!.clientId
-        || (
-          guildId && api.cache!.getClientPermissions(guildId, message.channel_id).has('MANAGE_MESSAGES')
-        )
+        message.author_id == api.cache!.clientId || guildId && perms()?.has('MANAGE_MESSAGES')
       }>
         <DangerContextMenuButton
           icon={Trash}
@@ -701,7 +702,7 @@ function QuickActions(props: { message: Message, offset?: number, guildId?: bigi
       <Show when={!permissions() || permissions()!.has('ADD_REACTIONS')}>
         <QuickActionButton icon={FaceSmile} tooltip="Add Reaction" />
       </Show>
-      <Show when={!permissions() || permissions()!.has('SEND_MESSAGES')}>
+      <Show when={!permissions() || permissions()!.hasAll('SEND_MESSAGES', 'VIEW_MESSAGE_HISTORY')}>
         <QuickActionButton icon={Reply} tooltip="Reply" onClick={() => props.onReply(props.message)} />
       </Show>
       <QuickActionButton
