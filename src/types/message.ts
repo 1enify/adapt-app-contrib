@@ -3,6 +3,28 @@ import type {User} from "./user";
 import {Reaction} from "./emoji";
 
 /**
+ * Represents partial message data about a referenced message.
+ */
+export interface MessageReference {
+  /**
+   * The ID of the channel the referenced message is in.
+   */
+  channel_id: Snowflake;
+  /**
+   * The ID of the guild the referenced message is in, if any.
+   */
+  guild_id?: Snowflake | null;
+  /**
+   * Whether to mention the author of the referenced message.
+   */
+  mention_author: boolean;
+  /**
+   * The ID of the message being referenced.
+   */
+  message_id: Snowflake;
+}
+
+/**
  * Represents the type and info of a message.
  */
 export type MessageInfo = {
@@ -93,6 +115,10 @@ export type Message = MessageInfo & {
    * The last time this message was edited, or `None` if it has not been edited.
    */
   edited_at: string | null;
+  /**
+   * A list of messages that this message references.
+   */
+  references: MessageReference[];
 
   _nonceState?: 'pending' | 'success' | 'error';
   _nonceError?: string;

@@ -13,7 +13,7 @@ import {
   splitProps,
   Switch
 } from "solid-js";
-import type {Message} from "../../types/message";
+import type {Message, MessageReference} from "../../types/message";
 import {getApi} from "../../api/Api";
 import MessageGrouper, {authorDefault, type MessageGroup} from "../../api/MessageGrouper";
 import {
@@ -51,7 +51,7 @@ import {ExtendedColor, Invite} from "../../types/guild";
 import GuildIcon from "../guilds/GuildIcon";
 import UserPlus from "../icons/svg/UserPlus";
 import {joinGuild} from "../../pages/guilds/Invite";
-import {useNavigate, useParams} from "@solidjs/router";
+import {A, useNavigate, useParams} from "@solidjs/router";
 import BookmarkFilled from "../icons/svg/BookmarkFilled";
 import {UserFlags} from "../../api/Bitflags";
 import {ReactiveSet} from "@solid-primitives/set";
@@ -62,10 +62,14 @@ import {ModalId, useModal} from "../ui/Modal";
 import EllipsisVertical from "../icons/svg/EllipsisVertical";
 import FaceSmile from "../icons/svg/FaceSmile";
 import Reply from "../icons/svg/Reply";
+import Xmark from "../icons/svg/Xmark";
 import EmojiPicker from "./EmojiPicker";
 import Spinner from "../icons/svg/Spinner";
 import Link from "../icons/svg/Link";
 import ArrowDown from "../icons/svg/ArrowDown";
+import {stringifyJSON} from "../../api/parseJSON";
+import Reference from "../icons/svg/Reference";
+import At from "../icons/svg/At";
 void tooltip
 
 const CONVEY = 'https://convey.adapt.chat'
@@ -116,6 +120,52 @@ function MessageLoadingSkeleton() {
 
 function shouldDisplayImage(filename: string): boolean {
   return ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].some((ext) => filename.endsWith(ext))
+}
+
+function MessageReferencePreview(props: { reference: MessageReference, grouper?: MessageGrouper }) {
+  const api = getApi()!
+  const [refMsg, setRefMsg] = createSignal<Message | null>(null)
+
+  onMount(async () => {
+    if (props.grouper) {
+      const loc = await props.grouper.findMessage(props.reference.message_id)
+      if (loc) {
+        const group = props.grouper.groups[loc[0]]
+        if (!group.isDivider) {
+          // @ts-ignore
+          setRefMsg((group as MessageGroup)[loc[1]])
+          return
+        }
+      }
+    }
+    const response = await api.request<Message>('GET', `/channels/${props.reference.channel_id}/messages/${props.reference.message_id}`)
+    if (response.ok) setRefMsg(response.jsonOrThrow())
+  })
+
+  const author = createMemo(() =>
+    refMsg()?.author ?? api.cache!.users.get(refMsg()?.author_id!) ?? authorDefault()
+  )
+  const avatar = createMemo(() => api.cache!.avatarOf(refMsg()?.author_id!))
+  const href = props.reference.guild_id
+    ? `/guilds/${props.reference.guild_id}/${props.reference.channel_id}/${props.reference.message_id}`
+    : `/dms/${props.reference.channel_id}/${props.reference.message_id}`
+
+  return (
+    <A
+      class="pl-8 text-xs text-fg/80 flex items-center text-ellipsis overflow-hidden whitespace-nowrap"
+      href={href}
+      replace={true}
+    >
+      <Show when={refMsg()} fallback={<span>Unknown message</span>}>
+        <Icon icon={Reference} class="w-4 h-4 mr-1 fill-none stroke-fg/20 mt-2" />
+        <Show when={avatar()}>
+          <img src={avatar()} alt="" class="inline-block w-5 h-5 rounded-full mr-1" />
+        </Show>
+        <span class="font-semibold text-fg">{displayName(author())}</span>
+        {refMsg()!.content ? `: ${refMsg()!.content}` : ''}
+      </Show>
+    </A>
+  )
 }
 
 const INVITE_REGEX = /https:\/\/adapt\.chat\/invite\/([a-zA-Z0-9]+)/g
@@ -401,9 +451,14 @@ function setSelectionRange(element: HTMLDivElement, selectionStart: number, sele
   selection?.addRange(range)
 }
 
-function MessageContextMenu(
-  { message, guildId, editing }: { message: Message, guildId?: bigint, editing?: ReactiveSet<bigint> }
-) {
+type MessageContextMenuProps = {
+  message: Message,
+  guildId?: bigint,
+  editing?: ReactiveSet<bigint>,
+  onReply?: (message: Message) => void,
+}
+
+function MessageContextMenu({ message, guildId, editing, onReply }: MessageContextMenuProps) {
   const api = getApi()!
   const {showModal} = useModal()
   const navigate = useNavigate()
@@ -418,6 +473,9 @@ function MessageContextMenu(
 
   return (
     <ContextMenu>
+      <Show when={onReply}>
+        <ContextMenuButton icon={Reply} label="Reply" onClick={() => onReply!(message)} />
+      </Show>
       <ContextMenuButton
         icon={BookmarkFilled}
         label="Mark Unread"
@@ -511,51 +569,69 @@ export type MessageHeaderProps = {
   classList?: Record<string, boolean>,
   noHoverEffects?: boolean,
   quickActions?: ReturnType<typeof QuickActions>,
+  referencesProvider?: {
+    references: MessageReference[],
+    grouper: MessageGrouper,
+  },
 }
 
 export function MessageHeader(props: ParentProps<MessageHeaderProps>) {
   return (
     <div
-      class="flex flex-col relative py-px transition-all duration-200 rounded-r-lg group"
+      class="flex flex-col py-px transition-all duration-200 rounded-r-lg group"
       classList={{
         [props.class ?? '']: true,
-        "bg-accent/10 hover:bg-accent/20 border-l-2 border-l-accent pl-[60px]": props.mentioned,
-        "pl-[62px]": !props.mentioned,
+        "bg-accent/10 hover:bg-accent/20 border-l-2 border-l-accent": props.mentioned,
         "hover:bg-bg-1/60": !props.mentioned && !props.noHoverEffects,
         ...(props.classList ?? {}),
       }}
       onContextMenu={props.onContextMenu}
     >
-      {props.quickActions}
-      <img
-        class="absolute left-3.5 w-9 h-9 mt-0.5 rounded-full"
-        src={props.authorAvatar}
-        alt=""
-      />
-      <div class="inline text-sm">
-        <span
-          class="font-medium"
-          style={extendedColor.fg(props.authorColor)}
-        >
-          {props.authorName}
-          <Show when={props.badge}>
-            <span class="text-xs ml-1.5 rounded px-1 py-[1px] bg-accent text-fg">{props.badge}</span>
-          </Show>
-        </span>
-        <span
-          class="timestamp text-fg/50 text-xs ml-2"
-          use:tooltip={timestampTooltip(props.timestamp)}
-        >
-          {humanizeTimestamp(props.timestamp)}
-        </span>
+      <Show when={props.referencesProvider}>
+        <For each={props.referencesProvider!.references}>
+          {(ref) => (
+            <MessageReferencePreview
+              reference={ref}
+              grouper={props.referencesProvider!.grouper}
+            />
+          )}
+        </For>
+      </Show>
+      <div
+        class="flex flex-col relative"
+        classList={{"pl-[60px]": props.mentioned, "pl-[62px]": !props.mentioned}}
+      >
+        {props.quickActions}
+        <img
+          class="absolute left-3.5 w-9 h-9 mt-0.5 rounded-full"
+          src={props.authorAvatar}
+          alt=""
+        />
+        <div class="inline text-sm">
+          <span
+            class="font-medium"
+            style={extendedColor.fg(props.authorColor)}
+          >
+            {props.authorName}
+            <Show when={props.badge}>
+              <span class="text-xs ml-1.5 rounded px-1 py-[1px] bg-accent text-fg">{props.badge}</span>
+            </Show>
+          </span>
+          <span
+            class="timestamp text-fg/50 text-xs ml-2"
+            use:tooltip={timestampTooltip(props.timestamp)}
+          >
+            {humanizeTimestamp(props.timestamp)}
+          </span>
+        </div>
+        {props.children}
       </div>
-      {props.children}
     </div>
   )
 }
 
 export function MessagePreview(
-  props: { message: Message, guildId?: bigint } & Partial<MessageHeaderProps> & MessageContentProps
+  props: { message: Message, guildId?: bigint, onReply?: (message: Message) => void } & Partial<MessageHeaderProps> & MessageContentProps
 ) {
   const api = getApi()!
   const contextMenu = useContextMenu()!
@@ -580,13 +656,17 @@ export function MessagePreview(
     <MessageHeader
       mentioned={api.cache?.isMentionedIn(message())}
       onContextMenu={contextMenu.getHandler(
-        <MessageContextMenu message={message()} guildId={props.guildId} editing={contentProps.editing} />
+        <MessageContextMenu message={message()} guildId={props.guildId} editing={contentProps.editing} onReply={props.onReply} />
       )}
       authorAvatar={api.cache!.avatarOf(message().author_id!)}
       authorColor={authorColor}
       authorName={displayName(author())}
       badge={UserFlags.fromValue(author().flags).has('BOT') ? 'BOT' : undefined}
       timestamp={snowflakes.timestamp(message().id)}
+      referencesProvider={message().references
+        && contentProps.grouper
+        && { references: message().references, grouper: contentProps.grouper }
+      }
       {...headerProps}
     >
       <MessageContent {...contentProps} />
@@ -608,7 +688,7 @@ function QuickActionButton(
   )
 }
 
-function QuickActions(props: { message: Message, offset?: number, guildId?: bigint, grouper: MessageGrouper }) {
+function QuickActions(props: { message: Message, offset?: number, guildId?: bigint, grouper: MessageGrouper, onReply: (message: Message) => void }) {
   const contextMenu = useContextMenu()
   const permissions = createMemo(() =>
     props.guildId ? getApi()?.cache?.getClientPermissions(props.guildId, props.message.channel_id) : null
@@ -622,12 +702,12 @@ function QuickActions(props: { message: Message, offset?: number, guildId?: bigi
         <QuickActionButton icon={FaceSmile} tooltip="Add Reaction" />
       </Show>
       <Show when={!permissions() || permissions()!.has('SEND_MESSAGES')}>
-        <QuickActionButton icon={Reply} tooltip="Reply" />
+        <QuickActionButton icon={Reply} tooltip="Reply" onClick={() => props.onReply(props.message)} />
       </Show>
       <QuickActionButton
         icon={EllipsisVertical}
         tooltip="More"
-        onClick={contextMenu?.getHandler(<MessageContextMenu message={props.message} guildId={props.guildId} />)}
+        onClick={contextMenu?.getHandler(<MessageContextMenu message={props.message} guildId={props.guildId} onReply={props.onReply} />)}
       />
     </div>
   )
@@ -645,6 +725,7 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
   const [loading, setLoading] = createSignal(true)
   const [autocompleteState, setAutocompleteState] = createSignal<AutocompleteState | null>(null)
   const [uploadedAttachments, setUploadedAttachments] = createSignal<UploadedAttachment[]>([])
+  const [replyingTo, setReplyingTo] = createSignal<{message: Message, mentionAuthor: boolean}[]>([])
   const [sendable, setSendable] = createSignal(false)
   const [emojiPickerVisible, setEmojiPickerVisible] = createSignal(false)
   let emojiPickerRef: HTMLDivElement | undefined
@@ -658,6 +739,18 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
   const [lastScrollPosition, setLastScrollPosition] = createSignal(0);
 
   const updateSendable = () => setSendable(!!messageInputRef?.innerText?.trim() || uploadedAttachments().length > 0)
+
+  const addReply = (message: Message) => {
+    setReplyingTo(prev => prev.some(({ message: m }) => m.id === message.id) ? prev : [...prev, {message, mentionAuthor: false}])
+    messageInputRef?.focus()
+  }
+  const removeReply = (id: bigint) => setReplyingTo(prev => prev.filter(({ message: m }) => m.id !== id))
+  const setMentionAuthor = (message: Message, mentionAuthor: boolean) => {
+    setReplyingTo(prev => prev.map(({ message: m, mentionAuthor: ma }) =>
+      m.id === message.id ? { message: m, mentionAuthor } : { message: m, mentionAuthor: ma }
+    ))
+  }
+
   const mobile = /Android|webOS|iPhone|iP[ao]d|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
   const grouper = createMemo(() => {
     const { grouper, cached } = getApi()!.cache!.useChannelMessages(props.channelId)
@@ -709,13 +802,22 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
     if (!sendable()) return;
     const content = messageInputRef!.innerText!.trim()
     const attachments = uploadedAttachments()
+    const references = replyingTo()
 
     setUploadedAttachments([])
+    setReplyingTo([])
     setSendable(false)
     // Clear the message input without invalidating undo history
     messageInputRef!.focus()
     document.execCommand('selectAll', false)
     document.execCommand('insertHTML', false, '')
+
+    const refs = references.map(({ message: r, mentionAuthor }) => ({
+      channel_id: r.channel_id,
+      guild_id: (api.cache?.channels.get(r.channel_id) as GuildChannel | undefined)?.guild_id ?? null,
+      mention_author: mentionAuthor,
+      message_id: r.id,
+    }))
 
     let mockMessage = {
       id: snowflakes.fromTimestamp(Date.now()),
@@ -730,6 +832,7 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
       })),
       _nonceState: 'pending',
       ...grouper().nonceDefault,
+      references: refs,
     } as Message
 
     const nonce = mockMessage.id.toString()
@@ -738,12 +841,12 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
     messageAreaRef!.scrollTo(0, messageAreaRef!.scrollHeight)
 
     try {
-      const json = { content, nonce }
+      const json = { content, nonce, references: refs }
 
       let options;
       if (attachments.length > 0) {
         const formData = new FormData()
-        formData.append('json', JSON.stringify(json));
+        formData.append('json', stringifyJSON(json));
         for (const [i, attachment] of Object.entries(attachments)) {
           formData.append('file' + i, attachment.file, attachment.filename)
         }
@@ -1186,7 +1289,13 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
                     <MessagePreview
                       message={firstMessage}
                       guildId={props.guildId}
-                      quickActions={<QuickActions message={firstMessage} guildId={props.guildId} grouper={grouper()} />}
+                      onReply={addReply}
+                      quickActions={
+                        <QuickActions
+                          message={firstMessage} guildId={props.guildId} grouper={grouper()}
+                          offset={firstMessage.references?.length * 6 + 4} onReply={addReply}
+                        />
+                      }
                       {...contentProps()}
                     />
                     <For each={group.slice(1)}>
@@ -1199,10 +1308,10 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
                               : "hover:bg-bg-1/60"]: true,
                           }}
                           onContextMenu={contextMenu.getHandler(
-                            <MessageContextMenu message={message} guildId={props.guildId} editing={editing} />
+                            <MessageContextMenu message={message} guildId={props.guildId} editing={editing} onReply={addReply} />
                           )}
                         >
-                          <QuickActions message={message} offset={9} guildId={props.guildId} grouper={grouper()} />
+                          <QuickActions message={message} offset={9} guildId={props.guildId} grouper={grouper()} onReply={addReply} />
                           <span
                             class="invisible text-center group-hover:visible text-[0.65rem] text-fg/40"
                             classList={{ [api.cache?.isMentionedIn(message) ? 'w-[60px]' : 'w-[62px]']: true }}
@@ -1336,6 +1445,36 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
               "w-[calc(100%-2.75rem)]": !mobile,
             }}
           >
+            <Show when={replyingTo().length > 0} keyed={false}>
+              <div class="flex flex-col gap-y-1 px-2">
+                <For each={replyingTo()}>
+                  {({ message: msg, mentionAuthor }) => {
+                    const icon = msg.author?.avatar ?? api.cache!.avatarOf(msg.author_id!)
+                    const name = displayName(msg.author ?? api.cache!.users.get(msg.author_id!) ?? authorDefault())
+                    return (
+                      <div class="flex items-center bg-2 rounded p-1 text-xs gap-2">
+                        <img src={icon} alt={name} class="w-6 h-6 rounded-full flex-shrink-0" />
+                        <span class="truncate flex-grow">
+                          <b>{name}</b>
+                          {msg.content ? `: ${msg.content}` : ''}
+                        </span>
+                        <button
+                          class="p-1 rounded-full hover:bg-fg/10"
+                          onClick={() => setMentionAuthor(msg, !mentionAuthor)}
+                          use:tooltip={(mentionAuthor ? "Do not mention" : "Mention") + ` @${name} when replying`}
+                        >
+                          <Icon icon={At} class="w-3 h-3 transition-all duration-200" classList={{ [mentionAuthor ? "fill-fg/100" : "fill-fg/60"]: true }} />
+                        </button>
+                        <button class="p-1 rounded-full hover:bg-fg/10" onClick={() => removeReply(msg.id)} use:tooltip="Remove">
+                          <Icon icon={Xmark} class="w-3 h-3 fill-fg/60" />
+                        </button>
+                      </div>
+                    )
+                  }}
+                </For>
+              </div>
+              <div class="divider m-0 p-0" />
+            </Show>
             <Show when={uploadedAttachments().length > 0} keyed={false}>
               <div class="flex flex-wrap gap-x-2 gap-y-1 px-2">
                 <For each={uploadedAttachments()}>

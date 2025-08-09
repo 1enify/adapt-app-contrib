@@ -58,7 +58,7 @@ export default class MessageGrouper {
   private setNewestMessageId: Setter<bigint | undefined>
   private hasGap: Accessor<boolean>
   private setHasGap: Setter<boolean>
- private readonly messageIds: Set<bigint>
+  private readonly messageIds: Set<bigint>
 
   constructor(
     private readonly api: Api,
@@ -161,7 +161,7 @@ export default class MessageGrouper {
       groups[groups.length - 1] = this.currentGroup = [...this.currentGroup!, message]
       return groups
     })
- this.messageIds.add(message.id)
+    this.messageIds.add(message.id)
     return [this.groups.length - 1, this.currentGroup!.length - 1]
   }
 
@@ -180,7 +180,7 @@ export default class MessageGrouper {
       if (group.length === 0) groups.splice(groupIndex, 1)
       return groups
     })
- this.messageIds.delete(id)
+    this.messageIds.delete(id)
   }
 
   /**
@@ -273,7 +273,7 @@ export default class MessageGrouper {
 
       const target = <Message[]> groups[groupIndex]
       target.splice(++messageIndex, 0, message)
- this.messageIds.add(message.id)
+      this.messageIds.add(message.id)
       lastMessage = message
     }
 
@@ -445,7 +445,8 @@ export default class MessageGrouper {
     }
 
     // group messages if they are from the same author and within 15 minutes
-    return message.author_id !== lastMessage.author_id
+    return !!message.references?.length
+      || message.author_id !== lastMessage.author_id
       || message.id - lastMessage.id > SNOWFLAKE_BOUNDARY
   }
 
@@ -470,6 +471,7 @@ export default class MessageGrouper {
       reactions: [],
       edited_at: null,
       mentions: [],
+      references: [],
     }
   }
 
