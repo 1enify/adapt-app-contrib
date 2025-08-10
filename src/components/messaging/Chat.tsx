@@ -156,8 +156,8 @@ function MessageReferencePreview(props: { reference: MessageReference, grouper?:
       href={href}
       replace={true}
     >
+      <Icon icon={Reference} class="w-4 h-4 mr-1 fill-none stroke-fg/20 mt-2" />
       <Show when={refMsg()} fallback={<span>Unknown message</span>}>
-        <Icon icon={Reference} class="w-4 h-4 mr-1 fill-none stroke-fg/20 mt-2" />
         <Show when={avatar()}>
           <img src={avatar()} alt="" class="inline-block w-5 h-5 rounded-full mr-1" />
         </Show>
