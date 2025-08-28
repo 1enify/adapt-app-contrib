@@ -15,7 +15,7 @@ import {
 } from "solid-js";
 import type {Message, MessageReference} from "../../types/message";
 import {getApi} from "../../api/Api";
-import MessageGrouper, {authorDefault, type MessageGroup} from "../../api/MessageGrouper";
+import MessageGrouper, {authorDefault, type MessageGroup, type MessageDivider} from "../../api/MessageGrouper";
 import {
   displayName,
   extendedColor,
@@ -689,7 +689,16 @@ function QuickActionButton(
   )
 }
 
-function QuickActions(props: { message: Message, offset?: number, guildId?: bigint, grouper: MessageGrouper, onReply: (message: Message) => void }) {
+type QuickActionsProps = {
+  message: Message,
+  offset?: number,
+  guildId?: bigint,
+  grouper: MessageGrouper,
+  editing?: ReactiveSet<bigint>,
+  onReply: (message: Message) => void,
+}
+
+function QuickActions(props: QuickActionsProps) {
   const contextMenu = useContextMenu()
   const permissions = createMemo(() =>
     props.guildId ? getApi()?.cache?.getClientPermissions(props.guildId, props.message.channel_id) : null
@@ -708,8 +717,110 @@ function QuickActions(props: { message: Message, offset?: number, guildId?: bigi
       <QuickActionButton
         icon={EllipsisVertical}
         tooltip="More"
-        onClick={contextMenu?.getHandler(<MessageContextMenu message={props.message} guildId={props.guildId} onReply={props.onReply} />)}
+        onClick={contextMenu?.getHandler(
+          <MessageContextMenu
+            message={props.message}
+            guildId={props.guildId}
+            onReply={props.onReply}
+            editing={props.editing}
+          />
+        )}
       />
+    </div>
+  )
+}
+
+type SubsequentMessageProps = {
+  message: Message,
+  guildId?: bigint,
+  grouper: MessageGrouper,
+  onReply: (message: Message) => void,
+  editing?: ReactiveSet<bigint>,
+  contentProps: Partial<MessageContentProps>,
+};
+
+function SubsequentMessage(props: SubsequentMessageProps) {
+  const api = getApi()!
+  const contextMenu = useContextMenu()
+
+  return (
+    <div
+      class="relative group flex items-center py-px transition-all duration-200 rounded-r-lg"
+      classList={{
+        [api.cache?.isMentionedIn(props.message)
+          ? "bg-accent/10 hover:bg-accent/20 border-l-2 border-l-accent"
+          : "hover:bg-bg-1/60"]: true,
+      }}
+      onContextMenu={contextMenu!.getHandler(
+        <MessageContextMenu message={props.message} guildId={props.guildId} editing={props.contentProps.editing} onReply={props.onReply} />
+      )}
+    >
+      <QuickActions
+        message={props.message}
+        offset={9}
+        guildId={props.guildId}
+        grouper={props.grouper}
+        editing={props.editing}
+        onReply={props.onReply}
+      />
+      <span
+        class="invisible text-center group-hover:visible text-[0.65rem] text-fg/40"
+        classList={{ [api.cache?.isMentionedIn(props.message) ? 'w-[60px]' : 'w-[62px]']: true }}
+        use:tooltip={timestampTooltip(snowflakes.timestamp(props.message.id))}
+      >
+        {humanizeTime(snowflakes.timestamp(props.message.id))}
+      </span>
+      <MessageContent message={props.message} largePadding {...props.contentProps} />
+    </div>
+  )
+}
+
+type MessageGroupViewProps = {
+  group: MessageGroup,
+  guildId?: bigint,
+  grouper: MessageGrouper,
+  onReply: (message: Message) => void,
+  editing: ReactiveSet<bigint>,
+  contentProps: Partial<MessageContentProps>,
+}
+
+function MessageGroupView(props: MessageGroupViewProps) {
+  const group = () => props.group
+  if (group().isDivider) return (
+    <div class="divider text-fg/50 mx-4 h-0 text-sm">{(group() as MessageDivider).content}</div>
+  )
+
+  return (
+    <div class="flex flex-col">
+      <For each={group() as Message[]}> 
+        {(message, i) => i() === 0 ? (
+          <MessagePreview
+            message={message}
+            guildId={props.guildId}
+            onReply={props.onReply}
+            quickActions={
+              <QuickActions
+                message={message}
+                guildId={props.guildId}
+                grouper={props.grouper}
+                offset={message.references?.length ? message.references!.length * 6 + 4 : 4}
+                editing={props.editing}
+                onReply={props.onReply}
+              />
+            }
+            {...props.contentProps}
+          />
+        ) : (
+          <SubsequentMessage
+            message={message}
+            guildId={props.guildId}
+            grouper={props.grouper}
+            onReply={props.onReply}
+            editing={props.editing}
+            contentProps={props.contentProps}
+          />
+        )}
+      </For>
     </div>
   )
 }
@@ -837,8 +948,8 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
     } as Message
 
     const nonce = mockMessage.id.toString()
-    const loc = grouper().pushMessage(mockMessage)
-    grouper().nonced.set(nonce, loc)
+    const idx = grouper().pushMessage(mockMessage)
+    grouper().nonced.set(nonce, idx)
     messageAreaRef!.scrollTo(0, messageAreaRef!.scrollHeight)
 
     try {
@@ -1277,56 +1388,16 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
           </Show>
           <Show when={!loading()} fallback={<MessageLoadingSkeleton />}>
             <For each={grouper().groups}>
-              {(group: MessageGroup) => {
-                if (group.isDivider) return (
-                  <div class="divider text-fg/50 mx-4 h-0 text-sm">{group.content}</div>
-                )
-
-                const firstMessage = group[0]
-                if (!firstMessage) return null
-
-                return (
-                  <div class="flex flex-col">
-                    <MessagePreview
-                      message={firstMessage}
-                      guildId={props.guildId}
-                      onReply={addReply}
-                      quickActions={
-                        <QuickActions
-                          message={firstMessage} guildId={props.guildId} grouper={grouper()}
-                          offset={firstMessage.references?.length * 6 + 4} onReply={addReply}
-                        />
-                      }
-                      {...contentProps()}
-                    />
-                    <For each={group.slice(1)}>
-                      {(message: Message) => (
-                        <div
-                          class="relative group flex items-center py-px transition-all duration-200 rounded-r-lg"
-                          classList={{
-                            [api.cache?.isMentionedIn(message)
-                              ? "bg-accent/10 hover:bg-accent/20 border-l-2 border-l-accent"
-                              : "hover:bg-bg-1/60"]: true,
-                          }}
-                          onContextMenu={contextMenu.getHandler(
-                            <MessageContextMenu message={message} guildId={props.guildId} editing={editing} onReply={addReply} />
-                          )}
-                        >
-                          <QuickActions message={message} offset={9} guildId={props.guildId} grouper={grouper()} onReply={addReply} />
-                          <span
-                            class="invisible text-center group-hover:visible text-[0.65rem] text-fg/40"
-                            classList={{ [api.cache?.isMentionedIn(message) ? 'w-[60px]' : 'w-[62px]']: true }}
-                            use:tooltip={timestampTooltip(snowflakes.timestamp(message.id))}
-                          >
-                            {humanizeTime(snowflakes.timestamp(message.id))}
-                          </span>
-                          <MessageContent message={message} largePadding {...contentProps()} />
-                        </div>
-                      )}
-                    </For>
-                  </div>
-                )
-              }}
+              {(group: MessageGroup) => (
+                <MessageGroupView
+                  group={group}
+                  guildId={props.guildId}
+                  grouper={grouper()}
+                  onReply={addReply}
+                  editing={editing}
+                  contentProps={contentProps()}
+                />
+              )}
             </For>
           </Show>
         </div>
@@ -1578,7 +1649,7 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
 
                 else if (event.key === 'ArrowUp' && !event.currentTarget.innerText?.trim()) {
                   event.preventDefault()
-                  const lastMessage = grouper().lastMessage
+                  const lastMessage = grouper().latestMessageWhere(m => m.author_id === api.cache?.clientId)
                   if (lastMessage && lastMessage.author_id == api.cache?.clientId)
                     editing.add(lastMessage.id)
                 }
@@ -1670,7 +1741,7 @@ export default function Chat(props: { channelId: bigint, guildId?: bigint, title
       {/* Loading indicator */}
       <Show when={grouper().isLoading}>
         <div class="fixed bottom-24 right-4 bg-bg-2 text-fg px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
-          <Icon icon={Spinner} class="w-4 h-4 animate-spin" />
+          <Icon icon={Spinner} class="w-4 h-4 fill-fg sanimate-spin" />
           Loading messages...
         </div>
       </Show>
