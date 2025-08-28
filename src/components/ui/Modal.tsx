@@ -31,6 +31,8 @@ import {Permissions} from "../../api/Bitflags";
 import {Message} from "../../types/message";
 import ConfirmMessageDeleteModal from "../channels/ConfirmMessageDeleteModal";
 import EmojiUploadModal from "../guilds/EmojiUploadModal";
+import EditNicknameModal from "../guilds/EditNicknameModal";
+import EditMemberRolesModal from "../guilds/EditMemberRolesModal";
 
 export enum ModalId {
   NewGuild,
@@ -49,6 +51,8 @@ export enum ModalId {
   SetBotPermissions,
   SetRequestedBotPermissions,
   EmojiUpload,
+  EditNickname,
+  EditMemberRoles,
 }
 
 type ModalMapping = {
@@ -72,6 +76,8 @@ type ModalMapping = {
     allowed: Permissions
   },
   [ModalId.EmojiUpload]: { file: File },
+  [ModalId.EditNickname]: { guildId: bigint, memberId: bigint, current: string },
+  [ModalId.EditMemberRoles]: { guildId: bigint, memberId: bigint },
 }
 
 type ModalDataPair = {
@@ -207,6 +213,12 @@ export function ModalProvider(props: ParentProps) {
           </Match>
           <Match when={context.id === ModalId.EmojiUpload}>
             <EmojiUploadModal {...context.data as any} />
+          </Match>
+          <Match when={context.id === ModalId.EditNickname}>
+            <EditNicknameModal {...context.data as any} />
+          </Match>
+          <Match when={context.id === ModalId.EditMemberRoles}>
+            <EditMemberRolesModal {...context.data as any} />
           </Match>
         </Switch>
       </ModalContainer>

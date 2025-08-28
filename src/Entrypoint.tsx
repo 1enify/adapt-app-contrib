@@ -63,6 +63,7 @@ const GuildSettingsRoleOverview = lazy(() => import('./pages/guilds/settings/Rol
 const GuildSettingsRolePermissions = lazy(() => import('./pages/guilds/settings/RolePermissions'))
 const GuildSettingsRoleMembers = lazy(() => import('./pages/guilds/settings/RoleMembers'))
 const GuildSettingsEmojis = lazy(() => import('./pages/guilds/settings/EmojiSettings'))
+const GuildSettingsMembers = lazy(() => import('./pages/guilds/settings/MemberSettings'))
 
 // Guild Channel Settings
 const GuildChannelSettingsOverview = lazy(() => import('./pages/channels/settings/Overview'))
@@ -183,6 +184,7 @@ const Entrypoint: Component = () => {
                   </Route>
                   <Route path="/roles" component={GuildSettingsRoles} />
                   <Route path="/emojis" component={GuildSettingsEmojis} />
+                  <Route path="/members" component={GuildSettingsMembers} />
                   <Route path="/invites" component={() => 'wip'} />
                 </Route>
                 <Route path="/guilds/:guildId/settings" component={GuildSettingsRoot} />
