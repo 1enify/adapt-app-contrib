@@ -57,8 +57,7 @@
     }
 
     &:disabled {
-      @apply cursor-not-allowed border-transparent opacity-20;
-      background-color: rgb(var(--chkfg));
+      @apply cursor-not-allowed opacity-30;
     }
   }
 
