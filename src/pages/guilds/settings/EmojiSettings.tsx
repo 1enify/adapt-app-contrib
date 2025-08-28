@@ -13,7 +13,6 @@ import Header from "../../../components/ui/Header";
 import Search from "../../../components/icons/svg/MagnifyingGlass";
 import ArrowUpFromBracket from "../../../components/icons/svg/ArrowUpFromBracket";
 import { ModalId, useModal } from "../../../components/ui/Modal";
-import EmojiUploadModal from "../../../components/guilds/EmojiUploadModal";
 import tooltip from "../../../directives/tooltip";
 void tooltip;
 
@@ -145,7 +144,7 @@ export default function EmojiSettings() {
   }
 
   return (
-    <div class="px-4 mobile:px-2 py-6">
+    <div class="px-4 py-6">
       <Header>Emojis</Header>
       
       <Show when={canManageEmojis()}>
@@ -153,13 +152,13 @@ export default function EmojiSettings() {
           <div>
             <h2 class="text-md font-title font-semibold text-fg mb-1">Upload Emojis</h2>
             <p class="mb-4 font-light text-sm text-fg/50">
-                Add up to 50 custom emojis to your server.
+              Add up to 50 custom emojis to your server.
             </p>
           </div>
           <div class="flex items-center gap-4">
             <input
               type="file"
-              accept="image/*"
+              accept="image/png, image/jpeg, image/gif"
               multiple
               class="hidden"
               id="emoji-upload"
@@ -177,18 +176,18 @@ export default function EmojiSettings() {
         </div>
       </Show>
 
-      <div class="bg-bg-0 rounded-lg overflow-hidden">
+      <div class="bg-bg-1/80 rounded-lg overflow-hidden">
         <div class="p-4 border-b border-bg-2">
           <div class="flex items-center justify-between">
             <h2 class="text-lg font-semibold font-title">
-                {searchQuery() ? "Search Results" : "Emojis"} ({filteredEmojis().length})
+              {searchQuery() ? "Search Results" : "Emojis"} ({filteredEmojis().length})
             </h2>
             <div class="relative">
               <Icon icon={Search} class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 fill-fg/40" />
               <input
                 type="text"
                 placeholder="Search emojis..."
-                class="bg-bg-1 rounded-lg pl-9 pr-3 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-accent"
+                class="bg-bg-0 rounded-lg pl-9 pr-3 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-accent"
                 value={searchQuery()}
                 onInput={(e) => setSearchQuery(e.currentTarget.value)}
               />
@@ -203,7 +202,7 @@ export default function EmojiSettings() {
                 <img
                   src={`https://convey.adapt.chat/emojis/${emoji.id}`}
                   alt={emoji.name}
-                  class="w-8 h-8"
+                  class="w-9 h-9"
                 />
                 <div class="flex-grow">
                   <Show when={editingEmoji()?.id === emoji.id} fallback={
@@ -249,7 +248,7 @@ export default function EmojiSettings() {
                       </button>
                     </div>
                   </Show>
-                  <div class="text-sm text-fg/60">
+                  <div class="text-xs font-light text-fg/50">
                     Created by {api.cache?.users.get(emoji.created_by!)?.username ?? "Unknown"}
                     <br />
                     {new Date(snowflakes.timestampMillis(emoji.id)).toLocaleDateString()}
@@ -257,11 +256,11 @@ export default function EmojiSettings() {
                 </div>
                 <Show when={canManageEmojis()}>
                   <button
-                    class="p-2 rounded-lg transition-colors"
+                    class="p-2 rounded-lg transition-colors group"
                     onClick={() => handleDelete(emoji.id)}
                     use:tooltip="Delete"
                   >
-                    <Icon icon={Trash} class="w-5 h-5 fill-fg transition-colors hover:fill-danger" />
+                    <Icon icon={Trash} class="w-5 h-5 fill-fg/10 transition-colors group-hover:fill-danger" />
                   </button>
                 </Show>
               </div>

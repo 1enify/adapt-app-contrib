@@ -4,7 +4,6 @@ import {getUnicodeEmojiUrl, getCustomEmojiUrl} from "./Emoji";
 import {ReactiveSet} from "@solid-primitives/set";
 import Icon from "../icons/Icon";
 import ChevronRight from "../icons/svg/ChevronRight";
-import FaceSmile from "../icons/svg/FaceSmile";
 import {Show} from "solid-js";
 import Fuse from 'fuse.js';
 import { getApi } from "../../api/Api";
@@ -34,6 +33,18 @@ function generateCategoryMap(): Map<string, (Gemoji | { id: bigint, name: string
   }
 
   return categories
+}
+
+const CATEGORY_ICONS: Record<string, string> = {
+  'Smileys & Emotion': '😀',
+  'People & Body': '🧑',
+  'Animals & Nature': '🐻',
+  'Food & Drink': '🍔',
+  'Travel & Places': '✈️',
+  Activities: '⚽',
+  Objects: '💡',
+  Symbols: '🔣',
+  Flags: '🏳️'
 }
 
 export default function EmojiPicker(props: { onSelect?: (emoji: string) => void }) {
@@ -168,9 +179,16 @@ export default function EmojiPicker(props: { onSelect?: (emoji: string) => void 
                   use:tooltip={{ content: category, placement: 'left' }}
                 >
                   {isGuild ? (
-                    <GuildIcon guild={guild!} sizeClass="w-7 h-7" />
+                    <GuildIcon guild={guild!} sizeClass="w-7 h-7 -m-1" />
                   ) : (
-                    <Icon icon={FaceSmile} class="w-5 h-5 fill-fg/60 group-hover:fill-accent transition-all duration-200" />
+                    <img
+                      src={getUnicodeEmojiUrl(CATEGORY_ICONS[category] ?? '😀')}
+                      alt={category}
+                      width={20}
+                      height={20}
+                      draggable={false}
+                      class="w-5 h-5 opacity-90 group-hover:opacity-100 transition-all duration-200"
+                    />
                   )}
                 </button>
               )
