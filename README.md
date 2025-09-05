@@ -11,6 +11,49 @@ This is the official web-based client and Progressive Web App (PWA) for the [Ada
 See the [project board](https://github.com/orgs/AdaptChat/projects/2/views/4?layout=board) for the current status of the
 web client.
 
+## Installation
+
+You can run the Adapt client locally using [Vite](https://vitejs.dev/).
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) **v18 or later**
+- [npm](https://www.npmjs.com/) 
+
+### Clone the repository
+```bash
+git clone https://github.com/AdaptChat/webclient.git
+cd webclient
+```
+
+### Install dependencies
+```bash
+npm install
+```
+
+### Start development server
+```bash
+npm run dev
+```
+
+### Build for production
+```bash
+npm run build
+```
+
+To preview the production build locally:
+
+```bash
+npm run serve
+```
+
+### Tauri desktop builds
+This project also includes [Tauri](https://tauri.app/).  
+To build with Tauri (Install the [Tauri prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites)):
+
+```bash
+npm run tauri build
+```
+
 ## Desktop Builds
 
 - Windows:
