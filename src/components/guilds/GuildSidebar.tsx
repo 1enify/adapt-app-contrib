@@ -1,5 +1,5 @@
 import {A, useNavigate, useParams} from "@solidjs/router";
-import {createMemo, createSignal, For, Match, Show, Switch} from "solid-js";
+import {createMemo, createSignal, For, Match, Show, Switch, onMount, onCleanup} from "solid-js";
 import {getApi} from "../../api/Api";
 import {GuildChannel} from "../../types/channel";
 import {ModalId, useModal} from "../ui/Modal";
@@ -182,6 +182,24 @@ export default function GuildSidebar() {
   const [dropdownExpanded, setDropdownExpanded] = createSignal(false)
   const isOwner = createMemo(() => guild().owner_id === api.cache?.clientUser?.id)
 
+  let dropdownRef: HTMLUListElement | undefined
+  let toggleRef: HTMLDivElement | undefined
+
+  onMount(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (!dropdownExpanded()) return
+      if (
+        !dropdownRef?.contains(e.target as Node) &&
+        !toggleRef?.contains(e.target as Node)
+      ) {
+        setDropdownExpanded(false)
+      }
+    }
+
+    document.addEventListener("click", handleClick)
+    onCleanup(() => document.removeEventListener("click", handleClick))
+  })
+
   const BaseContextMenu = () => (
     <Show when={guildPermissions()?.has('CREATE_INVITES')}>
       <ContextMenuButton
@@ -211,7 +229,6 @@ export default function GuildSidebar() {
     groups.forEach(group => group.children.sort((a, b) => {
       const aIsCategory = a.type === 'category'
       const bIsCategory = b.type === 'category'
-
       if (aIsCategory && !bIsCategory) return 1
       if (!aIsCategory && bIsCategory) return -1
       return a.position - b.position
@@ -229,6 +246,7 @@ export default function GuildSidebar() {
       <RenderCategory id={props.channel.id} group={channels()?.get(props.channel.id)!} />
     </Show>
   )
+  
   const RenderCategory = (props: {
     id: bigint, group: { category: GuildChannel, children: GuildChannel[] }
   }) => {
@@ -310,6 +328,7 @@ export default function GuildSidebar() {
       )}
     >
       <div
+        ref={toggleRef}
         class="box-border flex flex-col justify-end border-b-[1px] border-fg/5
           group hover:bg-2 transition-all duration-200 cursor-pointer relative w-full"
         classList={{ 'min-h-[150px]': !!guild().banner }}
@@ -351,7 +370,11 @@ export default function GuildSidebar() {
           </div>
         )}
         <Show when={dropdownExpanded()}>
-          <ul tabIndex={0} class="flex flex-col py-1 absolute rounded-b-xl bg-bg-3/60 backdrop-blur inset-x-0 top-full z-[200]">
+          <ul
+            ref={dropdownRef}
+            tabIndex={0}
+            class="flex flex-col py-1 absolute rounded-b-xl bg-bg-3/60 backdrop-blur inset-x-0 top-full z-[200]"
+          >
             <Show when={guildPermissions()?.has('CREATE_INVITES')}>
               <GuildDropdownButton
                 icon={UserPlus}
