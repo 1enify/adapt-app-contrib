@@ -17,7 +17,7 @@ You can run the Adapt client locally using [Vite](https://vitejs.dev/).
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) **v18 or later**
-- [npm](https://www.npmjs.com/) 
+- [pnpm](https://pnpm.io/) **v9 or later**
 
 ### Clone the repository
 ```bash
@@ -27,23 +27,23 @@ cd webclient
 
 ### Install dependencies
 ```bash
-npm install
+pnpm install
 ```
 
 ### Start development server
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ### Build for production
 ```bash
-npm run build
+pnpm build
 ```
 
 To preview the production build locally:
 
 ```bash
-npm run serve
+pnpm serve
 ```
 
 ### Tauri desktop builds
@@ -51,7 +51,7 @@ This project also includes [Tauri](https://tauri.app/).
 To build with Tauri (Install the [Tauri prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites)):
 
 ```bash
-npm run tauri build
+pnpm tauri build
 ```
 
 ## Desktop Builds
