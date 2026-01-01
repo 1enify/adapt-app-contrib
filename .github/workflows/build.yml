@@ -22,7 +22,7 @@ jobs:
         workspaces: "./src-tauri -> target"
 
     - name: Install tauri CLI
-      run: cargo install tauri-cli@1
+      run: cargo install tauri-cli@^1
 
     - name: Install packages
       run: npm i
@@ -76,7 +76,7 @@ jobs:
         workspaces: "./src-tauri -> target"
 
     - name: Install tauri CLI
-      run: cargo install tauri-cli
+      run: cargo install tauri-cli@^1
 
     - name: Install packages
       run: npm i
@@ -102,7 +102,7 @@ jobs:
         workspaces: "./src-tauri -> target"
 
     - name: Install tauri CLI
-      run: cargo install tauri-cli
+      run: cargo install tauri-cli@^1
 
     - name: Install packages
       run: npm i
@@ -128,7 +128,7 @@ jobs:
           workspaces: "./src-tauri -> target"
 
       - name: Install tauri CLI
-        run: cargo install tauri-cli
+        run: cargo install tauri-cli@^1
 
       - name: Install packages
         run: npm i
