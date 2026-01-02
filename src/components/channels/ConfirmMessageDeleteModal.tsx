@@ -4,7 +4,7 @@ import {getApi} from "../../api/Api";
 import Icon from "../icons/Icon";
 import Trash from "../icons/svg/Trash";
 import {Message} from "../../types/message";
-import {MessagePreview} from "../messaging/Chat";
+import {MessagePrimary} from "../messaging/Chat";
 
 type Props = {
   message: Message,
@@ -22,7 +22,7 @@ export default function ConfirmMessageDeleteModal(props: Props) {
         Are you sure you want to delete this message?
       </p>
       <div class="rounded-xl overflow-y-auto max-h-[50lvh] bg-bg-3/30 mt-2 py-4">
-        <MessagePreview message={props.message} noHoverEffects />
+        <MessagePrimary message={props.message} noHoverEffects />
       </div>
       <form
         class="flex flex-wrap justify-end mt-4 gap-x-4"

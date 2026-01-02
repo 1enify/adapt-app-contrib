@@ -90,7 +90,7 @@ export default function RoleOverview() {
   let pickerAreaRef: HTMLDivElement | null = null
   const [showColorPicker, setShowColorPicker] = createSignal(false)
   const listener = (e: MouseEvent) => {
-    if (pickerAreaRef && !pickerAreaRef.contains(e.target as Node)) setShowColorPicker(false)
+    if (pickerAreaRef && !(pickerAreaRef as any).contains(e.target as Node)) setShowColorPicker(false)
   }
   onMount(() => document.addEventListener('click', listener))
   onCleanup(() => document.removeEventListener('click', listener))

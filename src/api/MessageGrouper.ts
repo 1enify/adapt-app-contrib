@@ -1,5 +1,6 @@
 import type {Message} from "../types/message";
 import {Accessor, createSignal, Setter, type Signal} from "solid-js";
+import {createStore, reconcile, type SetStoreFunction} from "solid-js/store";
 import {humanizeDate, isSameDay, snowflakes} from "../utils";
 import type Api from "./Api";
 import {User} from "../types/user";
@@ -75,7 +76,8 @@ function groupMessages(messages: Message[]): MessageGroup[] {
  */
 export default class MessageGrouper {
   private readonly messagesSignal: Signal<Message[]>
-  private readonly groupsSignal: Signal<MessageGroup[]>
+  private groupsValue: MessageGroup[]
+  private setGroupsValue: SetStoreFunction<MessageGroup[]>
   private fetchBefore?: bigint
   private fetchLock = false
   private loading: Accessor<boolean>
@@ -96,7 +98,7 @@ export default class MessageGrouper {
     private readonly channelId: bigint,
   ) {
     this.messagesSignal = createSignal([] as Message[]);
-    this.groupsSignal = createSignal([] as MessageGroup[]);
+    [this.groupsValue, this.setGroupsValue] = createStore([] as MessageGroup[]);
     this.nonced = new Map();
     this.messageIds = new Set();
     [this.noMoreMessages, this.setNoMoreMessages] = createSignal(false);
@@ -108,7 +110,7 @@ export default class MessageGrouper {
 
   private recompute() {
     const messages = this.messages
-    this.setGroups(groupMessages(messages))
+    this.setGroupsValue(reconcile(groupMessages(messages)))
     this.updateMessageBoundaries(messages)
     this.checkForMessageGap(messages)
   }
@@ -179,13 +181,39 @@ export default class MessageGrouper {
 
     let index = 0
     this.setMessages(prev => {
-      const next = [...prev, message]
-      next.sort((a, b) => (a.id < b.id ? -1 : 1))
-      index = next.findIndex(m => m.id === message.id)
+      const next = [...prev]
+      // Fast paths: append or prepend
+      if (next.length === 0 || message.id > next[next.length - 1].id) {
+        next.push(message)
+        index = next.length - 1
+      } else if (message.id < next[0].id) {
+        next.unshift(message)
+        index = 0
+      } else {
+        // Binary search insertion index
+        let lo = 0, hi = next.length - 1
+        while (lo <= hi) {
+          const mid = (lo + hi) >> 1
+          if (next[mid].id < message.id) lo = mid + 1
+          else hi = mid - 1
+        }
+        next.splice(lo, 0, message)
+        index = lo
+      }
       return next
     })
     this.messageIds.add(message.id)
-    this.recompute()
+    if (index === this.messages.length - 1) {
+      this.appendMessageToGroups(message)
+      this.updateMessageBoundaries(this.messages)
+      this.checkForMessageGap(this.messages)
+    } else if (index === 0) {
+      this.prependMessageToGroups(message)
+      this.updateMessageBoundaries(this.messages)
+      this.checkForMessageGap(this.messages)
+    } else {
+      this.recompute()
+    }
     return index
   }
 
@@ -200,12 +228,52 @@ export default class MessageGrouper {
     if (unique.length === 0) return
 
     unique.forEach(m => this.messageIds.add(m.id))
+    let prevTail: Message | undefined
+    let prevHead: Message | undefined
     this.setMessages(prev => {
-      const next = [...prev, ...unique]
-      next.sort((a, b) => (a.id < b.id ? -1 : 1))
-      return next
+      prevTail = prev[prev.length - 1]
+      prevHead = prev[0]
+      if (prev.length === 0) return [...unique]
+      // Since API guarantees chunks are ordered and non-overlapping with what we request,
+      // try fast path merge; otherwise fallback to linear merge.
+      const uFirst = unique[0].id
+      const uLast = unique[unique.length - 1].id
+      const pFirst = prev[0].id
+      const pLast = prev[prev.length - 1].id
+
+      if (uLast < pFirst) {
+        // Entire chunk goes before current
+        return [...unique, ...prev]
+      } else if (uFirst > pLast) {
+        // Entire chunk goes after current
+        return [...prev, ...unique]
+      } else {
+        // General merge
+        const merged: Message[] = []
+        let i = 0, j = 0
+        while (i < prev.length && j < unique.length) {
+          if (prev[i].id < unique[j].id) merged.push(prev[i++])
+          else merged.push(unique[j++])
+        }
+        while (i < prev.length) merged.push(prev[i++])
+        while (j < unique.length) merged.push(unique[j++])
+        return merged
+      }
     })
-    this.recompute()
+
+    const appended = prevTail && unique[0].id > prevTail.id
+    const prepended = prevHead && unique[unique.length - 1].id < prevHead.id
+    if (appended) {
+      this.appendChunkToGroups(unique, prevTail!)
+      this.updateMessageBoundaries(this.messages)
+      this.checkForMessageGap(this.messages)
+    } else if (prepended) {
+      this.prependChunkToGroups(unique, prevHead!)
+      this.updateMessageBoundaries(this.messages)
+      this.checkForMessageGap(this.messages)
+    } else {
+      this.recompute()
+    }
   }
 
   /**
@@ -353,11 +421,123 @@ export default class MessageGrouper {
   }
 
   get groups() {
-    return this.groupsSignal[0]()
+    return this.groupsValue
   }
 
-  private get setGroups() {
-    return this.groupsSignal[1]
+  // setGroupsValue used for updates
+
+  private isDivider(group: MessageGroup): group is MessageDivider {
+    return (group as any)?.isDivider === true
+  }
+
+  private isNewDay(prev: Message | undefined, curr: Message): boolean {
+    if (!prev) return false
+    const prevTs = snowflakes.timestamp(prev.id)
+    const currTs = snowflakes.timestamp(curr.id)
+    return !isSameDay(prevTs, currTs)
+  }
+
+  private shouldSplitAcross(prev: Message | undefined, curr: Message): boolean {
+    if (!prev) return true
+    const newDay = this.isNewDay(prev, curr)
+    return newDay
+      || curr.author_id !== prev.author_id
+      || curr.id - prev.id > SNOWFLAKE_BOUNDARY
+      || !!curr.references?.length
+  }
+
+  private appendMessageToGroups(message: Message) {
+    const prevMsg = this.messages[this.messages.length - 2]
+    const newDay = this.isNewDay(prevMsg, message)
+    const split = this.shouldSplitAcross(prevMsg, message)
+    const ts = snowflakes.timestamp(message.id)
+
+    this.setGroupsValue(prevGroups => {
+      const next = [...prevGroups]
+      if (newDay) next.push({ isDivider: true, content: humanizeDate(ts) })
+      if (next.length === 0 || split || this.isDivider(next[next.length - 1])) {
+        next.push([message])
+      } else {
+        const li = next.length - 1
+        const arr = next[li] as Message[]
+        next[li] = [...arr, message]
+      }
+      return next
+    })
+  }
+
+  private prependMessageToGroups(message: Message) {
+    const nextMsg = this.messages[1]
+    const newDay = this.isNewDay(message, nextMsg)
+    const split = this.shouldSplitAcross(message, nextMsg)
+    const ts = snowflakes.timestamp(message.id)
+
+    this.setGroupsValue(prevGroups => {
+      const next = [...prevGroups]
+      if (newDay && split) {
+        next.unshift([message])
+        next.splice(1, 0, { isDivider: true, content: humanizeDate(ts) })
+        return next
+      }
+      if (next.length > 0 && !this.isDivider(next[0]) && !split) {
+        const arr = next[0] as Message[]
+        next[0] = [message, ...arr]
+        return next
+      }
+      next.unshift([message])
+      return next
+    })
+  }
+
+  private appendChunkToGroups(unique: Message[], prevTail: Message) {
+    if (unique.length === 0) return
+    const first = unique[0]
+    const tsFirst = snowflakes.timestamp(first.id)
+    const needDivider = this.isNewDay(prevTail, first)
+    const splitBoundary = this.shouldSplitAcross(prevTail, first)
+    const newGroups = groupMessages(unique)
+
+    this.setGroupsValue(prevGroups => {
+      const next = [...prevGroups]
+      if (needDivider) {
+        next.push({ isDivider: true, content: humanizeDate(tsFirst) })
+        return [...next, ...newGroups]
+      }
+      // Try to merge first new group with last existing group
+      if (!splitBoundary && next.length > 0) {
+        const lastIdx = next.length - 1
+        const lastIsDivider = this.isDivider(next[lastIdx])
+        const mergeTargetIdx = lastIsDivider ? lastIdx - 1 : lastIdx
+        if (mergeTargetIdx >= 0 && !this.isDivider(next[mergeTargetIdx]) && !this.isDivider(newGroups[0])) {
+          const merged = [...(next[mergeTargetIdx] as Message[]), ...(newGroups[0] as Message[])]
+          next[mergeTargetIdx] = merged
+          return [...next, ...newGroups.slice(1)]
+        }
+      }
+      return [...next, ...newGroups]
+    })
+  }
+
+  private prependChunkToGroups(unique: Message[], oldHead: Message) {
+    if (unique.length === 0) return
+    const last = unique[unique.length - 1]
+    const tsNext = snowflakes.timestamp(oldHead.id)
+    const needDivider = this.isNewDay(last, oldHead)
+    const splitBoundary = this.shouldSplitAcross(last, oldHead)
+    const newGroups = groupMessages(unique)
+
+    this.setGroupsValue(prevGroups => {
+      const next = [...prevGroups]
+      if (needDivider) {
+        return [...newGroups, { isDivider: true, content: humanizeDate(tsNext) }, ...next]
+      }
+      if (!splitBoundary && next.length > 0 && !this.isDivider(newGroups[newGroups.length - 1]) && !this.isDivider(next[0])) {
+        const mergedLast = [...(newGroups[newGroups.length - 1] as Message[]), ...(next[0] as Message[])]
+        const head = newGroups.slice(0, -1)
+        return [...head, mergedLast, ...next.slice(1)]
+      }
+      return [...newGroups, ...next]
+    })
   }
 
   get nonceDefault(): Partial<Message> {
@@ -419,4 +599,3 @@ export default class MessageGrouper {
     })
   }
 }
-
