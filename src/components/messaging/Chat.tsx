@@ -14,6 +14,7 @@ import {
   untrack,
   type JSX
 } from "solid-js";
+import { createStore, reconcile } from "solid-js/store";
 import type { Message, MessageReference } from "../../types/message";
 import { getApi } from "../../api/Api";
 import MessageGrouper, { authorDefault } from "../../api/MessageGrouper";
@@ -573,7 +574,7 @@ function MessageSecondary(props: MessageRowProps) {
 type RenderBlock =
   | { type: "header"; id: "header" }
   | { type: "divider"; id: string; content: string }
-  | { type: "group"; id: string; messages: Message[] };
+  | { type: "group"; id: string; messageIds: bigint[] };
 
 type MessageGroupViewProps = {
   block: RenderBlock;
@@ -582,6 +583,7 @@ type MessageGroupViewProps = {
   editing: ReactiveSet<bigint>;
   title: string;
   startMessage: JSX.Element;
+  messageById: (id: bigint) => Message | undefined;
   isMentioned: (message: Message) => boolean;
   isJumpHighlight: (messageId: bigint) => boolean;
   onReply: (message: Message) => void;
@@ -605,33 +607,40 @@ function MessageGroupView(props: MessageGroupViewProps) {
 
   return (
     <div class="flex flex-col">
-      <For each={props.block.messages}>
-        {(message, i) => (
-          <Show
-            when={i() === 0}
-            fallback={
-              <MessageSecondary
-                message={message}
-                guildId={props.guildId}
-                grouper={props.grouper}
-                editing={props.editing}
-                mentionHighlight={props.isMentioned(message)}
-                jumpHighlight={props.isJumpHighlight(message.id)}
-                onReply={props.onReply}
-              />
-            }
-          >
-            <MessagePrimary
-              message={message}
-              guildId={props.guildId}
-              grouper={props.grouper}
-              editing={props.editing}
-              mentionHighlight={props.isMentioned(message)}
-              jumpHighlight={props.isJumpHighlight(message.id)}
-              onReply={props.onReply}
-            />
-          </Show>
-        )}
+      <For each={props.block.messageIds}>
+        {(messageId, i) => {
+          const message = () => props.messageById(messageId);
+          return (
+            <Show when={message()}>
+              {(msg) => (
+                <Show
+                  when={i() === 0}
+                  fallback={
+                    <MessageSecondary
+                      message={msg()}
+                      guildId={props.guildId}
+                      grouper={props.grouper}
+                      editing={props.editing}
+                      mentionHighlight={props.isMentioned(msg())}
+                      jumpHighlight={props.isJumpHighlight(msg().id)}
+                      onReply={props.onReply}
+                    />
+                  }
+                >
+                  <MessagePrimary
+                    message={msg()}
+                    guildId={props.guildId}
+                    grouper={props.grouper}
+                    editing={props.editing}
+                    mentionHighlight={props.isMentioned(msg())}
+                    jumpHighlight={props.isJumpHighlight(msg().id)}
+                    onReply={props.onReply}
+                  />
+                </Show>
+              )}
+            </Show>
+          );
+        }}
       </For>
     </div>
   );
@@ -1051,7 +1060,7 @@ export default function Chat(props: {
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
       if (block.type !== "group") continue;
-      if (block.messages.some((message) => message.id === targetId)) return i;
+      if (block.messageIds.includes(targetId)) return i;
     }
     return -1;
   };
@@ -1564,23 +1573,38 @@ export default function Chat(props: {
     const range = windowRange();
     return messages().slice(range.start, range.end);
   });
+  const messageById = createMemo(() => {
+    const map = new Map<bigint, Message>();
+    for (const message of messages()) map.set(message.id, message);
+    return map;
+  });
+  const resolveMessageById = (id: bigint) => messageById().get(id);
 
   const showStartHeader = createMemo(() => reachedOldest() && !loading());
   const isEmpty = createMemo(() => !loading() && messages().length === 0);
 
-  const renderBlocks = createMemo(() => {
-    if (loading()) return [] as RenderBlock[];
+  const [renderBlocksStore, setRenderBlocksStore] = createStore<RenderBlock[]>([]);
+  const renderBlocks = () => renderBlocksStore;
+
+  createEffect(() => {
+    if (loading()) {
+      setRenderBlocksStore(reconcile([] as RenderBlock[], { key: "id" }));
+      return;
+    }
     const blocks: RenderBlock[] = [];
     if (showStartHeader()) blocks.push({ type: "header", id: "header" });
 
     const slice = renderedMessages();
-    if (slice.length === 0) return blocks;
+    if (slice.length === 0) {
+      setRenderBlocksStore(reconcile(blocks, { key: "id" }));
+      return;
+    }
 
     let lastMessage: Message | undefined;
     for (const message of slice) {
       const timestamp = snowflakes.timestamp(message.id);
       if (!lastMessage) {
-        blocks.push({ type: "group", id: message.id.toString(), messages: [message] });
+        blocks.push({ type: "group", id: message.id.toString(), messageIds: [message.id] });
         lastMessage = message;
         continue;
       }
@@ -1598,16 +1622,16 @@ export default function Chat(props: {
       }
 
       if (!sameAuthor || !withinWindow || newDay || isReply) {
-        blocks.push({ type: "group", id: message.id.toString(), messages: [message] });
+        blocks.push({ type: "group", id: message.id.toString(), messageIds: [message.id] });
       } else {
         const lastBlock = blocks[blocks.length - 1];
-        if (lastBlock.type === "group") lastBlock.messages.push(message);
+        if (lastBlock.type === "group") lastBlock.messageIds.push(message.id);
       }
 
       lastMessage = message;
     }
 
-    return blocks;
+    setRenderBlocksStore(reconcile(blocks, { key: "id" }));
   });
 
   const rowVirtualizer = createVirtualizer<HTMLDivElement, HTMLDivElement>({
@@ -1792,6 +1816,7 @@ export default function Chat(props: {
                           editing={editing}
                           title={props.title}
                           startMessage={props.startMessage}
+                          messageById={resolveMessageById}
                           isMentioned={isMessageMentioned}
                           isJumpHighlight={(id) => jumpHighlightId() === id}
                           onReply={addReply}
@@ -1829,6 +1854,7 @@ export default function Chat(props: {
                               editing={editing}
                               title={props.title}
                               startMessage={props.startMessage}
+                              messageById={resolveMessageById}
                               isMentioned={isMessageMentioned}
                               isJumpHighlight={(id) => jumpHighlightId() === id}
                               onReply={addReply}
@@ -2062,6 +2088,7 @@ export default function Chat(props: {
               <div class="divider m-0 p-0" />
             </Show>
             <div
+              id="message-input"
               ref={messageInputRef!}
               class="mx-2 empty:before:content-[attr(data-placeholder)] text-sm empty:before:text-fg/50 outline-none break-words"
               contentEditable

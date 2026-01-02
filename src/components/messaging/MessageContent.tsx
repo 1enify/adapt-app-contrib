@@ -19,6 +19,7 @@ import UserPlus from "../icons/svg/UserPlus";
 import Plus from "../icons/svg/Plus";
 
 import tooltip from "../../directives/tooltip";
+import { ModalId, useModal } from "../ui/Modal";
 void tooltip;
 
 const CONVEY = 'https://convey.adapt.chat';
@@ -39,6 +40,7 @@ export default function MessageContent(props: MessageContentProps) {
   const message = () => props.message
   const largePadding = () => props.largePadding
   const navigate = useNavigate()
+  const {showModal} = useModal()
 
   const api = getApi()!
   const [invites, setInvites] = createSignal<Invite[]>([])
@@ -65,28 +67,37 @@ export default function MessageContent(props: MessageContentProps) {
   })
 
   let editAreaRef: HTMLDivElement | null = null
-  const editMessage = async () => {
-    const editedContent = editAreaRef!.innerText!.trim()
-    if (!editedContent) return
+  const editMessage = async (editedContent: string) => {
+    const normalized = editedContent.replace(/\r\n/g, "\n").trimEnd()
+    if (!normalized) return showModal(ModalId.DeleteMessage, message())
 
     const msg = {
       ...message(),
-      content: editedContent,
+      content: normalized,
       _nonceState: 'pending',
     } satisfies Message;
     props.grouper?.editMessage(msg.id, msg)
 
     const response = await api.request('PATCH', `/channels/${message().channel_id}/messages/${message().id}`, {
-      json: { content: editedContent }
+      json: { content: normalized }
     })
     if (!response.ok) {
       toast.error(`Failed to edit message: ${response.errorJsonOrThrow().message}`)
     }
+    document.getElementById('message-input')?.focus()
   }
   createEffect(() => {
     if (props.editing?.has(message().id)) {
       editAreaRef!.innerText = message().content!
-      editAreaRef!.focus()
+      requestAnimationFrame(() => {
+        editAreaRef!.focus()
+        const selection = window.getSelection()
+        const range = document.createRange()
+        range.selectNodeContents(editAreaRef!)
+        range.collapse(false)
+        selection?.removeAllRanges()
+        selection?.addRange(range)
+      })
     }
   })
 
@@ -129,10 +140,17 @@ export default function MessageContent(props: MessageContentProps) {
             focus:outline-none border-2 focus:border-accent border-transparent transition"
           data-placeholder="Edit this message..."
           onKeyDown={async (e) => {
-            if (e.key == 'Enter' && !e.shiftKey || e.key == 'Escape') {
+            if (e.key == 'Enter') {
+              if (e.shiftKey) return
+              e.preventDefault()
+              const content = (editAreaRef as any)?.innerText ?? ""
+              await editMessage(content)
+              props.editing?.delete(message().id)
+              return
+            }
+            if (e.key == 'Escape') {
               e.preventDefault()
               props.editing?.delete(message().id)
-              if (e.key == 'Enter') await editMessage()
             }
           }}
         />

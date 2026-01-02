@@ -16,7 +16,7 @@ function GuildSettingsSidebar() {
   const params = useParams()
   const api = getApi()!
 
-  const guildId = createMemo(() => BigInt(params.guildId))
+  const guildId = createMemo(() => BigInt(params.guildId as any))
   const guild = createMemo(() => api.cache!.guilds.get(guildId())!)
   const perms = createMemo(() => api.cache!.getClientPermissions(guildId()))
   const root = createMemo(() => `/guilds/${guildId()}/settings`)

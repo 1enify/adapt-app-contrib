@@ -31,7 +31,7 @@ export default function RoleOverview() {
   const api = getApi()!
   const cache = api.cache!
 
-  const roleId = createMemo(() => BigInt(params.roleId))
+  const roleId = createMemo(() => BigInt(params.roleId as any))
   const role = createMemo(() => cache.roles.get(roleId())!)
 
   const [roleName, setRoleName] = createSignal<string>()

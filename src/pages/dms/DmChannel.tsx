@@ -21,7 +21,7 @@ export default function DmChannel() {
 
   const channel = createMemo(() => {
     const cache = api.cache!
-    return cache.channels.get(BigInt(params.channelId))! as DmChannelType
+    return cache.channels.get(BigInt(params.channelId as any))! as DmChannelType
   })
 
   if (!channel()) return <NotFound />

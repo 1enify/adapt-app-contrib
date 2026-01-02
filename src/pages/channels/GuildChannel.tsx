@@ -13,7 +13,7 @@ export default function GuildChannel() {
   const api = getApi()!, cache = api.cache!
 
   const channel = createMemo(() => {
-    return cache.channels.get(BigInt(params.channelId)) as GuildChannelType
+    return cache.channels.get(BigInt(params.channelId as any)) as GuildChannelType
   })
   if (!channel()) {
     return <NotFound />

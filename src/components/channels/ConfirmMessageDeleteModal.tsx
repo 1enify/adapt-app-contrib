@@ -1,5 +1,5 @@
 import {ModalTemplate, useModal} from "../ui/Modal";
-import {createSignal} from "solid-js";
+import {createSignal, onMount} from "solid-js";
 import {getApi} from "../../api/Api";
 import Icon from "../icons/Icon";
 import Trash from "../icons/svg/Trash";
@@ -15,6 +15,17 @@ export default function ConfirmMessageDeleteModal(props: Props) {
   const {hideModal} = useModal()
 
   const [isDeleting, setIsDeleting] = createSignal<boolean>(false)
+  const deleteMessage = async () => {
+    setIsDeleting(true)
+    try {
+      await api.deleteMessage(props.message.channel_id, props.message.id)
+    } catch (err) {
+      setIsDeleting(false)
+      throw err
+    }
+    setIsDeleting(false)
+    hideModal()
+  }
 
   return (
     <ModalTemplate title="Delete Message">
@@ -28,15 +39,7 @@ export default function ConfirmMessageDeleteModal(props: Props) {
         class="flex flex-wrap justify-end mt-4 gap-x-4"
         onSubmit={async (event) => {
           event.preventDefault()
-          setIsDeleting(true)
-          try {
-            await api.deleteMessage(props.message.channel_id, props.message.id)
-          } catch (err) {
-            setIsDeleting(false)
-            throw err
-          }
-          setIsDeleting(false)
-          hideModal()
+          deleteMessage()
         }}
       >
         <button type="button" class="btn border-none btn-ghost" onClick={hideModal}>

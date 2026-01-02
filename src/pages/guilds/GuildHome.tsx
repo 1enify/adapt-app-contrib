@@ -14,7 +14,7 @@ void tooltip
 
 export default function GuildHome() {
   const api = getApi()!
-  const guild = createMemo(() => api.cache!.guilds.get(BigInt(useParams().guildId))!)
+  const guild = createMemo(() => api.cache!.guilds.get(BigInt(useParams().guildId as any))!)
 
   if (!guild())
     return <NotFound />

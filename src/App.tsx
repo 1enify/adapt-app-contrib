@@ -411,7 +411,7 @@ function HomeSidebar(props: { tabSignal: Signal<Tab> }) {
       <A
         classList={{
           "rounded-xl flex items-center justify-between overflow-hidden backdrop-blur transition": true,
-          [params.channelId as any && channel.id === BigInt(params.channelId)
+          [params.channelId as any && channel.id === BigInt(params.channelId as any)
             ? "bg-fg/10"
             : "bg-bg-2/80 hover:bg-bg-3/80"]: true,
         }}
@@ -595,7 +595,7 @@ export function Sidebar({ signal }: { signal: Signal<Tab> }) {
   const [showStatusSettings, setShowStatusSettings] = createSignal(false)
   let containerRef: HTMLDivElement | null = null
   const listener = (event: MouseEvent) => {
-    if (containerRef && !containerRef.contains(event.target as Node)) setShowStatusSettings(false)
+    if (containerRef && !(containerRef as any).contains?.(event.target as Node)) setShowStatusSettings(false)
   }
   onMount(() => document.addEventListener('click', listener))
   onCleanup(() => document.removeEventListener('click', listener))

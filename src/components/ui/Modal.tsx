@@ -4,6 +4,8 @@ import {
   createEffect,
   createSignal,
   Match,
+  onCleanup,
+  onMount,
   ParentProps, Setter, Signal,
   Switch,
   useContext
@@ -160,6 +162,15 @@ export function ModalProvider(props: ParentProps) {
       setTimeout(() => setStack(prev => prev.slice(0, -1)), timeout)
     },
   }
+
+  const listener = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && stack().length > 0) {
+      e.preventDefault()
+      context.hideModal()
+    }
+  }
+  onMount(() => document.addEventListener('keydown', listener))
+  onCleanup(() => document.removeEventListener('keydown', listener))
 
   return (
     <ModalContext.Provider value={context}>
