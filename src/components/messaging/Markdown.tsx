@@ -99,7 +99,10 @@ function Anchor(props: JSX.HTMLAttributes<HTMLAnchorElement> & { isImage?: boole
       if (parsed && snowflakes.modelType(parsed) === snowflakes.ModelType.Message) {
         // If we're already in the same channel, just update the message ID
         if (pathParts[pathParts.length - 2] === params.channelId) {
-          navigate(`/guilds/${params.guildId}/${params.channelId}/${messageId}`, { replace: true })
+          const url = !!params.guildId
+            ? `/guilds/${params.guildId}/${params.channelId}/${messageId}`
+            : `/dms/${params.channelId}/${messageId}`;
+          navigate(url, { replace: true })
         } else {
           // Otherwise navigate to the full path
           navigate(url.pathname + url.search + url.hash)
