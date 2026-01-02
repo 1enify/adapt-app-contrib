@@ -22,3 +22,46 @@ web client.
 - Linux (x86_64/AMD64):
   - [.deb](https://download.adapt.chat/webclient/linux-x86_64/Adapt.deb) (smaller, but might need to install dependencies)
   - [AppImage](https://download.adapt.chat/webclient/linux-x86_64/Adapt.AppImage) (larger, easier to install)
+
+## Building from Source
+
+You can run the Adapt client locally using [Vite](https://vitejs.dev/).
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) **v18 or later**
+- [npm](https://npmjs.com) or some other package manager
+
+### Clone the repository
+```bash
+git clone https://github.com/AdaptChat/webclient.git
+cd webclient
+```
+
+### Install dependencies
+```bash
+npm install
+```
+
+### Start development server
+```bash
+npm run dev
+```
+
+### Build for production
+```bash
+npm run build
+```
+
+To preview the production build locally:
+
+```bash
+npm run serve
+```
+
+### Building for Desktop from Source
+
+You can choose to build the client as a desktop app using [Tauri](https://tauri.app/):
+
+```bash
+npm run tauri build
+```

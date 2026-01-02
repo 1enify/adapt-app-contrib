@@ -12,17 +12,17 @@ env:
 
 jobs:
   build-mac-x86_64:
-    runs-on: macos-13
+    runs-on: macos-26
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - uses: Swatinem/rust-cache@v2
       with:
         workspaces: "./src-tauri -> target"
 
     - name: Install tauri CLI
-      run: cargo install tauri-cli
+      run: cargo install tauri-cli@^1
 
     - name: Install packages
       run: npm i
@@ -31,7 +31,7 @@ jobs:
       run: cargo tauri build --target x86_64-apple-darwin
     
     - name: Upload artifact x86_64
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: app-darwin-86_64
         path: |
@@ -39,7 +39,7 @@ jobs:
           src-tauri/target/x86_64-apple-darwin/release/bundle/dmg
 
   build-mac-aarch64:
-    runs-on: macos-13
+    runs-on: macos-26
 
     steps:
     - uses: actions/checkout@v3
@@ -49,7 +49,7 @@ jobs:
         workspaces: "./src-tauri -> target"
 
     - name: Install tauri CLI
-      run: cargo install tauri-cli
+      run: cargo install tauri-cli@^1
 
     - name: Install packages
       run: npm i
@@ -58,7 +58,7 @@ jobs:
       run: rustup target add aarch64-apple-darwin && cargo tauri build --target aarch64-apple-darwin
 
     - name: Upload artifact aarch64
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: app-darwin-aarch64
         path: |
@@ -69,14 +69,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - uses: Swatinem/rust-cache@v2
       with:
         workspaces: "./src-tauri -> target"
 
     - name: Install tauri CLI
-      run: cargo install tauri-cli
+      run: cargo install tauri-cli@^1
 
     - name: Install packages
       run: npm i
@@ -85,7 +85,7 @@ jobs:
       run: cargo tauri build --target x86_64-pc-windows-msvc
     
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: app-windows-86_64
         path: |
@@ -95,14 +95,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - uses: Swatinem/rust-cache@v2
       with:
         workspaces: "./src-tauri -> target"
 
     - name: Install tauri CLI
-      run: cargo install tauri-cli
+      run: cargo install tauri-cli@^1
 
     - name: Install packages
       run: npm i
@@ -111,24 +111,24 @@ jobs:
       run: rustup target add i686-pc-windows-msvc && cargo tauri build --target i686-pc-windows-msvc
     
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: app-windows-i686
         path: |
           src-tauri/target/i686-pc-windows-msvc/release/bundle/nsis
 
   build-linux-x86_64:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: "./src-tauri -> target"
 
       - name: Install tauri CLI
-        run: cargo install tauri-cli
+        run: cargo install tauri-cli@^1
 
       - name: Install packages
         run: npm i
@@ -149,7 +149,7 @@ jobs:
         run: cargo tauri build --target x86_64-unknown-linux-gnu
       
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-linux-x86_64
           path: |
@@ -158,9 +158,9 @@ jobs:
             !src-tauri/target/x86_64-unknown-linux-gnu/release/bundle/appimage/*.sh
 
       - name: Upload .deb artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: app-linux-x86_64
+          name: app-linux-x86_64-deb
           path: |
             src-tauri/target/x86_64-unknown-linux-gnu/release/bundle/deb
 
@@ -172,40 +172,46 @@ jobs:
       contents: read
       pages: write
       id-token: write
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [build-mac-x86_64, build-mac-aarch64, build-win-x86_64, build-win-i686, build-linux-x86_64]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Download darwin-x86_64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: app-darwin-86_64
           path: darwin-x86_64
       
       - name: Download darwin-aarch64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: app-darwin-aarch64
           path: darwin-aarch64
       
       - name: Download windows-x86_64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: app-windows-86_64
           path: windows-x86_64
       
       - name: Download windows-i686
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: app-windows-i686
           path: windows-i686
       
       - name: Download linux-x86_64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: app-linux-x86_64
+          path: linux-x86_64
+
+      - name: Download linux-x86_64 .deb
+        uses: actions/download-artifact@v4
+        with:
+          name: app-linux-x86_64-deb
           path: linux-x86_64
       
       - name: Change paths
@@ -289,13 +295,13 @@ jobs:
         run: ls -R download-artifacts
 
       - name: Setup Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: 'download-artifacts'
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
