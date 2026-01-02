@@ -2039,7 +2039,7 @@ export default function Chat(props: {
                         )}
                       </div>
                       <div class="break-words flex-grow p-2 bg-1">
-                        <h2 class="text-sm font-title font-medium justify-self-center">
+                        <h2 class="text-sm font-title font-medium">
                           {attachment.filename}
                         </h2>
                         <div class="text-xs text-fg/60">

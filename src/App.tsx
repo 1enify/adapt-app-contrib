@@ -82,7 +82,7 @@ function SidebarNavButton(props: {
       <Show when={props.pings}>
         <span
           class="indicator-item indicator-bottom bg-red-600 inline-flex text-xs font-medium items-center rounded-full
-               min-w-[18px] h-[18px] m-1.5 ring-bg-0/80 ring-[3px]"
+               min-w-[18px] h-[18px] m-1.5"
         >
           <span class="min-w-[18px] text-center text-white px-1.5 py-2">
             {humanizePings(props.pings!)}

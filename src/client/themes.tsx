@@ -226,6 +226,13 @@ function applyTheme(theme: Theme) {
   set('link', theme.link.default)
   set('link-hover', theme.link.hover)
   set('link-visited', theme.link.visited)
+
+  // For PWA theme color
+  const [r, g, b] = theme.bg[2];
+  const hex = '#' + r.toString(16).padStart(2, '0') 
+    + g.toString(16).padStart(2, '0')
+    + b.toString(16).padStart(2, '0');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', hex);
 }
 
 type ExtendedSetter = <U extends Theme>(prev: Theme | ((prev: Theme) => U), saveNow?: boolean) => U

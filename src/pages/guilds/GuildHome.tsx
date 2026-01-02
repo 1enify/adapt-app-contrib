@@ -48,6 +48,7 @@ export default function GuildHome() {
             "background-size": "cover",
             "background-position": "center",
             "mask-image": "linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0))",
+            "-webkit-mask-image": "linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0))",
           }}
         />
         <div class="absolute flex items-start top-[calc(100%-2rem)] left-4 gap-x-3">
