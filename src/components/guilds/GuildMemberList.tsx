@@ -30,7 +30,7 @@ export function GuildMemberGroup(props: { members: Iterable<User | bigint>, offl
   const navigate = useNavigate()
   const contextMenu = useContextMenu()!
 
-  const guildId = () => BigInt(params.guildId)
+  const guildId = () => BigInt(params.guildId!)
   const ownerId = createMemo(() => cache.guilds.get(guildId())?.owner_id)
   const channelId = createMemo(() => params.channelId ? BigInt(params.channelId) : undefined)
   const permissions = createMemo(() => cache.getClientPermissions(guildId()))
@@ -156,7 +156,7 @@ const fuse = function<T>(value: string, index: Accessor<Fuse<T>>, fallback: Acce
 export default function GuildMemberList() {
   const api = getApi()!
   const params = useParams()
-  const guildId = () => BigInt(params.guildId)
+  const guildId = () => BigInt(params.guildId!)
   const guildMemo = createMemo(() => api.cache!.guilds.get(guildId()))
   if (!guildMemo()) return
 
@@ -233,7 +233,7 @@ export default function GuildMemberList() {
     if (!cache) return []
 
     const m =
-      cache.memberReactor.get(BigInt(params.guildId))?.map(u => cache.users.get(u)) ?? []
+      cache.memberReactor.get(BigInt(params.guildId!))?.map(u => cache.users.get(u)) ?? []
     return m.filter((u): u is User => !!u)
   })
   const fuseMemberIndex = createMemo(() => new Fuse(members()!, {

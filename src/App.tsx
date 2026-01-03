@@ -61,6 +61,7 @@ import {HeaderContext} from "./components/ui/Header";
 import {relationshipFilterFactory} from "./pages/friends/Requests";
 import PenToSquare from "./components/icons/svg/PenToSquare";
 import {ModalId, useModal} from "./components/ui/Modal";
+import GroupMemberList from "./components/channels/GroupMemberList";
 
 void tooltip
 
@@ -225,7 +226,13 @@ function DirectMessageButton({ channelId }: { channelId: bigint }) {
     >
       <div class="flex items-center gap-x-2 flex-grow min-w-0">
         {group ? (
-          <img src={(channel() as GroupDmChannel).icon} alt="" class="w-9 h-9 rounded-full"/>
+          (channel() as GroupDmChannel).icon ? (
+            <img src={(channel() as GroupDmChannel).icon} alt="" class="w-9 h-9 rounded-full"/>
+          ) : (
+            <div class="rounded-full bg-bg-3 w-9 h-9 flex items-center justify-center">
+              <Icon icon={UserGroup} class="w-4 h-4 fill-fg/60"/>
+            </div>
+          )
         ) : (
           <div class="indicator flex-shrink-0">
             <StatusIndicator status={presence()?.status} tailwind="m-[0.1rem] w-3 h-3" indicator />
@@ -421,7 +428,11 @@ function HomeSidebar(props: { tabSignal: Signal<Tab> }) {
           {guild ? (
             <GuildIcon guild={guild} sizeClass="w-10 h-10 rounded-none" unread={false} pings={0} />
           ) : (
-            <img src={icon!} alt="" class="w-10 h-10" />
+            icon ? <img src={icon!} alt="" class="w-10 h-10" /> : (
+              <div class="w-10 h-10 flex items-center justify-center bg-bg-3/80">
+                <Icon icon={UserGroup} class="w-4 h-4 fill-fg/60" />
+              </div>
+            )
           )}
           <div class="pl-2">
             <h2 class="font-title text-sm font-semibold text-fg/80">
@@ -518,7 +529,17 @@ function HomeSidebar(props: { tabSignal: Signal<Tab> }) {
         </Match>
 
         <Match when={tab() === Tab.Conversations}>
-          <h2 class="font-title font-medium text-fg/50 text-sm mx-3.5 mt-2 mb-1">Direct Messages</h2>
+          <h2 class="font-title font-medium text-fg/50 text-sm mx-3.5 mt-2 mb-1 flex items-center justify-between">
+            <span>Direct Messages</span>
+            <button class="group">
+              <Icon
+                icon={Plus}
+                class="w-4 h-4 fill-fg/50 group-hover:fill-fg/100 transition"
+                tooltip="New Conversation"
+                onClick={() => showModal(ModalId.NewConversation)}
+              />
+            </button>
+          </h2>
           <div class="overflow-y-auto">
             <div class="px-2 mb-2 flex flex-col">
               <For each={cache.dmChannelOrder[0]()}>
@@ -711,9 +732,11 @@ const FriendActions = lazy(() => import('./pages/friends/Friends').then(m => ({ 
 export const [previousPage, setPreviousPage] = createSignal<string>('/')
 
 export default function App(props: ParentProps) {
+  const api = getApi()
   const isMobile = createMediaQuery("(max-width: 768px)")
   const isWide = createMediaQuery("(min-width: 1000px)")
   const location = useLocation()
+  const params = useParams()
 
   onMount(() => {
     if (isMobile()) {
@@ -747,6 +770,10 @@ export default function App(props: ParentProps) {
   })
 
   const [headers] = useContext(HeaderContext)!
+  const isGroupDmChannel = createMemo(() => 
+    location.pathname.startsWith('/dms') 
+    && api?.cache?.channels.get(BigInt(params.channelId ?? 0))?.type === 'group'
+  )
 
   return (
     <div
@@ -803,7 +830,7 @@ export default function App(props: ParentProps) {
             <Match when={location.pathname.startsWith("/friends")}>
               <FriendActions />
             </Match>
-            <Match when={location.pathname.startsWith('/guilds')}>
+            <Match when={location.pathname.startsWith('/guilds') || isGroupDmChannel()}>
               <ActionButton
                 onClick={() => setShowRightSidebar(prev => !prev)}
                 icon={UserGroup}
@@ -854,6 +881,9 @@ export default function App(props: ParentProps) {
               <Switch>
                 <Match when={location.pathname.startsWith('/guilds')}>
                   <GuildMemberList />
+                </Match>
+                <Match when={isGroupDmChannel()}>
+                  <GroupMemberList />
                 </Match>
                 <Match when={actualShowRightSidebar()}>
                   {setNoRightSidebar(true)}

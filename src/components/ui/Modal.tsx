@@ -35,6 +35,7 @@ import ConfirmMessageDeleteModal from "../channels/ConfirmMessageDeleteModal";
 import EmojiUploadModal from "../guilds/EmojiUploadModal";
 import EditNicknameModal from "../guilds/EditNicknameModal";
 import EditMemberRolesModal from "../guilds/EditMemberRolesModal";
+import NewConversationModal from "../friends/NewConversationModal";
 
 export enum ModalId {
   NewGuild,
@@ -55,6 +56,7 @@ export enum ModalId {
   EmojiUpload,
   EditNickname,
   EditMemberRoles,
+  NewConversation,
 }
 
 type ModalMapping = {
@@ -80,6 +82,7 @@ type ModalMapping = {
   [ModalId.EmojiUpload]: { file: File },
   [ModalId.EditNickname]: { guildId: bigint, memberId: bigint, current: string },
   [ModalId.EditMemberRoles]: { guildId: bigint, memberId: bigint },
+  [ModalId.NewConversation]: undefined,
 }
 
 type ModalDataPair = {
@@ -230,6 +233,9 @@ export function ModalProvider(props: ParentProps) {
           </Match>
           <Match when={context.id === ModalId.EditMemberRoles}>
             <EditMemberRolesModal {...context.data as any} />
+          </Match>
+          <Match when={context.id === ModalId.NewConversation}>
+            <NewConversationModal />
           </Match>
         </Switch>
       </ModalContainer>

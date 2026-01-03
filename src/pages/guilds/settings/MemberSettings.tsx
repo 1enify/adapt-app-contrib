@@ -52,7 +52,7 @@ export default function MemberSettings() {
   const api = getApi()!;
   const cache = api.cache!;
   const params = useParams();
-  const guildId = createMemo(() => BigInt(params.guildId));
+  const guildId = createMemo(() => BigInt(params.guildId as any));
 
   const permissions = createMemo(() => cache.getClientPermissions(guildId()));
 

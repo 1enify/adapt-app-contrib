@@ -16,7 +16,7 @@ export default function ConfirmChannelDeleteModal(props: Props) {
   const params = useParams()
   const {hideModal} = useModal()
 
-  const guild = createMemo(() => api.cache!.guilds.get(BigInt(params.guildId)))
+  const guild = createMemo(() => api.cache!.guilds.get(BigInt(params.guildId as any)))
   const [isDeleting, setIsDeleting] = createSignal<boolean>(false)
   const colloquial = () => props.channel.type === 'text' ? `#${props.channel.name}` : props.channel.name
 
