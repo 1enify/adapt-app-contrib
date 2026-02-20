@@ -1,333 +1,333 @@
 {
-    "loading": {
-        "launching": "",
-        "timeout": "",
-        "check_status": "您也可以看看我们的{{link}}。",
-        "status_page": ""
+  "loading": {
+    "launching": "正在启动…",
+    "timeout": "连接超时。",
+    "check_status": "您也可以看看我们的{{link}}。",
+    "status_page": "状态页面"
+  },
+  "not_found": {
+    "header": "找不到页面",
+    "go_back": "返回"
+  },
+  "copy": {
+    "user_id": {
+      "imperative": "复制用户 ID",
+      "success": "已复制用户 ID"
     },
-    "not_found": {
-        "header": "",
-        "go_back": "返回"
+    "username": {
+      "imperative": "复制用户名",
+      "success": "已复制用户名",
+      "error": "复制用户名失败"
     },
-    "copy": {
-        "user_id": {
-            "imperative": "",
-            "success": ""
-        },
-        "username": {
-            "imperative": "",
-            "success": "",
-            "error": ""
-        },
-        "channel_id": {
-            "imperative": "",
-            "success": ""
-        },
-        "message_id": {
-            "imperative": "",
-            "success": ""
-        },
-        "loading": "",
-        "error": ""
+    "channel_id": {
+      "imperative": "复制频道 ID",
+      "success": "已复制频道 ID"
     },
-    "dms": {
-        "delete_group": "",
-        "leave_group": "",
-        "close_dm": "",
-        "group_members": "",
-        "no_messages": "没讯息"
+    "message_id": {
+      "imperative": "复制消息 ID",
+      "success": "已复制消息 ID"
     },
-    "status": {
-        "online": "",
-        "idle": "",
-        "dnd": "",
-        "invisible": "",
-        "offline": ""
+    "loading": "正在复制…",
+    "error": "复制失败"
+  },
+  "dms": {
+    "delete_group": "删除群组",
+    "leave_group": "离开群组",
+    "close_dm": "关闭私信",
+    "group_members": "群组成员",
+    "no_messages": "没讯息"
+  },
+  "status": {
+    "online": "在线",
+    "idle": "空闲",
+    "dnd": "请勿打扰",
+    "invisible": "隐身",
+    "offline": "离线"
+  },
+  "sidebar": {
+    "main": {
+      "static": {
+        "home": "主页",
+        "friends": "好友",
+        "discover": "发现",
+        "global_search": "全局搜索",
+        "quick_access": "快速访问",
+        "conversations": "私信",
+        "all_servers": "全部服务器"
+      },
+      "quick_access": {
+        "new_messages": "最近的讯息",
+        "recently_viewed": "最近读的",
+        "from_dms": "来自私信",
+        "from_group_dms": "来自群组私信"
+      },
+      "conversations": {
+        "dms": "私信"
+      },
+      "all_servers": {
+        "servers": "服务器"
+      }
     },
-    "sidebar": {
-        "main": {
-            "static": {
-                "home": "",
-                "friends": "",
-                "discover": "",
-                "global_search": "",
-                "quick_access": "",
-                "conversations": "",
-                "all_servers": ""
-            },
-            "quick_access": {
-                "new_messages": "最近的讯息",
-                "recently_viewed": "最近读的",
-                "from_dms": "",
-                "from_group_dms": ""
-            },
-            "conversations": {
-                "dms": ""
-            },
-            "all_servers": {
-                "servers": ""
-            }
-        },
-        "user": {
-            "edit_status": "",
-            "custom_status": {
-                "header": "",
-                "fallback": ""
-            },
-            "user_settings": ""
-        },
-        "members": {
-            "collapse": "",
-            "expand": ""
-        },
-        "collapse": "",
-        "expand": "",
-        "unknown_header": ""
+    "user": {
+      "edit_status": "编辑状态",
+      "custom_status": {
+        "header": "自定义状态",
+        "fallback": "今天感觉如何？"
+      },
+      "user_settings": "用户设置"
     },
-    "settings": {
-        "user": {
-            "header": "",
-            "tabs": {
-                "account": "",
-                "themes": "",
-                "plugins": "",
-                "bots": ""
-            },
-            "sections": {
-                "root": "",
-                "client": "",
-                "developers": ""
-            },
-            "logout": "",
-            "issue": ""
-        },
-        "guild": {
-            "channel": {
-                "header": "",
-                "delete": ""
-            },
-            "header": "",
-            "tabs": {
-                "overview": "",
-                "roles": "",
-                "emojis": "",
-                "invites": "",
-                "members": ""
-            },
-            "sections": {
-                "management": ""
-            },
-            "overview": {
-                "header": "",
-                "name": "",
-                "description": "",
-                "banner": {
-                    "header": "",
-                    "description": "",
-                    "upload": "",
-                    "remove": ""
-                }
-            },
-            "roles": {
-                "header": "",
-                "description": "",
-                "search": "",
-                "create": "",
-                "members": "",
-                "default": {
-                    "large": "",
-                    "small": "",
-                    "header": ""
-                }
-            },
-            "delete": ""
-        },
-        "permissions": {
-            "categories": {
-                "all_channels": "",
-                "text_channels": "",
-                "voice_channels": "",
-                "member_customization": "",
-                "server_management": "",
-                "danger_zone": ""
-            },
-            "view_channel": {
-                "label": "",
-                "description": ""
-            },
-            "modify_channels": {
-                "label": "",
-                "description": ""
-            },
-            "manage_channels": {
-                "label": "",
-                "description": ""
-            },
-            "view_message_history": {
-                "label": "",
-                "description": ""
-            },
-            "send_messages": {
-                "label": "",
-                "description": ""
-            },
-            "manage_messages": {
-                "label": "",
-                "description": ""
-            },
-            "attach_files": {
-                "label": "",
-                "description": ""
-            },
-            "send_embeds": {
-                "label": "",
-                "description": ""
-            },
-            "use_external_emojis": {
-                "label": "",
-                "description": ""
-            },
-            "add_reactions": {
-                "label": "",
-                "description": ""
-            },
-            "pin_messages": {
-                "label": "",
-                "description": ""
-            },
-            "star_messages": {
-                "label": "",
-                "description": ""
-            },
-            "publish_messages": {
-                "label": "",
-                "description": ""
-            },
-            "bulk_delete_messages": {
-                "label": "",
-                "description": ""
-            },
-            "privileged_mentions": {
-                "label": "",
-                "description": ""
-            },
-            "manage_webhooks": {
-                "label": "",
-                "description": ""
-            },
-            "connect": {
-                "label": "",
-                "description": ""
-            },
-            "speak": {
-                "label": "",
-                "description": ""
-            },
-            "mute_members": {
-                "label": "",
-                "description": ""
-            },
-            "deafen_members": {
-                "label": "",
-                "description": ""
-            },
-            "change_nickname": {
-                "label": "",
-                "description": ""
-            },
-            "manage_nicknames": {
-                "label": "",
-                "description": ""
-            },
-            "manage_emojis": {
-                "label": "",
-                "description": ""
-            },
-            "manage_starboard": {
-                "label": "",
-                "description": ""
-            },
-            "manage_guild": {
-                "label": "",
-                "description": ""
-            },
-            "manage_roles": {
-                "label": "",
-                "description": ""
-            },
-            "create_invites": {
-                "label": "",
-                "description": ""
-            },
-            "manage_invites": {
-                "label": "",
-                "description": ""
-            },
-            "timeout_members": {
-                "label": "",
-                "description": ""
-            },
-            "kick_members": {
-                "label": "",
-                "description": ""
-            },
-            "ban_members": {
-                "label": "",
-                "description": ""
-            },
-            "view_audit_log": {
-                "label": "",
-                "description": ""
-            },
-            "administrator": {
-                "label": "",
-                "description": ""
-            }
-        },
-        "save": ""
+    "members": {
+      "collapse": "收起成员列表",
+      "expand": "展开成员列表"
     },
-    "time": {
-        "recently": "刚刚",
-        "past": "{{delta}}前",
-        "future": "{{delta}}后",
-        "yesterday_at": "昨天 {{time}}",
-        "weekday_at": "",
-        "date_at": ""
+    "collapse": "收起侧边栏",
+    "expand": "展开侧边栏",
+    "unknown_header": "未知"
+  },
+  "settings": {
+    "user": {
+      "header": "用户设置",
+      "tabs": {
+        "account": "账户",
+        "themes": "主题",
+        "plugins": "插件",
+        "bots": "机器人"
+      },
+      "sections": {
+        "root": "通用",
+        "client": "客户端",
+        "developers": "开发者"
+      },
+      "logout": "退出登录",
+      "issue": "报告问题"
     },
-    "generic": {
-        "remove": "",
-        "save": "",
-        "cancel": "",
-        "back": "回去",
-        "wip": ""
-    },
-    "error": {
-        "header": "",
-        "open_issue": "",
-        "open_issue_link": ""
-    },
-    "friends": {
-        "tabs": {
-            "pending": "特定",
-            "all": "好友",
-            "blocked": "已屏蔽"
-        },
-        "header": "好友",
-        "add": "添加好友",
-        "dividers": {
-            "all": "全部好友（{{count}}）"
-        },
-        "actions": {
-            "unfriend": "删除好友",
-            "unblock": "解除屏蔽"
+    "guild": {
+      "channel": {
+        "header": "频道设置",
+        "delete": "删除频道"
+      },
+      "header": "服务器设置",
+      "tabs": {
+        "overview": "概览",
+        "roles": "身份组",
+        "emojis": "表情",
+        "invites": "邀请",
+        "members": "成员"
+      },
+      "sections": {
+        "management": "管理"
+      },
+      "overview": {
+        "header": "服务器概览",
+        "name": "服务器名称",
+        "description": "服务器描述",
+        "banner": {
+          "header": "服务器横幅",
+          "description": "在服务器顶部展示横幅图片。",
+          "upload": "上传横幅",
+          "remove": "移除横幅"
         }
-    },
-    "home": {
-        "welcome": "您好{{username}}！",
-        "onboarding": {
-            "add_friend": {
-                "label": "跟好友联系"
-            }
+      },
+      "roles": {
+        "header": "身份组",
+        "description": "身份组用于管理成员权限。",
+        "search": "搜索身份组",
+        "create": "创建身份组",
+        "members": "成员",
+        "default": {
+          "large": "所有成员默认拥有此身份组。",
+          "small": "默认身份组",
+          "header": "@everyone"
         }
+      },
+      "delete": "删除服务器"
+    },
+    "permissions": {
+      "categories": {
+        "all_channels": "全部频道",
+        "text_channels": "文字频道",
+        "voice_channels": "语音频道",
+        "member_customization": "成员自定义",
+        "server_management": "服务器管理",
+        "danger_zone": "危险操作"
+      },
+      "view_channel": {
+        "label": "查看频道",
+        "description": "允许成员查看此频道。"
+      },
+      "modify_channels": {
+        "label": "修改频道",
+        "description": "允许成员修改频道设置。"
+      },
+      "manage_channels": {
+        "label": "管理频道",
+        "description": "允许成员创建、编辑和删除频道。"
+      },
+      "view_message_history": {
+        "label": "查看消息历史",
+        "description": "允许成员阅读频道中的历史消息。"
+      },
+      "send_messages": {
+        "label": "发送消息",
+        "description": "允许成员在此频道发送消息。"
+      },
+      "manage_messages": {
+        "label": "管理消息",
+        "description": "允许成员删除他人的消息。"
+      },
+      "attach_files": {
+        "label": "上传文件",
+        "description": "允许成员上传文件和图片。"
+      },
+      "send_embeds": {
+        "label": "发送嵌入内容",
+        "description": "允许成员发送嵌入链接和富文本内容。"
+      },
+      "use_external_emojis": {
+        "label": "使用外部表情",
+        "description": "允许成员使用来自其他服务器的自定义表情。"
+      },
+      "add_reactions": {
+        "label": "添加表情回应",
+        "description": "允许成员对消息添加表情回应。"
+      },
+      "pin_messages": {
+        "label": "置顶消息",
+        "description": "允许成员置顶频道中的消息。"
+      },
+      "star_messages": {
+        "label": "收藏消息",
+        "description": "允许成员收藏消息。"
+      },
+      "publish_messages": {
+        "label": "发布消息",
+        "description": "允许成员将消息发布到关注的服务器。"
+      },
+      "bulk_delete_messages": {
+        "label": "批量删除消息",
+        "description": "允许成员批量删除频道中的消息。"
+      },
+      "privileged_mentions": {
+        "label": "特权提及",
+        "description": "允许成员使用 @everyone 和 @here 提及所有人。"
+      },
+      "manage_webhooks": {
+        "label": "管理 Webhook",
+        "description": "允许成员创建、编辑和删除 Webhook。"
+      },
+      "connect": {
+        "label": "连接语音频道",
+        "description": "允许成员加入语音频道。"
+      },
+      "speak": {
+        "label": "发言",
+        "description": "允许成员在语音频道中发言。"
+      },
+      "mute_members": {
+        "label": "静音成员",
+        "description": "允许成员将他人在语音频道中静音。"
+      },
+      "deafen_members": {
+        "label": "屏蔽成员音频",
+        "description": "允许成员屏蔽他人在语音频道中的音频。"
+      },
+      "change_nickname": {
+        "label": "修改昵称",
+        "description": "允许成员修改自己的服务器昵称。"
+      },
+      "manage_nicknames": {
+        "label": "管理昵称",
+        "description": "允许成员修改他人的服务器昵称。"
+      },
+      "manage_emojis": {
+        "label": "管理表情",
+        "description": "允许成员添加、编辑和删除自定义表情。"
+      },
+      "manage_starboard": {
+        "label": "管理收藏榜",
+        "description": "允许成员管理服务器收藏榜。"
+      },
+      "manage_guild": {
+        "label": "管理服务器",
+        "description": "允许成员修改服务器设置。"
+      },
+      "manage_roles": {
+        "label": "管理身份组",
+        "description": "允许成员创建、编辑和删除低于自身等级的身份组。"
+      },
+      "create_invites": {
+        "label": "创建邀请链接",
+        "description": "允许成员创建服务器邀请链接。"
+      },
+      "manage_invites": {
+        "label": "管理邀请链接",
+        "description": "允许成员查看和删除服务器邀请链接。"
+      },
+      "timeout_members": {
+        "label": "禁言成员",
+        "description": "允许成员临时禁止他人在服务器中发言。"
+      },
+      "kick_members": {
+        "label": "踢出成员",
+        "description": "允许成员将他人移出服务器。"
+      },
+      "ban_members": {
+        "label": "封禁成员",
+        "description": "允许成员永久封禁他人并禁止其重新加入服务器。"
+      },
+      "view_audit_log": {
+        "label": "查看审计日志",
+        "description": "允许成员查看服务器操作记录。"
+      },
+      "administrator": {
+        "label": "管理员",
+        "description": "赋予成员所有权限，此权限无法被频道覆盖。请谨慎授予。"
+      }
+    },
+    "save": "保存更改"
+  },
+  "time": {
+    "recently": "刚刚",
+    "past": "{{delta}}前",
+    "future": "{{delta}}后",
+    "yesterday_at": "昨天 {{time}}",
+    "weekday_at": "{{weekday}} {{time}}",
+    "date_at": "{{date}} {{time}}"
+  },
+  "generic": {
+    "remove": "移除",
+    "save": "保存",
+    "cancel": "取消",
+    "back": "回去",
+    "wip": "开发中"
+  },
+  "error": {
+    "header": "出了点问题",
+    "open_issue": "报告此问题",
+    "open_issue_link": "在 GitHub 上提交 Issue"
+  },
+  "friends": {
+    "tabs": {
+      "pending": "待处理",
+      "all": "好友",
+      "blocked": "已屏蔽"
+    },
+    "header": "好友",
+    "add": "添加好友",
+    "dividers": {
+      "all": "全部好友（{{count}}）"
+    },
+    "actions": {
+      "unfriend": "删除好友",
+      "unblock": "解除屏蔽"
     }
+  },
+  "home": {
+    "welcome": "您好{{username}}！",
+    "onboarding": {
+      "add_friend": {
+        "label": "跟好友联系"
+      }
+    }
+  }
 }
