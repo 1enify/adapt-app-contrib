@@ -1,41 +1,40 @@
 {
   "loading": {
     "launching": "正在启动…",
-    "timeout": "连接超时。",
+    "timeout": "Adapt 无法启动？Adapt 的服务器可能正在维护中。请稍后再试！",
     "check_status": "您也可以看看我们的{{link}}。",
     "status_page": "状态页面"
   },
   "not_found": {
-    "header": "找不到页面",
+    "header": "找不到页面！",
     "go_back": "返回"
   },
   "copy": {
     "user_id": {
       "imperative": "复制用户 ID",
-      "success": "已复制用户 ID"
+      "success": "已复制用户 ID！"
     },
     "username": {
       "imperative": "复制用户名",
-      "success": "已复制用户名",
+      "success": "已复制用户名！",
       "error": "复制用户名失败"
     },
     "channel_id": {
       "imperative": "复制频道 ID",
-      "success": "已复制频道 ID"
+      "success": "已复制频道 ID！"
     },
     "message_id": {
       "imperative": "复制消息 ID",
-      "success": "已复制消息 ID"
+      "success": "已复制消息 ID！"
     },
     "loading": "正在复制…",
-    "error": "复制失败"
+    "error": "复制失败！"
   },
   "dms": {
     "delete_group": "删除群组",
     "leave_group": "离开群组",
     "close_dm": "关闭私信",
     "no_messages": "没讯息",
-    "group_members_one": "{{count}} 位成员",
     "group_members_other": "{{count}} 位成员"
   },
   "status": {
@@ -63,10 +62,10 @@
         "from_group_dms": "来自群组私信"
       },
       "conversations": {
-        "dms": "私信"
+        "dms": "私信 ({{count}})"
       },
       "all_servers": {
-        "servers": "服务器"
+        "servers": "服务器 ({{count}})"
       }
     },
     "user": {
@@ -139,8 +138,6 @@
           "small": "默认身份组",
           "header": "@everyone"
         },
-        "members_one": "{{count}} 位成员",
-        "members_zero": "暂无成员",
         "members_other": "{{count}} 位成员"
       },
       "delete": "删除服务器"
