@@ -1,42 +1,42 @@
 {
   "loading": {
     "launching": "正在启动…",
-    "timeout": "Adapt 无法启动？Adapt 的服务器可能正在维护中。请稍后再试！",
-    "check_status": "您也可以查看我们的{{link}}。",
+    "timeout": "连接超时。",
+    "check_status": "您也可以看看我们的{{link}}。",
     "status_page": "状态页面"
   },
   "not_found": {
-    "header": "未找到页面！",
+    "header": "找不到页面",
     "go_back": "返回"
   },
   "copy": {
     "user_id": {
       "imperative": "复制用户 ID",
-      "success": "已将用户 ID 复制到剪贴板！"
+      "success": "已复制用户 ID"
     },
     "username": {
       "imperative": "复制用户名",
-      "success": "已将用户名复制到剪贴板！",
-      "error": "复制用户名时出错"
+      "success": "已复制用户名",
+      "error": "复制用户名失败"
     },
     "channel_id": {
       "imperative": "复制频道 ID",
-      "success": "已将频道 ID 复制到剪贴板！"
+      "success": "已复制频道 ID"
     },
     "message_id": {
       "imperative": "复制消息 ID",
-      "success": "已将消息 ID 复制到剪贴板！"
+      "success": "已复制消息 ID"
     },
     "loading": "正在复制…",
-    "error": "复制到剪贴板失败！"
+    "error": "复制失败"
   },
   "dms": {
     "delete_group": "删除群组",
     "leave_group": "离开群组",
     "close_dm": "关闭私信",
+    "no_messages": "没讯息",
     "group_members_one": "{{count}} 位成员",
-    "group_members_other": "{{count}} 位成员",
-    "no_messages": "暂无消息"
+    "group_members_other": "{{count}} 位成员"
   },
   "status": {
     "online": "在线",
@@ -51,37 +51,35 @@
         "home": "主页",
         "friends": "好友",
         "discover": "发现",
-        "global_search": "搜索 Adapt…",
+        "global_search": "全局搜索",
         "quick_access": "快速访问",
         "conversations": "私信",
         "all_servers": "全部服务器"
       },
       "quick_access": {
-        "new_messages": "最新消息",
-        "recently_viewed": "最近浏览",
-        "from_dms": "私信",
-        "from_group_dms": "群组消息"
+        "new_messages": "最近的讯息",
+        "recently_viewed": "最近读的",
+        "from_dms": "来自私信",
+        "from_group_dms": "来自群组私信"
       },
       "conversations": {
-        "dms": "私信（{{count}}）"
+        "dms": "私信"
       },
       "all_servers": {
-        "servers": "服务器（{{count}}）"
+        "servers": "服务器"
       }
     },
     "user": {
-      "edit_status": "更改状态",
+      "edit_status": "编辑状态",
       "custom_status": {
         "header": "自定义状态",
-        "fallback": "设置自定义状态"
+        "fallback": "今天感觉如何？"
       },
-      "user_settings": "设置"
-    },
-    "guild": {
+      "user_settings": "用户设置"
     },
     "members": {
-      "collapse": "隐藏成员列表",
-      "expand": "显示成员列表"
+      "collapse": "收起成员列表",
+      "expand": "展开成员列表"
     },
     "collapse": "收起侧边栏",
     "expand": "展开侧边栏",
@@ -89,7 +87,7 @@
   },
   "settings": {
     "user": {
-      "header": "设置",
+      "header": "用户设置",
       "tabs": {
         "account": "账户",
         "themes": "主题",
@@ -97,7 +95,7 @@
         "bots": "机器人"
       },
       "sections": {
-        "root": "用户设置",
+        "root": "通用",
         "client": "客户端",
         "developers": "开发者"
       },
@@ -107,8 +105,6 @@
     "guild": {
       "channel": {
         "header": "频道设置",
-        "tabs": {},
-        "sections": {},
         "delete": "删除频道"
       },
       "header": "服务器设置",
@@ -123,29 +119,29 @@
         "management": "管理"
       },
       "overview": {
-        "header": "概览",
+        "header": "服务器概览",
         "name": "服务器名称",
-        "description": "简短描述",
+        "description": "服务器描述",
         "banner": {
-          "header": "横幅",
-          "description": "横幅将显示在频道侧边栏顶部以及服务器主页上。",
+          "header": "服务器横幅",
+          "description": "在服务器顶部展示横幅图片。",
           "upload": "上传横幅",
           "remove": "移除横幅"
         }
       },
       "roles": {
         "header": "身份组",
-        "description": "身份组用于对服务器成员进行分组并授予相应权限。",
+        "description": "身份组用于管理成员权限。",
         "search": "搜索身份组",
         "create": "创建身份组",
+        "default": {
+          "large": "所有成员默认拥有此身份组。",
+          "small": "默认身份组",
+          "header": "@everyone"
+        },
         "members_one": "{{count}} 位成员",
         "members_zero": "暂无成员",
-        "members_other": "{{count}} 位成员",
-        "default": {
-          "large": "管理默认权限",
-          "small": "全体成员",
-          "header": "默认权限"
-        }
+        "members_other": "{{count}} 位成员"
       },
       "delete": "删除服务器"
     },
@@ -160,181 +156,138 @@
       },
       "view_channel": {
         "label": "查看频道",
-        "description": "拥有此权限的成员可以查看频道并接收其中的事件。"
+        "description": "允许成员查看此频道。"
       },
       "modify_channels": {
         "label": "修改频道",
-        "description": "拥有此权限的成员可以管理频道设置，包括修改名称、话题、图标、慢速模式、NSFW 状态以及锁定/解锁频道。"
+        "description": "允许成员修改频道设置。"
       },
       "manage_channels": {
         "label": "管理频道",
-        "description": "拥有此权限的成员可以管理频道，包括创建、删除、调整位置、在分类间移动以及编辑权限覆盖。"
+        "description": "允许成员创建、编辑和删除频道。"
       },
       "view_message_history": {
         "label": "查看消息历史",
-        "description": "拥有此权限的成员可以查看文字频道的历史消息，即使无法发送或接收新消息。"
+        "description": "允许成员阅读频道中的历史消息。"
       },
       "send_messages": {
         "label": "发送消息",
-        "description": "拥有此权限的成员可以在文字频道中发送消息。同时需要具备「查看频道」权限。"
+        "description": "允许成员在此频道发送消息。"
       },
       "manage_messages": {
         "label": "管理消息",
-        "description": "拥有此权限的成员可以管理他人发送的消息，包括删除消息、移除表情回应以及在公告频道中取消发布。"
+        "description": "允许成员删除他人的消息。"
       },
       "attach_files": {
         "label": "上传文件",
-        "description": "拥有此权限的成员可以在文字频道的消息中附加文件。"
+        "description": "允许成员上传文件和图片。"
       },
       "send_embeds": {
         "label": "发送嵌入内容",
-        "description": "拥有此权限的成员可以在文字频道中发送富文本嵌入内容，或让链接自动展开显示。"
+        "description": "允许成员发送嵌入链接和富文本内容。"
       },
       "use_external_emojis": {
         "label": "使用外部表情",
-        "description": "拥有此权限的成员可以使用来自其他服务器的表情。"
+        "description": "允许成员使用来自其他服务器的自定义表情。"
       },
       "add_reactions": {
         "label": "添加表情回应",
-        "description": "拥有此权限的成员可以在文字频道的消息上添加新的表情回应。"
+        "description": "允许成员对消息添加表情回应。"
       },
       "pin_messages": {
         "label": "置顶消息",
-        "description": "拥有此权限的成员可以在文字频道中置顶或取消置顶消息。"
+        "description": "允许成员置顶频道中的消息。"
       },
       "star_messages": {
         "label": "收藏消息",
-        "description": "拥有此权限的成员可以在文字频道中收藏或取消收藏消息。"
+        "description": "允许成员收藏消息。"
       },
       "publish_messages": {
         "label": "发布消息",
-        "description": "拥有此权限的成员可以将消息发布到公告频道的订阅源。"
+        "description": "允许成员将消息发布到关注的服务器。"
       },
       "bulk_delete_messages": {
         "label": "批量删除消息",
-        "description": "拥有此权限的成员可以在文字频道中批量删除或清除消息。"
+        "description": "允许成员批量删除频道中的消息。"
       },
       "privileged_mentions": {
         "label": "特权提及",
-        "description": "拥有此权限的成员可以在文字频道中提及大量用户，包括 @everyone 以及不可提及的身份组。"
+        "description": "允许成员使用 @everyone 和 @here 提及所有人。"
       },
       "manage_webhooks": {
         "label": "管理 Webhook",
-        "description": "拥有此权限的成员可以在文字频道中创建、编辑和删除 Webhook。"
+        "description": "允许成员创建、编辑和删除 Webhook。"
       },
       "connect": {
-        "label": "连接",
-        "description": "拥有此权限的成员可以加入语音频道。"
+        "label": "连接语音频道",
+        "description": "允许成员加入语音频道。"
       },
       "speak": {
         "label": "发言",
-        "description": "拥有此权限的成员可以在语音频道中发言。"
+        "description": "允许成员在语音频道中发言。"
       },
       "mute_members": {
         "label": "静音成员",
-        "description": "拥有此权限的成员可以在语音频道中将其他成员静音。"
+        "description": "允许成员将他人在语音频道中静音。"
       },
       "deafen_members": {
         "label": "屏蔽成员音频",
-        "description": "拥有此权限的成员可以在语音频道中屏蔽其他成员的音频。"
+        "description": "允许成员屏蔽他人在语音频道中的音频。"
       },
       "change_nickname": {
         "label": "修改昵称",
-        "description": "拥有此权限的成员可以修改自己在服务器中的昵称。"
+        "description": "允许成员修改自己的服务器昵称。"
       },
       "manage_nicknames": {
         "label": "管理昵称",
-        "description": "拥有此权限的成员可以修改其他成员在服务器中的昵称。"
+        "description": "允许成员修改他人的服务器昵称。"
       },
       "manage_emojis": {
         "label": "管理表情",
-        "description": "拥有此权限的成员可以为服务器创建、编辑和删除自定义表情。"
+        "description": "允许成员添加、编辑和删除自定义表情。"
       },
       "manage_starboard": {
         "label": "管理收藏榜",
-        "description": "拥有此权限的成员可以删除收藏榜帖子或为服务器禁用收藏榜功能。"
+        "description": "允许成员管理服务器收藏榜。"
       },
       "manage_guild": {
         "label": "管理服务器",
-        "description": "拥有此权限的成员可以管理服务器设置，包括修改名称、图标、可见性以及启用/禁用收藏榜。"
+        "description": "允许成员修改服务器设置。"
       },
       "manage_roles": {
         "label": "管理身份组",
-        "description": "拥有此权限的成员可以管理服务器身份组、编辑低级身份组的权限，并为其他成员分配或移除身份组。"
+        "description": "允许成员创建、编辑和删除低于自身等级的身份组。"
       },
       "create_invites": {
         "label": "创建邀请链接",
-        "description": "拥有此权限的成员可以创建服务器邀请链接。"
+        "description": "允许成员创建服务器邀请链接。"
       },
       "manage_invites": {
         "label": "管理邀请链接",
-        "description": "拥有此权限的成员可以撤销或暂停服务器中任意频道的邀请链接。"
+        "description": "允许成员查看和删除服务器邀请链接。"
       },
       "timeout_members": {
         "label": "禁言成员",
-        "description": "拥有此权限的成员可以对身份组低于自身的成员执行禁言或解除禁言操作。"
+        "description": "允许成员临时禁止他人在服务器中发言。"
       },
       "kick_members": {
         "label": "踢出成员",
-        "description": "拥有此权限的成员可以将身份组低于自身的成员踢出服务器。"
+        "description": "允许成员将他人移出服务器。"
       },
       "ban_members": {
         "label": "封禁成员",
-        "description": "拥有此权限的成员可以对身份组低于自身的成员执行封禁或解除封禁操作。"
+        "description": "允许成员永久封禁他人并禁止其重新加入服务器。"
       },
       "view_audit_log": {
         "label": "查看审计日志",
-        "description": "拥有此权限的成员可以查看服务器上过往的管理操作或其他特权操作记录。"
+        "description": "允许成员查看服务器操作记录。"
       },
       "administrator": {
         "label": "管理员",
-        "description": "拥有此权限的成员可以绕过服务器上的所有权限限制及频道限制。"
+        "description": "赋予成员所有权限，此权限无法被频道覆盖。请谨慎授予。"
       }
     },
-    "save": "保存更改？"
-  },
-  "home": {
-    "welcome": "您好，{{username}}！",
-    "onboarding": {
-      "title": "探索 Adapt",
-      "edit_profile": {
-        "label": "自定义您的个人资料",
-        "description": "让 Adapt 上的其他人了解您。设置显示名称、更换头像并撰写个人简介。"
-      },
-      "add_friend": {
-        "label": "与好友保持联系",
-        "description": "在 Adapt 上找到您的朋友，将他们添加到好友列表，然后开始聊天。"
-      },
-      "join_guild": {
-        "label": "加入社区",
-        "description": "创建、发现并加入感兴趣的社区，与志同道合的人畅聊。您也可以加入官方的 {{server_link}}。",
-        "official_server_name": "Adapt 社区"
-      }
-    }
-  },
-  "friends": {
-    "header": "好友",
-    "tabs": {
-      "all": "好友",
-      "pending": "请求",
-      "blocked": "已屏蔽"
-    },
-    "add": "添加好友",
-    "dividers": {
-      "all": "全部好友（{{count}}）",
-      "incoming": "收到的请求（{{count}}）",
-      "outgoing": "发出的请求（{{count}}）"
-    },
-    "actions": {
-      "dm": "发送私信",
-      "unfriend": "删除好友",
-      "unblock": "解除屏蔽",
-      "pending": {
-        "accept": "接受请求",
-        "decline": "拒绝请求",
-        "revoke": "撤回请求"
-      }
-    }
+    "save": "保存更改"
   },
   "time": {
     "recently": "刚刚",
@@ -348,12 +301,55 @@
     "remove": "移除",
     "save": "保存",
     "cancel": "取消",
-    "back": "返回",
-    "wip": "开发中！"
+    "back": "回去",
+    "wip": "开发中"
   },
   "error": {
-    "header": "错误：{{message}}",
-    "open_issue": "如果此错误持续出现，请在 GitHub 仓库中{{link}}。",
-    "open_issue_link": "提交 Issue"
+    "header": "出了点问题",
+    "open_issue": "报告此问题",
+    "open_issue_link": "在 GitHub 上提交 Issue"
+  },
+  "friends": {
+    "tabs": {
+      "pending": "待处理",
+      "all": "好友",
+      "blocked": "已屏蔽"
+    },
+    "header": "好友",
+    "add": "添加好友",
+    "dividers": {
+      "all": "全部好友（{{count}}）",
+      "incoming": "收到的请求（{{count}}）",
+      "outgoing": "发出的请求（{{count}}）"
+    },
+    "actions": {
+      "unfriend": "删除好友",
+      "unblock": "解除屏蔽",
+      "dm": "发送私信",
+      "pending": {
+        "accept": "接受请求",
+        "decline": "拒绝请求",
+        "revoke": "撤回请求"
+      }
+    }
+  },
+  "home": {
+    "welcome": "您好{{username}}！",
+    "onboarding": {
+      "add_friend": {
+        "label": "跟好友联系",
+        "description": "在 Adapt 上找到您的朋友，将他们添加到好友列表，然后开始聊天。"
+      },
+      "title": "探索 Adapt",
+      "edit_profile": {
+        "label": "自定义您的个人资料",
+        "description": "让 Adapt 上的其他人了解您。设置显示名称、更换头像并撰写个人简介。"
+      },
+      "join_guild": {
+        "label": "加入社区",
+        "description": "创建、发现、加入感兴趣的社区并在其中畅聊。您也可以加入官方的 {{server_link}}。",
+        "official_server_name": "Adapt 社区"
+      }
+    }
   }
 }
