@@ -34,8 +34,9 @@
     "delete_group": "删除群组",
     "leave_group": "离开群组",
     "close_dm": "关闭私信",
-    "group_members": "群组成员",
-    "no_messages": "没讯息"
+    "no_messages": "没讯息",
+    "group_members_one": "{{count}} 位成员",
+    "group_members_other": "{{count}} 位成员"
   },
   "status": {
     "online": "在线",
@@ -133,12 +134,14 @@
         "description": "身份组用于管理成员权限。",
         "search": "搜索身份组",
         "create": "创建身份组",
-        "members": "成员",
         "default": {
           "large": "所有成员默认拥有此身份组。",
           "small": "默认身份组",
           "header": "@everyone"
-        }
+        },
+        "members_one": "{{count}} 位成员",
+        "members_zero": "暂无成员",
+        "members_other": "{{count}} 位成员"
       },
       "delete": "删除服务器"
     },
@@ -315,18 +318,37 @@
     "header": "好友",
     "add": "添加好友",
     "dividers": {
-      "all": "全部好友（{{count}}）"
+      "all": "全部好友（{{count}}）",
+      "incoming": "收到的请求（{{count}}）",
+      "outgoing": "发出的请求（{{count}}）"
     },
     "actions": {
       "unfriend": "删除好友",
-      "unblock": "解除屏蔽"
+      "unblock": "解除屏蔽",
+      "dm": "发送私信",
+      "pending": {
+        "accept": "接受请求",
+        "decline": "拒绝请求",
+        "revoke": "撤回请求"
+      }
     }
   },
   "home": {
     "welcome": "您好{{username}}！",
     "onboarding": {
       "add_friend": {
-        "label": "跟好友联系"
+        "label": "跟好友联系",
+        "description": "在 Adapt 上找到您的朋友，将他们添加到好友列表，然后开始聊天。"
+      },
+      "title": "探索 Adapt",
+      "edit_profile": {
+        "label": "自定义您的个人资料",
+        "description": "让 Adapt 上的其他人了解您。设置显示名称、更换头像并撰写个人简介。"
+      },
+      "join_guild": {
+        "label": "加入社区",
+        "description": "创建、发现、加入感兴趣的社区并在其中畅聊。您也可以加入官方的 {{server_link}}。",
+        "official_server_name": "Adapt 社区"
       }
     }
   }
