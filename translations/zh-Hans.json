@@ -27,6 +27,12 @@
       "imperative": "复制消息 ID",
       "success": "已将消息 ID 复制到剪贴板！"
     },
+    "server_id": {
+      "imperative": "复制服务器 ID"
+    },
+    "role_id": {
+      "imperative": "复制身份组 ID"
+    },
     "loading": "正在复制…",
     "error": "复制到剪贴板失败！"
   },
@@ -131,7 +137,10 @@
           "description": "横幅将显示在频道侧边栏顶部以及服务器主页上。",
           "upload": "上传横幅",
           "remove": "移除横幅"
-        }
+        },
+        "description_placeholder_editing": "在此输入描述…",
+        "description_placeholder_not_editing": "暂无描述！",
+        "upload_placeholder": "上传"
       },
       "roles": {
         "header": "身份组",
@@ -145,9 +154,105 @@
           "large": "管理默认权限",
           "small": "全体成员",
           "header": "默认权限"
+        },
+        "locked": "已锁定",
+        "new_role": "新建身份组",
+        "back": "返回"
+      },
+      "emojis": {
+        "header": "表情",
+        "upload": {
+          "header": "上传表情",
+          "description": "最多可为服务器添加 50 个自定义表情。",
+          "button": "上传",
+          "search_results": "搜索结果",
+          "search_placeholder": "搜索表情…",
+          "created_by": "由 {{username}} 创建"
+        },
+        "no_permission": "您需要《管理表情》权限才能修改表情。",
+        "actions": {
+          "save": "保存",
+          "cancel": "取消",
+          "delete": "删除"
+        },
+        "failed_delete": "删除表情失败",
+        "deleted": "表情已成功删除",
+        "failed_rename": "重命名表情失败",
+        "renamed": "表情已成功重命名"
+      },
+      "invites": {
+        "header": "邀请",
+        "description": "查看和管理此服务器的所有有效邀请链接。",
+        "search_placeholder": "搜索邀请码…",
+        "columns": {
+          "code": "邀请码",
+          "inviter": "邀请人",
+          "created": "创建时间",
+          "expires": "到期时间",
+          "uses": "使用次数"
+        },
+        "expiry_never": "永不过期",
+        "expiry_left": "剩余 {{delta}}",
+        "all_inviters": "全部邀请人",
+        "search_users": "搜索用户…",
+        "count_one": "{{count}} 个邀请",
+        "count_other": "{{count}} 个邀请",
+        "loading": "正在加载…",
+        "none_found": "未找到邀请链接。",
+        "copy_link": "复制邀请链接",
+        "revoke": "撤销邀请",
+        "copying": {
+          "loading": "正在复制邀请链接…",
+          "success": "邀请链接已复制！",
+          "error": "复制邀请链接失败。"
+        },
+        "failed_fetch": "获取邀请列表失败",
+        "failed_revoke": "撤销邀请失败",
+        "sort": {
+          "label": "排序：{{option}}",
+          "code_asc": "邀请码（A-Z）",
+          "created_desc": "创建时间（最新优先）",
+          "created_asc": "创建时间（最早优先）",
+          "expiry_asc": "到期时间（最早优先）",
+          "expiry_desc": "到期时间（最晚优先）",
+          "uses_desc": "使用次数（最多优先）",
+          "uses_asc": "使用次数（最少优先）"
         }
       },
-      "delete": "删除服务器"
+      "members": {
+        "header": "成员",
+        "description": "查看和管理服务器中的成员。",
+        "search_placeholder": "搜索成员…",
+        "search_roles": "搜索身份组…",
+        "all_roles": "全部身份组",
+        "showing_all": "共显示 {{count}} 位成员",
+        "showing_filtered": "显示 {{filtered}} / {{total}} 位成员",
+        "columns": {
+          "member": "成员",
+          "roles": "身份组",
+          "created": "注册时间",
+          "joined": "加入时间"
+        },
+        "roles_updating": "正在更新身份组…",
+        "role_removed": "身份组已移除",
+        "actions": {
+          "edit_nickname": "编辑昵称",
+          "edit_roles": "编辑身份组",
+          "add_edit_roles": "添加/编辑身份组",
+          "kick": "踢出成员",
+          "remove_role": "移除身份组"
+        },
+        "sort": {
+          "label": "排序：{{option}}",
+          "name": "名称",
+          "account_age_asc": "账户年龄（升序）",
+          "account_age_desc": "账户年龄（降序）",
+          "join_date_asc": "加入时间（升序）",
+          "join_date_desc": "加入时间（降序）"
+        }
+      },
+      "delete": "删除服务器",
+      "delete_server": "删除服务器"
     },
     "permissions": {
       "categories": {
@@ -295,6 +400,10 @@
   },
   "home": {
     "welcome": "您好，{{username}}！",
+    "active_now": "当前在线",
+    "all_friends": "全部好友",
+    "ongoing_conversations": "进行中的对话",
+    "message_not_loaded": "消息尚未加载。（后续更新将提供消息数据）",
     "onboarding": {
       "title": "探索 Adapt",
       "edit_profile": {
@@ -317,6 +426,7 @@
     "tabs": {
       "all": "好友",
       "pending": "请求",
+      "pending_short": "请求",
       "blocked": "已屏蔽"
     },
     "add": "添加好友",
@@ -349,11 +459,270 @@
     "save": "保存",
     "cancel": "取消",
     "back": "返回",
-    "wip": "开发中！"
+    "wip": "开发中！",
+    "edit": "编辑",
+    "delete": "删除",
+    "leave": "离开",
+    "upload": "上传",
+    "loading": "正在加载…",
+    "unknown": "未知"
   },
   "error": {
     "header": "错误：{{message}}",
     "open_issue": "如果此错误持续出现，请在 GitHub 仓库中{{link}}。",
-    "open_issue_link": "提交 Issue"
+    "open_issue_link": "提交 Issue",
+    "something_went_wrong": "出现了问题！"
+  },
+  "auth": {
+    "login": {
+      "title": "登录您的账户",
+      "no_account": "还没有账户？",
+      "sign_up": "立即注册",
+      "email": "邮箱",
+      "password": "密码",
+      "remember_me": "记住我",
+      "forgot_password": "忘记密码？",
+      "submit": "登录",
+      "submitting": "正在登录…"
+    },
+    "register": {
+      "title": "创建账户",
+      "have_account": "已有账户？",
+      "sign_in": "立即登录",
+      "email": "邮箱",
+      "password": "密码",
+      "username": "用户名",
+      "remember_me": "记住我",
+      "submit": "注册",
+      "submitting": "正在注册…",
+      "no_captcha": "尚未获取 CAPTCHA 令牌",
+      "username_checking": "正在检查可用性…",
+      "username_available": "用户名可用！"
+    }
+  },
+  "account": {
+    "header": "账户",
+    "username": "用户名",
+    "display_name": "显示名称",
+    "credentials": "登录凭据",
+    "email": "邮箱",
+    "show_email": "显示邮箱",
+    "hide_email": "隐藏邮箱",
+    "save": "保存",
+    "cancel": "取消",
+    "edit": "编辑"
+  },
+  "chat": {
+    "message_input_placeholder": "发送消息…",
+    "no_permission": "您没有在此频道发送消息的权限。",
+    "jump_to_newer": "跳转至最新消息",
+    "upload": "上传",
+    "add_emoji": "添加表情",
+    "send": "发送",
+    "reply": "回复",
+    "more": "更多",
+    "add_reaction": "添加表情回应",
+    "unknown_message": "未知消息",
+    "mention_when_replying": "回复时提及 @{{name}}",
+    "do_not_mention_when_replying": "回复时不提及 @{{name}}",
+    "remove_reply": "移除",
+    "bot_badge": "机器人",
+    "typing_one": "{{user}} 正在输入…",
+    "typing_two": "{{user1}} 和 {{user2}} 正在输入…",
+    "typing_many": "{{users}}、{{last}} 等人正在输入…",
+    "typing_suffix_is": "正在输入…",
+    "typing_suffix_are": "正在输入…",
+    "context_menu": {
+      "reply": "回复",
+      "mark_unread": "标记为未读",
+      "copy_text": "复制文本",
+      "copy_text_loading": "正在复制消息内容…",
+      "copy_text_success": "已复制到剪贴板！",
+      "copy_text_error": "复制消息内容失败，请稍后重试。",
+      "copy_message_id": "复制消息 ID",
+      "copy_message_link": "复制消息链接",
+      "copy_link_loading": "正在复制消息链接…",
+      "copy_link_success": "已复制到剪贴板！",
+      "copy_link_error": "复制消息链接失败，请稍后重试。",
+      "edit_message": "编辑消息",
+      "delete_message": "删除消息"
+    }
+  },
+  "modals": {
+    "close": "关闭弹窗",
+    "new_guild": {
+      "title": "新建服务器",
+      "create_server": {
+        "label": "创建服务器",
+        "description": "建立一个全新的社区，可以是您与好友的私人空间，也可以发展成大型社群。"
+      },
+      "join_server": {
+        "label": "加入服务器",
+        "description": "输入邀请码以加入已有服务器。"
+      },
+      "discover_servers": {
+        "label": "发现服务器",
+        "description": "不知道从哪里开始？前往服务器发现页面，浏览您可能感兴趣的公开服务器。"
+      }
+    },
+    "create_server": {
+      "title": "创建服务器",
+      "description": "在创建服务器之前，先为它取个名字吧。",
+      "description_note": "您之后随时可以更改。",
+      "submit": "创建服务器",
+      "back": "返回"
+    },
+    "join_server": {
+      "title": "加入服务器",
+      "placeholder": "输入邀请码…",
+      "description": "输入邀请码以加入已有服务器。",
+      "examples_header": "有效邀请码示例：",
+      "invalid_code": "这看起来不是有效的邀请码。",
+      "submit": "加入服务器",
+      "back": "返回"
+    },
+    "create_channel": {
+      "title": "创建频道",
+      "description": "频道是成员交流的地方。",
+      "type_label": "您想创建哪种类型的频道？",
+      "name_label": "您想给这个频道取什么名字？",
+      "types": {
+        "text": {
+          "name": "文字",
+          "description": "在经典的文字频道中发送消息并交流。"
+        },
+        "voice": {
+          "name": "语音",
+          "description": "在语音频道中进行语音通话和视频直播。",
+          "unsupported": "暂不支持语音频道。"
+        }
+      },
+      "submit": "创建频道",
+      "back": "返回"
+    },
+    "create_category": {
+      "title": "创建分类",
+      "name_label": "您想给这个分类取什么名字？",
+      "submit": "创建分类",
+      "back": "返回"
+    },
+    "delete_message": {
+      "title": "删除消息",
+      "description": "确定要删除这条消息吗？",
+      "cancel": "取消",
+      "submit": "删除消息"
+    },
+    "delete_server": {
+      "title": "删除服务器",
+      "description": "确定要删除 <b>{{name}}</b> 吗？此操作无法撤销。该服务器的所有数据将被永久删除，无法恢复。",
+      "name_label": "请输入服务器名称以确认",
+      "password_label": "请输入您的密码",
+      "password_placeholder": "密码",
+      "name_mismatch": "服务器名称不匹配",
+      "cancel": "取消",
+      "submit": "删除服务器"
+    },
+    "leave_server": {
+      "title": "离开服务器",
+      "description": "确定要离开 <b>{{name}}</b> 吗？离开后，您需要重新获得邀请才能加入。",
+      "cancel": "取消",
+      "submit": "离开"
+    },
+    "create_role": {
+      "title": "创建身份组",
+      "name_label": "身份组名称",
+      "name_placeholder": "身份组名称",
+      "edit_color": "编辑颜色",
+      "submit": "创建身份组"
+    },
+    "invite_people": {
+      "title": "邀请成员",
+      "description": "通过以下链接邀请好友加入 <b>{{name}}</b>：",
+      "loading": "正在加载…",
+      "copy_to_clipboard": "复制到剪贴板"
+    },
+    "add_friend": {
+      "title": "添加好友",
+      "description": "请您的好友告知其唯一用户名，然后在下方输入。",
+      "your_username_is": "您的用户名是",
+      "copied": "已复制！",
+      "username_placeholder": "用户名",
+      "invalid_username": "用户名格式无效。请确认输入的是用户名而非显示名称。",
+      "requested_to_add": "已请求添加",
+      "as_a_friend": "为好友。"
+    },
+    "set_presence": {
+      "title": "自定义状态",
+      "description": "为您的账户设置自定义状态。",
+      "custom_status_label": "自定义状态",
+      "custom_status_placeholder": "好困啊…",
+      "submit": "保存"
+    },
+    "edit_nickname": {
+      "title": "编辑昵称",
+      "description": "您正在修改 {{username}} 在 {{guild}} 中的昵称。",
+      "visible_note": "此昵称将对服务器中的所有成员可见。",
+      "placeholder": "输入昵称…",
+      "cancel": "取消",
+      "submit": "保存"
+    },
+    "edit_roles": {
+      "title": "编辑身份组",
+      "description": "您正在编辑 <b>{{username}}</b> 在 <b>{{guild}}</b> 中的身份组。",
+      "save_note": "点击《保存》后身份组将更新。",
+      "cancel": "取消",
+      "submit": "保存"
+    },
+    "upload_emoji": {
+      "title": "上传表情",
+      "name_label": "表情名称",
+      "name_placeholder": "输入表情名称",
+      "preview_alt": "表情预览",
+      "cancel": "取消",
+      "submit": "上传",
+      "submitting": "正在上传…",
+      "success": "表情已成功上传",
+      "error": "上传表情失败"
+    },
+    "create_bot": {
+      "title": "创建机器人",
+      "name_label": "名称",
+      "name_placeholder": "我的超级机器人",
+      "handle_label": "标识符",
+      "handle_placeholder": "my-fancy-bot",
+      "handle_description": "标识符用于在 Adapt 中唯一标识您的机器人。",
+      "submit": "创建机器人"
+    }
+  },
+  "guild": {
+    "context_menu": {
+      "invite_people": "邀请成员",
+      "copy_server_id": "复制服务器 ID",
+      "leave_server": "离开服务器",
+      "create_server": "创建服务器",
+      "join_server": "加入服务器"
+    },
+    "new_server": "新建服务器"
+  },
+  "role": {
+    "name_label": "身份组名称",
+    "color_label": "身份组颜色",
+    "preview_label": "预览",
+    "pick_color": "选择颜色",
+    "remove_color": "移除",
+    "dark_theme": "深色主题",
+    "light_theme": "浅色主题",
+    "hoist": {
+      "label": "独立显示此身份组成员",
+      "description": "在成员列表中将拥有此身份组的成员单独分组显示"
+    },
+    "mentionable": {
+      "label": "允许所有人提及此身份组",
+      "description": "允许所有成员无论权限如何，均可集体提及拥有此身份组的全体成员"
+    }
+  },
+  "avatar": {
+    "edit": "编辑",
+    "edit_title": "编辑头像"
   }
 }
