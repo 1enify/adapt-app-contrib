@@ -27,6 +27,12 @@
       "imperative": "Copy Message ID",
       "success": "Message ID copied to clipboard!"
     },
+    "server_id": {
+      "imperative": "Copy Server ID"
+    },
+    "role_id": {
+      "imperative": "Copy Role ID"
+    },
     "loading": "Copying...",
     "error": "Failed to copy to clipboard!"
   },
@@ -131,7 +137,10 @@
           "description": "This will be shown at the top of the channel sidebar and on the server home page.",
           "upload": "Upload Banner",
           "remove": "Remove Banner"
-        }
+        },
+        "description_placeholder_editing": "Enter description here...",
+        "description_placeholder_not_editing": "No description yet!",
+        "upload_placeholder": "Upload"
       },
       "roles": {
         "header": "Roles",
@@ -145,9 +154,105 @@
           "large": "Manage Default Permissions",
           "small": "All Members",
           "header": "Default Permissions"
+        },
+        "locked": "Locked",
+        "new_role": "New Role",
+        "back": "Back"
+      },
+      "emojis": {
+        "header": "Emojis",
+        "upload": {
+          "header": "Upload Emojis",
+          "description": "Add up to 50 custom emojis to your server.",
+          "button": "Upload",
+          "search_results": "Search Results",
+          "search_placeholder": "Search emojis...",
+          "created_by": "Created by {{username}}"
+        },
+        "no_permission": "You need the Manage Emojis permission to modify emojis.",
+        "actions": {
+          "save": "Save",
+          "cancel": "Cancel",
+          "delete": "Delete"
+        },
+        "failed_delete": "Failed to delete emoji",
+        "deleted": "Emoji deleted successfully",
+        "failed_rename": "Failed to rename emoji",
+        "renamed": "Emoji renamed successfully"
+      },
+      "invites": {
+        "header": "Invites",
+        "description": "View and manage all active invites for this server.",
+        "search_placeholder": "Search invite codes...",
+        "columns": {
+          "code": "Code",
+          "inviter": "Inviter",
+          "created": "Created",
+          "expires": "Expires",
+          "uses": "Uses"
+        },
+        "expiry_never": "Never",
+        "expiry_left": "{{delta}} left",
+        "all_inviters": "All inviters",
+        "search_users": "Search users...",
+        "count_one": "{{count}} invite",
+        "count_other": "{{count}} invites",
+        "loading": "Loading...",
+        "none_found": "No invites found.",
+        "copy_link": "Copy Invite Link",
+        "revoke": "Revoke Invite",
+        "copying": {
+          "loading": "Copying invite link...",
+          "success": "Invite link copied!",
+          "error": "Failed to copy invite link."
+        },
+        "failed_fetch": "Failed to fetch invites",
+        "failed_revoke": "Failed to revoke invite",
+        "sort": {
+          "label": "Sort: {{option}}",
+          "code_asc": "Invite code (A-Z)",
+          "created_desc": "Created (newest first)",
+          "created_asc": "Created (oldest first)",
+          "expiry_asc": "Expiry (soonest first)",
+          "expiry_desc": "Expiry (latest first)",
+          "uses_desc": "Uses (highest first)",
+          "uses_asc": "Uses (lowest first)"
         }
       },
-      "delete": "Delete Server"
+      "members": {
+        "header": "Members",
+        "description": "View and manage members in your server.",
+        "search_placeholder": "Search Members...",
+        "search_roles": "Search roles...",
+        "all_roles": "All roles",
+        "showing_all": "Showing all {{count}} members",
+        "showing_filtered": "Showing {{filtered}} out of {{total}} members",
+        "columns": {
+          "member": "Member",
+          "roles": "Roles",
+          "created": "Created",
+          "joined": "Joined"
+        },
+        "roles_updating": "Updating roles...",
+        "role_removed": "Role removed",
+        "actions": {
+          "edit_nickname": "Edit Nickname",
+          "edit_roles": "Edit Roles",
+          "add_edit_roles": "Add/Edit Roles",
+          "kick": "Kick Member",
+          "remove_role": "Remove role"
+        },
+        "sort": {
+          "label": "Sort: {{option}}",
+          "name": "Name",
+          "account_age_asc": "Account age (asc)",
+          "account_age_desc": "Account age (desc)",
+          "join_date_asc": "Join date (asc)",
+          "join_date_desc": "Join date (desc)"
+        }
+      },
+      "delete": "Delete Server",
+      "delete_server": "Delete Server"
     },
     "permissions": {
       "categories": {
@@ -295,6 +400,10 @@
   },
   "home": {
     "welcome": "Welcome, {{username}}!",
+    "active_now": "Active Now",
+    "all_friends": "All Friends",
+    "ongoing_conversations": "Ongoing Conversations",
+    "message_not_loaded": "Message not loaded yet. (Message data will be provided in a future update)",
     "onboarding": {
       "title": "Learn Adapt",
       "edit_profile": {
@@ -317,6 +426,7 @@
     "tabs": {
       "all": "Friends",
       "pending": "Requests",
+      "pending_short": "Req.",
       "blocked": "Blocked"
     },
     "add": "Add Friend",
@@ -349,11 +459,270 @@
     "save": "Save",
     "cancel": "Cancel",
     "back": "Back",
-    "wip": "Work in progress!"
+    "wip": "Work in progress!",
+    "edit": "Edit",
+    "delete": "Delete",
+    "leave": "Leave",
+    "upload": "Upload",
+    "loading": "Loading...",
+    "unknown": "Unknown"
   },
   "error": {
     "header": "Error: {{message}}",
     "open_issue": "If this error persists, please {{link}} in the GitHub repository.",
-    "open_issue_link": "open an issue"
+    "open_issue_link": "open an issue",
+    "something_went_wrong": "Something went wrong!"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in to your account",
+      "no_account": "Don't have an account?",
+      "sign_up": "Sign up",
+      "email": "Email",
+      "password": "Password",
+      "remember_me": "Remember me",
+      "forgot_password": "Forgot your password?",
+      "submit": "Sign in",
+      "submitting": "Signing in..."
+    },
+    "register": {
+      "title": "Create an account",
+      "have_account": "Already have an account?",
+      "sign_in": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "username": "Username",
+      "remember_me": "Remember me",
+      "submit": "Register",
+      "submitting": "Registering...",
+      "no_captcha": "No CAPTCHA token yet",
+      "username_checking": "Checking availability...",
+      "username_available": "Username available!"
+    }
+  },
+  "account": {
+    "header": "Account",
+    "username": "Username",
+    "display_name": "Display Name",
+    "credentials": "Credentials",
+    "email": "Email",
+    "show_email": "Show Email",
+    "hide_email": "Hide Email",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit"
+  },
+  "chat": {
+    "message_input_placeholder": "Send a message...",
+    "no_permission": "You do not have permission to send messages in this channel.",
+    "jump_to_newer": "Jump to Newer Messages",
+    "upload": "Upload",
+    "add_emoji": "Add Emoji",
+    "send": "Send",
+    "reply": "Reply",
+    "more": "More",
+    "add_reaction": "Add Reaction",
+    "unknown_message": "Unknown message",
+    "mention_when_replying": "Mention @{{name}} when replying",
+    "do_not_mention_when_replying": "Do not mention @{{name}} when replying",
+    "remove_reply": "Remove",
+    "bot_badge": "BOT",
+    "typing_one": "{{user}} is typing...",
+    "typing_two": "{{user1}} and {{user2}} are typing...",
+    "typing_many": "{{users}} and {{last}} are typing...",
+    "typing_suffix_is": "is typing...",
+    "typing_suffix_are": "are typing...",
+    "context_menu": {
+      "reply": "Reply",
+      "mark_unread": "Mark Unread",
+      "copy_text": "Copy Text",
+      "copy_text_loading": "Copying message text...",
+      "copy_text_success": "Copied to your clipboard!",
+      "copy_text_error": "Failed to copy message text, try again later.",
+      "copy_message_id": "Copy Message ID",
+      "copy_message_link": "Copy Message Link",
+      "copy_link_loading": "Copying message link...",
+      "copy_link_success": "Copied to your clipboard!",
+      "copy_link_error": "Failed to copy message link, try again later.",
+      "edit_message": "Edit Message",
+      "delete_message": "Delete Message"
+    }
+  },
+  "modals": {
+    "close": "Close Modal",
+    "new_guild": {
+      "title": "New Server",
+      "create_server": {
+        "label": "Create a server",
+        "description": "Start a new community. It can be a place for you and your friends, or you can grow it into a large community."
+      },
+      "join_server": {
+        "label": "Join a server",
+        "description": "Enter an invite code to join an existing server."
+      },
+      "discover_servers": {
+        "label": "Discover servers",
+        "description": "Not sure where to start? Check out the server discovery page where you can browse public servers you might be interested in."
+      }
+    },
+    "create_server": {
+      "title": "Create a Server",
+      "description": "Before we create your server, let's give it a name.",
+      "description_note": "You can always change this later.",
+      "submit": "Create Server",
+      "back": "Back"
+    },
+    "join_server": {
+      "title": "Join a Server",
+      "placeholder": "Enter an invite code...",
+      "description": "Enter an invite code to join an existing server.",
+      "examples_header": "Examples of valid invite codes:",
+      "invalid_code": "That doesn't look like a valid invite code.",
+      "submit": "Join Server",
+      "back": "Back"
+    },
+    "create_channel": {
+      "title": "Create Channel",
+      "description": "Channels are where your members communicate.",
+      "type_label": "What type of channel do you want to create?",
+      "name_label": "What do you want to name this channel?",
+      "types": {
+        "text": {
+          "name": "Text",
+          "description": "Send messages and communicate in a classic text-based channel."
+        },
+        "voice": {
+          "name": "Voice",
+          "description": "Talk and stream with voice and video in a voice channel.",
+          "unsupported": "Voice channels are not supported yet."
+        }
+      },
+      "submit": "Create Channel",
+      "back": "Back"
+    },
+    "create_category": {
+      "title": "Create Category",
+      "name_label": "What do you want to name this category?",
+      "submit": "Create Category",
+      "back": "Back"
+    },
+    "delete_message": {
+      "title": "Delete Message",
+      "description": "Are you sure you want to delete this message?",
+      "cancel": "Cancel",
+      "submit": "Delete Message"
+    },
+    "delete_server": {
+      "title": "Delete Server",
+      "description": "Are you sure you want to delete <b>{{name}}</b>? You will not be able to undo this action. All data associated with this server will be deleted and you will not be able to recover them in the future.",
+      "name_label": "Type the name of the server to confirm",
+      "password_label": "Enter your password",
+      "password_placeholder": "Password",
+      "name_mismatch": "Guild name does not match",
+      "cancel": "Cancel",
+      "submit": "Delete Server"
+    },
+    "leave_server": {
+      "title": "Leave Server",
+      "description": "Are you sure you want to leave <b>{{name}}</b>? You will be unable to rejoin unless you are re-invited.",
+      "cancel": "Cancel",
+      "submit": "Leave"
+    },
+    "create_role": {
+      "title": "Create Role",
+      "name_label": "Role Name",
+      "name_placeholder": "Role Name",
+      "edit_color": "Edit Color",
+      "submit": "Create Role"
+    },
+    "invite_people": {
+      "title": "Invite People",
+      "description": "Invite people to join <b>{{name}}</b> by sending them this link:",
+      "loading": "Loading...",
+      "copy_to_clipboard": "Copy to clipboard"
+    },
+    "add_friend": {
+      "title": "Add Friend",
+      "description": "Ask your friend to give you their unique username, and enter it below.",
+      "your_username_is": "Your username is",
+      "copied": "Copied!",
+      "username_placeholder": "Username",
+      "invalid_username": "Invalid username format. Make sure this is the username (not display name).",
+      "requested_to_add": "Requested to add",
+      "as_a_friend": "as a friend."
+    },
+    "set_presence": {
+      "title": "Custom Status",
+      "description": "Set a custom status for your account.",
+      "custom_status_label": "Custom Status",
+      "custom_status_placeholder": "So sleepy...",
+      "submit": "Save"
+    },
+    "edit_nickname": {
+      "title": "Edit Nickname",
+      "description": "You are changing {{username}}'s nickname in {{guild}}.",
+      "visible_note": "This will be visible to all members in this server.",
+      "placeholder": "Enter nickname...",
+      "cancel": "Cancel",
+      "submit": "Save"
+    },
+    "edit_roles": {
+      "title": "Edit Roles",
+      "description": "You are editing roles for <b>{{username}}</b> in <b>{{guild}}</b>.",
+      "save_note": "Roles will be updated once you press \"Save\".",
+      "cancel": "Cancel",
+      "submit": "Save"
+    },
+    "upload_emoji": {
+      "title": "Upload Emoji",
+      "name_label": "Emoji Name",
+      "name_placeholder": "Enter emoji name",
+      "preview_alt": "Emoji preview",
+      "cancel": "Cancel",
+      "submit": "Upload",
+      "submitting": "Uploading...",
+      "success": "Emoji uploaded successfully",
+      "error": "Failed to upload emoji"
+    },
+    "create_bot": {
+      "title": "Create Bot",
+      "name_label": "Name",
+      "name_placeholder": "My Fancy Bot",
+      "handle_label": "Handle",
+      "handle_placeholder": "my-fancy-bot",
+      "handle_description": "Bot handles are used to uniquely identify your bot in Adapt.",
+      "submit": "Create Bot"
+    }
+  },
+  "guild": {
+    "context_menu": {
+      "invite_people": "Invite People",
+      "copy_server_id": "Copy Server ID",
+      "leave_server": "Leave Server",
+      "create_server": "Create Server",
+      "join_server": "Join Server"
+    },
+    "new_server": "New Server"
+  },
+  "role": {
+    "name_label": "Role Name",
+    "color_label": "Role Color",
+    "preview_label": "Preview",
+    "pick_color": "Pick Color",
+    "remove_color": "Remove",
+    "dark_theme": "Dark Theme",
+    "light_theme": "Light Theme",
+    "hoist": {
+      "label": "Hoist members with this role",
+      "description": "Display members with this role separately in the members list"
+    },
+    "mentionable": {
+      "label": "Allow everyone to mention this role",
+      "description": "Allows all members, regardless of permission, to collectively mention all members in this role"
+    }
+  },
+  "avatar": {
+    "edit": "Edit",
+    "edit_title": "Edit Avatar"
   }
 }
