@@ -37,7 +37,7 @@ export default function GuildInviteModal(props: { guild: Guild }) {
     <ModalTemplate title={t('modals.invite_people.title')}>
       <p class="text-fg/70 text-center mt-2">
         {tJsx('modals.invite_people.description', {
-          guild: <b>{props.guild.name}</b>
+          name: <b>{props.guild.name}</b>
         })}
       </p>
       <div class="flex items-center justify-between bg-0 mt-4 rounded-lg box-border overflow-hidden">
