@@ -41,7 +41,7 @@
     "leave_group": "离开群组",
     "close_dm": "关闭私信",
     "group_members_other": "{{count}} 位成员",
-    "no_messages": "暂无消息"
+    "no_messages": "没有消息"
   },
   "status": {
     "online": "在线",
@@ -466,7 +466,7 @@
       "outgoing": "发出的请求（{{count}}）"
     },
     "actions": {
-      "dm": "发送私信",
+      "dm": "开私信",
       "unfriend": "删除好友",
       "unblock": "解除屏蔽",
       "pending": {
