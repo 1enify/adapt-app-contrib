@@ -40,7 +40,6 @@
     "delete_group": "Gruppe löschen",
     "leave_group": "Gruppe verlassen",
     "close_dm": "DM schließen",
-    "group_members_zero": "Keine Mitglieder",
     "group_members_one": "{{count}} Mitglied",
     "group_members_other": "{{count}} Mitglieder",
     "no_messages": "Keine Nachrichten"
@@ -84,7 +83,6 @@
       },
       "user_settings": "Einstellungen"
     },
-    "guild": {},
     "members": {
       "collapse": "Mitglieder ausblenden",
       "expand": "Mitglieder anzeigen"
@@ -148,8 +146,6 @@
     "guild": {
       "channel": {
         "header": "Kanaleinstellungen",
-        "tabs": {},
-        "sections": {},
         "delete": "Kanal löschen"
       },
       "header": "Servereinstellungen",
@@ -175,7 +171,6 @@
         "description": "Rollen werden verwendet, um Mitglieder auf Ihrem Server zu gruppieren und ihnen Berechtigungen zu erteilen.",
         "search": "Suchrollen",
         "create": "Rolle erstellen",
-        "members_zero": "Keine Mitglieder",
         "members_one": "{{count}} Mitglied",
         "members_other": "{{count}} Mitglieder",
         "default": {
@@ -559,8 +554,7 @@
     "do_not_mention_when_replying": "@ nicht erwähnen{{name}} beim Antworten",
     "bot_badge": "BOT",
     "typing_one": "{{user}} tippt...",
-    "typing_two": "{{user1}} Und {{user2}} schreibe...",
-    "typing_many": "{{users}} Und {{last}} schreibe...",
+    "typing_other": "",
     "typing_suffix_is": "tippt...",
     "typing_suffix_are": "schreibe...",
     "context_menu": {
@@ -657,15 +651,12 @@
     },
     "invite_people": {
       "title": "Leute einladen",
-      "description": "Laden Sie Leute ein, mitzumachen {{name}} indem Sie ihnen diesen Link senden:",
-      "loading": "Laden...",
-      "copy_to_clipboard": "In die Zwischenablage kopieren"
+      "description": "Laden Sie Leute ein, mitzumachen {{name}} indem Sie ihnen diesen Link senden:"
     },
     "add_friend": {
       "title": "Freund hinzufügen",
       "description": "Bitten Sie Ihren Freund, Ihnen seinen eindeutigen Benutzernamen zu geben, und geben Sie ihn unten ein.",
       "your_username_is": "Ihr Benutzername ist",
-      "copied": "Kopiert!",
       "username_placeholder": "Benutzername",
       "invalid_username": "Ungültiges Benutzernamenformat. ",
       "requested_to_add": "Zum Hinzufügen aufgefordert {{username}} als Freund."
@@ -707,13 +698,6 @@
     }
   },
   "guild": {
-    "context_menu": {
-      "invite_people": "Leute einladen",
-      "copy_server_id": "Server-ID kopieren",
-      "leave_server": "Verlassen Sie den Server",
-      "create_server": "Server erstellen",
-      "join_server": "Dem Server beitreten"
-    },
     "new_server": "Neuer Server"
   },
   "avatar": {
