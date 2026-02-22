@@ -40,6 +40,7 @@
     "delete_group": "Delete Group",
     "leave_group": "Leave Group",
     "close_dm": "Close DM",
+    "group_members_zero": "No Members",
     "group_members_one": "{{count}} Member",
     "group_members_other": "{{count}} Members",
     "no_messages": "No messages"
@@ -630,33 +631,29 @@
     },
     "delete_message": {
       "title": "Delete Message",
-      "description": "Are you sure you want to delete this message?",
-      "submit": "Delete Message"
+      "description": "Are you sure you want to delete this message?"
     },
     "delete_server": {
       "title": "Delete Server",
-      "description": "Are you sure you want to delete <b>{{name}}</b>? You will not be able to undo this action. All data associated with this server will be deleted and you will not be able to recover them in the future.",
+      "description": "Are you sure you want to delete {{name}}? You will not be able to undo this action. All data associated with this server will be deleted and you will not be able to recover them in the future.",
       "name_label": "Type the name of the server to confirm",
       "password_label": "Enter your password",
       "password_placeholder": "Password",
-      "name_mismatch": "Guild name does not match",
-      "submit": "Delete Server"
+      "name_mismatch": "Guild name does not match"
     },
     "leave_server": {
       "title": "Leave Server",
-      "description": "Are you sure you want to leave <b>{{name}}</b>? You will be unable to rejoin unless you are re-invited.",
-      "submit": "Leave"
+      "description": "Are you sure you want to leave {{name}}? You will be unable to rejoin unless you are re-invited."
     },
     "create_role": {
       "title": "Create Role",
       "name_label": "Role Name",
       "name_placeholder": "Role Name",
-      "edit_color": "Edit Color",
-      "submit": "Create Role"
+      "edit_color": "Edit Color"
     },
     "invite_people": {
       "title": "Invite People",
-      "description": "Invite people to join <b>{{name}}</b> by sending them this link:",
+      "description": "Invite people to join {{name}} by sending them this link:",
       "loading": "Loading...",
       "copy_to_clipboard": "Copy to clipboard"
     },
@@ -683,7 +680,7 @@
     },
     "edit_roles": {
       "title": "Edit Roles",
-      "description": "You are editing roles for <b>{{username}}</b> in <b>{{guild}}</b>.",
+      "description": "You are editing roles for {{username}} in {{guild}}.",
       "save_note": "Roles will be updated once you press \"Save\"."
     },
     "upload_emoji": {
