@@ -476,14 +476,15 @@
       }
     },
     "no_friends": {
-      "remark": "您目前（像Cryptex）是没有好友。"
+      "remark": "您目前（像Cryptex）是没有好友。",
+      "action": "加一些？"
     }
   },
   "time": {
     "recently": "刚刚",
     "past": "{{delta}}前",
     "future": "{{delta}}后",
-    "yesterday_at": "昨天 {{time}}",
+    "yesterday_at": "昨天{{time}}",
     "weekday_at": "{{weekday}} {{time}}",
     "date_at": "{{date}} {{time}}"
   },
