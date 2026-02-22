@@ -618,8 +618,7 @@
     },
     "delete_message": {
       "title": "删除消息",
-      "description": "确定要删除这条消息吗？",
-      "submit": "删除消息"
+      "description": "确定要删除这条消息吗？"
     },
     "delete_server": {
       "title": "删除服务器",
@@ -627,20 +626,17 @@
       "name_label": "请输入服务器名称以确认",
       "password_label": "请输入您的密码",
       "password_placeholder": "密码",
-      "name_mismatch": "服务器名称不匹配",
-      "submit": "删除服务器"
+      "name_mismatch": "服务器名称不匹配"
     },
     "leave_server": {
       "title": "离开服务器",
-      "description": "确定要离开 <b>{{name}}</b> 吗？离开后，您需要重新获得邀请才能加入。",
-      "submit": "离开"
+      "description": "确定要离开 <b>{{name}}</b> 吗？离开后，您需要重新获得邀请才能加入。"
     },
     "create_role": {
       "title": "创建身份组",
       "name_label": "身份组名称",
       "name_placeholder": "身份组名称",
-      "edit_color": "编辑颜色",
-      "submit": "创建身份组"
+      "edit_color": "编辑颜色"
     },
     "invite_people": {
       "title": "邀请成员",
