@@ -23,6 +23,27 @@ web client.
   - [.deb](https://download.adapt.chat/webclient/linux-x86_64/Adapt.deb) (smaller, but might need to install dependencies)
   - [AppImage](https://download.adapt.chat/webclient/linux-x86_64/Adapt.AppImage) (larger, easier to install)
 
+## Contributing
+
+### Contributing Code
+
+All contributions are welcome! Here are a few general guidelines:
+- for JSX and CSS, use 2-space indents
+- there is no strict guideline for code formatting, but try to follow best practices.
+  if you want, run a code formatter on the section of code you are contributing
+- break long lines into multiple lines (especially with Tailwind classes)
+- ensure the remainder of the client still works properly
+- if you have used Generative AI for part of the contribution, please mention so in the PR description
+  - fully AI-generated contributions with no review will not be accepted
+
+### Contributing Translations
+
+If you want to translate the Adapt Web Client:
++ create an account on https://i18n.adapt.chat (this is a [Weblate](https://weblate.org/) instance)
++ after setting up your account, contact me and tell me your email and language(s) you want to translate
+  - you can contact me through the official [Adapt Community Server](https://adapt.chat/invite/Sy0HSbiR), the [Adapt Development Discord](https://discord.gg/A2ewwZSxxs), or via emailing me@jay3332.tech.
++ after you get a response, you may begin translating!
+
 ## Building from Source
 
 You can run the Adapt client locally using [Vite](https://vitejs.dev/).
