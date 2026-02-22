@@ -9,9 +9,10 @@ const translationModules =
 
 const resources: Record<string, Record<string, any>> = {};
 for (const [path, mod] of Object.entries(translationModules)) {
-  const locale = path.replace('../translations/', '').replace('.json', '');
+  let locale = path.replace('../translations/', '').replace('.json', '');
   const candidate = { translation: mod.default ?? mod };
   
+  if (locale === 'be-TARASK') locale = 'be_TARASK';
   if (candidate.translation != null && Object.keys(candidate.translation).length > 0) 
     resources[locale] = candidate;
 }
@@ -20,6 +21,7 @@ export function getLanguageDisplayName(locale: string, displayLocale = 'en'): st
   const normalized = locale.replaceAll('_', '-');
   const { language, script, region } = new Intl.Locale(normalized);
 
+  displayLocale = displayLocale.replaceAll('_', '-');
   const languageNames = new Intl.DisplayNames([displayLocale], { type: 'language' });
   const regionNames = new Intl.DisplayNames([displayLocale], { type: 'region' });
   const scriptNames = new Intl.DisplayNames([displayLocale], { type: 'script' });
