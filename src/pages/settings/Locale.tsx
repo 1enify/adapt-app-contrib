@@ -1,10 +1,11 @@
 import { For } from "solid-js";
 import Header from "../../components/ui/Header";
-import { AVAILABLE_LOCALES, LOCALE_FLAGS, LOCALE_NAMES, locale, setLocale, t } from "../../i18n";
+import { AVAILABLE_LOCALES, LOCALE_FLAGS, getLanguageDisplayName, locale, setLocale, t } from "../../i18n";
 import { getUnicodeEmojiUrl } from "../../components/messaging/Emoji";
 
 function LocaleOption(props: { localeKey: string }) {
-  const name = () => LOCALE_NAMES[props.localeKey] ?? props.localeKey;
+  const localName = () => getLanguageDisplayName(props.localeKey, locale());
+  const nativeName = () => getLanguageDisplayName(props.localeKey, props.localeKey);
   const flag = () => LOCALE_FLAGS[props.localeKey];
   const isSelected = () => locale() === props.localeKey;
 
@@ -19,10 +20,12 @@ function LocaleOption(props: { localeKey: string }) {
       onClick={() => setLocale(props.localeKey)}
     >
       <span class="flex items-center gap-3">
-        <img src={getUnicodeEmojiUrl(flag())} alt={flag()} width={20} height={20} class="inline-block" />
-        <span class="font-medium">{name()}</span>
+        <img src={getUnicodeEmojiUrl(flag()!)} alt={flag()!} width={20} height={20} class="inline-block" />
+        <span class="font-medium">{nativeName()}</span>
       </span>
-      <span class="text-xs opacity-60 font-mono">{props.localeKey}</span>
+      <span class="text-xs opacity-60">
+        {localName()}
+      </span>
     </button>
   );
 }
@@ -34,7 +37,7 @@ export default function Locale() {
       <p class="text-fg/60 text-sm mb-4 mx-4">
         {t("settings.user.language.description")}
       </p>
-      <div class="flex flex-col gap-1 px-2">
+      <div class="flex flex-col px-2">
         <For each={AVAILABLE_LOCALES}>
           {(localeKey) => <LocaleOption localeKey={localeKey} />}
         </For>

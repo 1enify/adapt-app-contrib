@@ -10,45 +10,49 @@ const translationModules =
 const resources: Record<string, Record<string, any>> = {};
 for (const [path, mod] of Object.entries(translationModules)) {
   const locale = path.replace('../translations/', '').replace('.json', '');
-  resources[locale] = { translation: mod.default ?? mod };
+  const candidate = { translation: mod.default ?? mod };
+  
+  if (candidate.translation != null && Object.keys(candidate.translation).length > 0) 
+    resources[locale] = candidate;
 }
 
-export const LOCALE_NAMES: Record<string, string> = {
-  'en-US': 'English (US)',
-  'en-GB': 'English (UK)',
-  'zh-Hans': '中文（简体）',
-  'zh-Hant': '中文（繁體）',
-  'zh-Hant-HK': '中文（繁體，香港）',
-  'es': 'Español',
-  'fr': 'Français',
-  'de': 'Deutsch',
-  'pt-BR': 'Português (Brasil)',
-  'ru': 'Русский',
-  'ja': '日本語',
-  'ko': '한국어',
-  'tr': 'Türkçe',
-  'vi': 'Tiếng Việt',
-  'be_TARASK': 'Беларуская (тарашкевіца)',
-};
+export function getLanguageDisplayName(locale: string, displayLocale = 'en'): string {
+  const normalized = locale.replaceAll('_', '-');
+  const { language, script, region } = new Intl.Locale(normalized);
+  displayLocale = displayLocale.replaceAll('_', '-');
 
-export const LOCALE_FLAGS: Record<string, string> = {
-  'en-US': '🇺🇸',
-  'en-GB': '🇬🇧',
-  'zh-Hans': '🇨🇳',
-  'zh-Hant': '🇹🇼',
-  'zh-Hant-HK': '🇭🇰',
-  'es': '🇪🇸',
-  'fr': '🇫🇷',
-  'de': '🇩🇪',
-  'pt-BR': '🇧🇷',
-  'ru': '🇷🇺',
-  'ja': '🇯🇵',
-  'ko': '🇰🇷',
-  'tr': '🇹🇷',
-  'vi': '🇻🇳',
-  'be_TARASK': '🇧🇾',
-};
+  const languageNames = new Intl.DisplayNames([displayLocale], { type: 'language' });
+  const regionNames = new Intl.DisplayNames([displayLocale], { type: 'region' });
+  const scriptNames = new Intl.DisplayNames([displayLocale], { type: 'script' });
 
+  const languageName = languageNames
+    .of(language)
+    ?.replace(/^\p{L}/u, c => c.toUpperCase());
+  const qualifier = region
+    ? regionNames.of(region)
+    : script
+    ? scriptNames.of(script)
+    : null;
+
+  return qualifier ? `${languageName} (${qualifier})` : languageName ?? locale;
+}
+
+export function getFlagEmoji(locale: string): string | null {
+  const normalized = locale.replaceAll('_', '-');
+  try {
+    const { region } = new Intl.Locale(normalized).maximize();
+    if (!region) return null;
+    return [...region]
+      .map(char => String.fromCodePoint(0x1F1E6 - 65 + char.charCodeAt(0)))
+      .join('');
+  } catch {
+    return null;
+  }
+}
+
+export const LOCALE_FLAGS: Record<string, string | null> = Object.fromEntries(
+  Object.keys(resources).map(locale => [locale, getFlagEmoji(locale)])
+);
 export const AVAILABLE_LOCALES = Object.keys(resources);
 
 const STORAGE_KEY = 'locale';
