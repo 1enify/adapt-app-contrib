@@ -4,7 +4,7 @@ import {Permissions} from "./api/Bitflags";
 import {User} from "./types/user";
 import {getApi} from "./api/Api";
 import {JSX} from "solid-js";
-import {t, locale} from "./i18n";
+import {t, locale, normalizedLocale} from "./i18n";
 
 /**
  * Utilities related to snowflakes.
@@ -212,17 +212,17 @@ export function humanizeTimestamp(timestamp: number | Date): string {
   else if (isSameDay(timestamp, new Date(now.getTime() - 86_400_000)))
     return t('time.yesterday_at', { time: humanized })
   else if (day(now).getTime() - day(timestamp).getTime() < 3 * 86_400_000) {
-    const weekday = timestamp.toLocaleDateString(locale(), { weekday: 'long' })
+    const weekday = timestamp.toLocaleDateString(normalizedLocale(), { weekday: 'long' })
     return t('time.weekday_at', { weekday, time: humanized })
   }
   else if (timestamp.getFullYear() === now.getFullYear()) {
-    date = timestamp.toLocaleDateString(locale(), {
+    date = timestamp.toLocaleDateString(normalizedLocale(), {
       month: 'short',
       day: 'numeric',
     })
   }
   else {
-    date = timestamp.toLocaleDateString(locale(), {
+    date = timestamp.toLocaleDateString(normalizedLocale(), {
       year: 'numeric',
       month: 'short',
       day: '2-digit',
@@ -239,7 +239,7 @@ export function humanizeFullTimestamp(timestamp: number | Date): string {
   if (typeof timestamp === 'number')
     timestamp = new Date(timestamp)
 
-  return timestamp.toLocaleString(locale(), {
+  return timestamp.toLocaleString(normalizedLocale(), {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -258,7 +258,7 @@ export function humanizeDate(timestamp: number | Date): string {
   if (typeof timestamp === 'number')
     timestamp = new Date(timestamp)
 
-  return timestamp.toLocaleDateString(locale(), {
+  return timestamp.toLocaleDateString(normalizedLocale(), {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -272,7 +272,7 @@ export function humanizeTime(timestamp: number | Date): string {
   if (typeof timestamp === 'number')
     timestamp = new Date(timestamp)
 
-  return timestamp.toLocaleTimeString(locale(), {
+  return timestamp.toLocaleTimeString(normalizedLocale(), {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,

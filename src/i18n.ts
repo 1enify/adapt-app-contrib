@@ -17,11 +17,15 @@ for (const [path, mod] of Object.entries(translationModules)) {
     resources[locale] = candidate;
 }
 
+export function normalizeLocale(locale: string): string {
+  return locale.replaceAll('_', '-');
+}
+
 export function getLanguageDisplayName(locale: string, displayLocale = 'en'): string {
-  const normalized = locale.replaceAll('_', '-');
+  const normalized = normalizeLocale(locale);
+  displayLocale = normalizeLocale(displayLocale);
   const { language, script, region } = new Intl.Locale(normalized);
 
-  displayLocale = displayLocale.replaceAll('_', '-');
   const languageNames = new Intl.DisplayNames([displayLocale], { type: 'language' });
   const regionNames = new Intl.DisplayNames([displayLocale], { type: 'region' });
   const scriptNames = new Intl.DisplayNames([displayLocale], { type: 'script' });
@@ -39,7 +43,7 @@ export function getLanguageDisplayName(locale: string, displayLocale = 'en'): st
 }
 
 export function getFlagEmoji(locale: string): string | null {
-  const normalized = locale.replaceAll('_', '-');
+  const normalized = normalizeLocale(locale);
   try {
     const { region } = new Intl.Locale(normalized).maximize();
     if (!region) return null;
@@ -76,7 +80,8 @@ function getInitialLocale(): string {
 
 // TODO: make this a context maybe?
 const [locale, _setLocale] = createSignal<string>(getInitialLocale());
-export { locale };
+const normalizedLocale = () => normalizeLocale(locale());
+export { locale, normalizedLocale };
 
 i18next.init({
   lng: locale(),
