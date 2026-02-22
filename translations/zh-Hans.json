@@ -207,11 +207,6 @@
           "created_by": "由 {{username}} 创建"
         },
         "no_permission": "您需要《管理表情》权限才能修改表情。",
-        "actions": {
-          "save": "保存",
-          "cancel": "取消",
-          "delete": "删除"
-        },
         "failed_delete": "删除表情失败",
         "deleted": "表情已成功删除",
         "failed_rename": "重命名表情失败",
@@ -588,8 +583,7 @@
       "title": "创建服务器",
       "description": "在创建服务器之前，先为它取个名字吧。",
       "description_note": "您之后随时可以更改。",
-      "submit": "创建服务器",
-      "back": "返回"
+      "submit": "创建服务器"
     },
     "join_server": {
       "title": "加入服务器",
@@ -597,8 +591,7 @@
       "description": "输入邀请码以加入已有服务器。",
       "examples_header": "有效邀请码示例：",
       "invalid_code": "这看起来不是有效的邀请码。",
-      "submit": "加入服务器",
-      "back": "返回"
+      "submit": "加入服务器"
     },
     "create_channel": {
       "title": "创建频道",
@@ -616,19 +609,16 @@
           "unsupported": "暂不支持语音频道。"
         }
       },
-      "submit": "创建频道",
-      "back": "返回"
+      "submit": "创建频道"
     },
     "create_category": {
       "title": "创建分类",
       "name_label": "您想给这个分类取什么名字？",
-      "submit": "创建分类",
-      "back": "返回"
+      "submit": "创建分类"
     },
     "delete_message": {
       "title": "删除消息",
       "description": "确定要删除这条消息吗？",
-      "cancel": "取消",
       "submit": "删除消息"
     },
     "delete_server": {
@@ -638,13 +628,11 @@
       "password_label": "请输入您的密码",
       "password_placeholder": "密码",
       "name_mismatch": "服务器名称不匹配",
-      "cancel": "取消",
       "submit": "删除服务器"
     },
     "leave_server": {
       "title": "离开服务器",
       "description": "确定要离开 <b>{{name}}</b> 吗？离开后，您需要重新获得邀请才能加入。",
-      "cancel": "取消",
       "submit": "离开"
     },
     "create_role": {
@@ -673,31 +661,24 @@
       "title": "自定义状态",
       "description": "为您的账户设置自定义状态。",
       "custom_status_label": "自定义状态",
-      "custom_status_placeholder": "好困啊…",
-      "submit": "保存"
+      "custom_status_placeholder": "好困啊…"
     },
     "edit_nickname": {
       "title": "编辑昵称",
       "description": "您正在修改 {{username}} 在 {{guild}} 中的昵称。",
       "visible_note": "此昵称将对服务器中的所有成员可见。",
-      "placeholder": "输入昵称…",
-      "cancel": "取消",
-      "submit": "保存"
+      "placeholder": "输入昵称…"
     },
     "edit_roles": {
       "title": "编辑身份组",
       "description": "您正在编辑 <b>{{username}}</b> 在 <b>{{guild}}</b> 中的身份组。",
-      "save_note": "点击《保存》后身份组将更新。",
-      "cancel": "取消",
-      "submit": "保存"
+      "save_note": "点击《保存》后身份组将更新。"
     },
     "upload_emoji": {
       "title": "上传表情",
       "name_label": "表情名称",
       "name_placeholder": "输入表情名称",
       "preview_alt": "表情预览",
-      "cancel": "取消",
-      "submit": "上传",
       "submitting": "正在上传…",
       "success": "表情已成功上传",
       "error": "上传表情失败"
@@ -723,7 +704,6 @@
     "new_server": "新建服务器"
   },
   "avatar": {
-    "edit": "编辑",
     "edit_title": "编辑头像"
   }
 }
