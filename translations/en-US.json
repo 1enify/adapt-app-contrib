@@ -96,16 +96,51 @@
   "settings": {
     "user": {
       "header": "Settings",
-      "tabs": {
-        "account": "Account",
-        "themes": "Themes",
-        "plugins": "Plugins",
-        "bots": "Bots"
-      },
       "sections": {
         "root": "User Settings",
         "client": "Client",
         "developers": "Developers"
+      },
+      "account": {
+        "header": "Account",
+        "username": "Username",
+        "display_name": "Display Name",
+        "credentials": "Credentials",
+        "email": "Email",
+        "show_email": "Show Email",
+        "hide_email": "Hide Email"
+      },
+      "language": {
+        "header": "Language",
+        "description": "Select the language you want to use in Adapt."
+      },
+      "themes": {
+        "header": "Themes",
+        "preset": {
+          "header": "Preset Themes",
+          "light": "Light",
+          "dim": "Dim",
+          "dark": "Dark"
+        },
+        "theme_colors": "Theme Colors",
+        "custom_css": "Custom CSS"
+      },
+      "plugins": {
+        "header": "Plugins"
+      },
+      "bots": {
+        "header": "Bots",
+        "description": "Bots are used to automate tasks and provide additional functionality throughout Adapt.",
+        "resources": {
+          "header": "Resources",
+          "developer_resources": "Developer Resources",
+          "api_reference": "Adapt API Reference"
+        },
+        "list": {
+          "header": "My Bots",
+          "search": "Search Bots",
+          "new": "New Bot"
+        }
       },
       "logout": "Log Out",
       "issue": "Report an issue"
@@ -118,13 +153,6 @@
         "delete": "Delete Channel"
       },
       "header": "Server Settings",
-      "tabs": {
-        "overview": "Overview",
-        "roles": "Roles",
-        "emojis": "Emojis",
-        "invites": "Invites",
-        "members": "Members"
-      },
       "sections": {
         "management": "Management"
       },
@@ -155,9 +183,25 @@
           "small": "All Members",
           "header": "Default Permissions"
         },
+        "role": {
+          "name_label": "Role Name",
+          "color_label": "Role Color",
+          "preview_label": "Preview",
+          "pick_color": "Pick Color",
+          "remove_color": "Remove",
+          "dark_theme": "Dark Theme",
+          "light_theme": "Light Theme",
+          "hoist": {
+            "label": "Hoist members with this role",
+            "description": "Display members with this role separately in the members list"
+          },
+          "mentionable": {
+            "label": "Allow everyone to mention this role",
+            "description": "Allows all members, regardless of permission, to collectively mention all members in this role"
+          }
+        },
         "locked": "Locked",
-        "new_role": "New Role",
-        "back": "Back"
+        "new_role": "New Role"
       },
       "emojis": {
         "header": "Emojis",
@@ -251,8 +295,7 @@
           "join_date_desc": "Join date (desc)"
         }
       },
-      "delete": "Delete Server",
-      "delete_server": "Delete Server"
+      "delete": "Delete Server"
     },
     "permissions": {
       "categories": {
@@ -464,6 +507,7 @@
     "delete": "Delete",
     "leave": "Leave",
     "upload": "Upload",
+    "more": "More",
     "loading": "Loading...",
     "unknown": "Unknown"
   },
@@ -500,32 +544,17 @@
       "username_available": "Username available!"
     }
   },
-  "account": {
-    "header": "Account",
-    "username": "Username",
-    "display_name": "Display Name",
-    "credentials": "Credentials",
-    "email": "Email",
-    "show_email": "Show Email",
-    "hide_email": "Hide Email",
-    "save": "Save",
-    "cancel": "Cancel",
-    "edit": "Edit"
-  },
   "chat": {
     "message_input_placeholder": "Send a message...",
     "no_permission": "You do not have permission to send messages in this channel.",
     "jump_to_newer": "Jump to Newer Messages",
-    "upload": "Upload",
     "add_emoji": "Add Emoji",
     "send": "Send",
     "reply": "Reply",
-    "more": "More",
     "add_reaction": "Add Reaction",
     "unknown_message": "Unknown message",
     "mention_when_replying": "Mention @{{name}} when replying",
     "do_not_mention_when_replying": "Do not mention @{{name}} when replying",
-    "remove_reply": "Remove",
     "bot_badge": "BOT",
     "typing_one": "{{user}} is typing...",
     "typing_two": "{{user1}} and {{user2}} are typing...",
@@ -648,8 +677,7 @@
       "copied": "Copied!",
       "username_placeholder": "Username",
       "invalid_username": "Invalid username format. Make sure this is the username (not display name).",
-      "requested_to_add": "Requested to add",
-      "as_a_friend": "as a friend."
+      "requested_to_add": "Requested to add {{username}} as a friend."
     },
     "set_presence": {
       "title": "Custom Status",
@@ -703,23 +731,6 @@
       "join_server": "Join Server"
     },
     "new_server": "New Server"
-  },
-  "role": {
-    "name_label": "Role Name",
-    "color_label": "Role Color",
-    "preview_label": "Preview",
-    "pick_color": "Pick Color",
-    "remove_color": "Remove",
-    "dark_theme": "Dark Theme",
-    "light_theme": "Light Theme",
-    "hoist": {
-      "label": "Hoist members with this role",
-      "description": "Display members with this role separately in the members list"
-    },
-    "mentionable": {
-      "label": "Allow everyone to mention this role",
-      "description": "Allows all members, regardless of permission, to collectively mention all members in this role"
-    }
   },
   "avatar": {
     "edit": "Edit",

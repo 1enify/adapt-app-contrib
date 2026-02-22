@@ -96,16 +96,51 @@
   "settings": {
     "user": {
       "header": "设置",
-      "tabs": {
-        "account": "账户",
-        "themes": "主题",
-        "plugins": "插件",
-        "bots": "机器人"
-      },
       "sections": {
         "root": "用户设置",
         "client": "客户端",
         "developers": "开发者"
+      },
+      "account": {
+        "header": "账户",
+        "username": "用户名",
+        "display_name": "显示名称",
+        "credentials": "登录凭据",
+        "email": "邮箱",
+        "show_email": "显示邮箱",
+        "hide_email": "隐藏邮箱"
+      },
+      "language": {
+        "header": "语言",
+        "description": "选择您想在 Adapt 中使用的语言。"
+      },
+      "themes": {
+        "header": "主题",
+        "preset": {
+          "header": "预设主题",
+          "light": "浅色",
+          "dim": "护眼",
+          "dark": "深色"
+        },
+        "theme_colors": "主题颜色",
+        "custom_css": "自定义 CSS"
+      },
+      "plugins": {
+        "header": "插件"
+      },
+      "bots": {
+        "header": "机器人",
+        "description": "机器人可用于在 Adapt 中自动执行任务并提供额外功能。",
+        "resources": {
+          "header": "资源",
+          "developer_resources": "开发者资源",
+          "api_reference": "Adapt API 参考文档"
+        },
+        "list": {
+          "header": "我的机器人",
+          "search": "搜索机器人",
+          "new": "新建机器人"
+        }
       },
       "logout": "退出登录",
       "issue": "报告问题"
@@ -118,13 +153,6 @@
         "delete": "删除频道"
       },
       "header": "服务器设置",
-      "tabs": {
-        "overview": "概览",
-        "roles": "身份组",
-        "emojis": "表情",
-        "invites": "邀请",
-        "members": "成员"
-      },
       "sections": {
         "management": "管理"
       },
@@ -154,6 +182,23 @@
           "large": "管理默认权限",
           "small": "全体成员",
           "header": "默认权限"
+        },
+        "role": {
+          "name_label": "身份组名称",
+          "color_label": "身份组颜色",
+          "preview_label": "预览",
+          "pick_color": "选择颜色",
+          "remove_color": "移除",
+          "dark_theme": "深色主题",
+          "light_theme": "浅色主题",
+          "hoist": {
+            "label": "独立显示此身份组成员",
+            "description": "在成员列表中将拥有此身份组的成员单独分组显示"
+          },
+          "mentionable": {
+            "label": "允许所有人提及此身份组",
+            "description": "允许所有成员无论权限如何，均可集体提及拥有此身份组的全体成员"
+          }
         },
         "locked": "已锁定",
         "new_role": "新建身份组",
@@ -464,6 +509,7 @@
     "delete": "删除",
     "leave": "离开",
     "upload": "上传",
+    "more": "更多",
     "loading": "正在加载…",
     "unknown": "未知"
   },
