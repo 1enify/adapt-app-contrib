@@ -19,7 +19,6 @@ for (const [path, mod] of Object.entries(translationModules)) {
 export function getLanguageDisplayName(locale: string, displayLocale = 'en'): string {
   const normalized = locale.replaceAll('_', '-');
   const { language, script, region } = new Intl.Locale(normalized);
-  displayLocale = displayLocale.replaceAll('_', '-');
 
   const languageNames = new Intl.DisplayNames([displayLocale], { type: 'language' });
   const regionNames = new Intl.DisplayNames([displayLocale], { type: 'region' });
