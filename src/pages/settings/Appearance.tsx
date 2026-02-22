@@ -1,27 +1,45 @@
 import {presets, Rgb, Theme, useTheme} from "../../client/themes";
 import ThemePreview from "../../components/settings/ThemePreview";
-import {createMemo, createSignal, ParentProps} from "solid-js";
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  onCleanup,
+  onMount,
+  ParentProps,
+} from "solid-js";
 import Icon from "../../components/icons/Icon";
 import PenToSquare from "../../components/icons/svg/PenToSquare";
 import ChevronRight from "../../components/icons/svg/ChevronRight";
 import Header from "../../components/ui/Header";
 import {t} from "../../i18n";
+import iro from "@jaames/iro";
 
-function PaletteColor<Key extends keyof Theme>({ key, label }: { key: Key | [Key, keyof Theme[Key]], label: string }) {
-  function computeColor(color: string): Rgb {
-    dummyElement!.style.color = color
-    const computed = getComputedStyle(dummyElement!).color
-    const [r, g, b] = computed.match(/\d+/g)!.map(Number)
-    return [r, g, b]
-  }
+function rgbToHex(rgb: Rgb): string {
+  return '#' + rgb.map(c => c.toString(16).padStart(2, '0')).join('')
+}
 
+function hexToRgb(hex: string): Rgb {
+  const n = parseInt(hex.slice(1), 16)
+  return [(n >> 16) & 0xff, (n >> 8) & 0xff, n & 0xff]
+}
+
+function PaletteColor<Key extends keyof Theme>({
+  key,
+  label,
+}: {
+  key: Key | [Key, keyof Theme[Key]]
+  label: string
+}) {
   const [theme, setTheme] = useTheme()
+
   const currentColor = createMemo<Rgb>(() => {
     if (typeof key === 'string') return theme()[key] as Rgb
     const [key1, key2] = key
     // @ts-ignore
     return theme()[key1][key2] as Rgb
   })
+
   const set = (color: Rgb) => {
     setTheme(theme => {
       theme = { ...theme }
@@ -37,70 +55,105 @@ function PaletteColor<Key extends keyof Theme>({ key, label }: { key: Key | [Key
     })
   }
 
-  let dummyElement: HTMLDivElement | null = null
-  let actualColorInput: HTMLInputElement | null = null
+  const hex = createMemo(() => rgbToHex(currentColor()))
+
+  const [open, setOpen] = createSignal(false)
+  let containerRef: HTMLDivElement | null = null
+  let pickerRef: HTMLDivElement | null = null
+  let colorPicker: iro.ColorPicker | null = null
+
+  onMount(() => {
+    colorPicker = iro.ColorPicker(pickerRef!, {
+      width: 160,
+      color: hex(),
+      layout: [
+        { component: iro.ui.Box },
+        { component: iro.ui.Slider, options: { sliderType: 'hue' } },
+      ],
+      sliderSize: 12,
+      sliderMargin: 8,
+    })
+
+    colorPicker.on('color:change', (color: iro.Color) => {
+      set(hexToRgb(color.hexString))
+    })
+  })
+
+  createEffect(() => {
+    const h = hex()
+    if (colorPicker && colorPicker.color.hexString.toLowerCase() !== h.toLowerCase()) {
+      colorPicker.setColors([h])
+    }
+  })
+
+  const outsideClickHandler = (e: MouseEvent) => {
+    if (containerRef && !(containerRef as HTMLDivElement).contains(e.target as Node)) {
+      setOpen(false)
+    }
+  }
+  onMount(() => document.addEventListener('click', outsideClickHandler, true))
+  onCleanup(() => document.removeEventListener('click', outsideClickHandler, true))
+
+  const [hexInput, setHexInput] = createSignal(hex())
+  createEffect(() => setHexInput(hex()))
 
   const fg = createMemo(() => {
-    const [red, green, blue] = currentColor()
-    return (red * 0.299 + green * 0.587 + blue * 0.114) > 186 ? 'fill-black' : 'fill-white'
+    const [r, g, b] = currentColor()
+    return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? 'fill-black' : 'fill-white'
   })
-  const hex = createMemo(() => {
-    return `#${currentColor().map(c => c.toString(16).padStart(2, '0')).join('')}`
-  })
-  const [inputValue, setInputValue] = createSignal()
 
   return (
-    <>
-      <div ref={dummyElement!} class="absolute" />
-      <div class="flex flex-grow items-center justify-center p-4 rounded-lg bg-bg-3/50">
-        <div
-          class="group/palette rounded-lg overflow-hidden w-14 h-14 relative hover:cursor-pointer outline outline-fg/20"
-          style={{ "background-color": `rgb(${currentColor().join(' ')})` }}
-          onClick={() => actualColorInput!.click()}
+    <div class="flex flex-col items-center gap-1" ref={containerRef!}>
+      <div class="relative">
+        <button
+          class="group/swatch w-12 h-12 rounded-lg border-2 border-fg/20 hover:border-fg/60 transition flex items-center justify-center flex-shrink-0"
+          style={{ 'background-color': hex() }}
+          onClick={() => setOpen(p => !p)}
+          title={label}
         >
-          <input
-            ref={actualColorInput!}
-            type="color"
-            class="absolute invisible inset-0 w-full h-full"
-            value={hex()}
-            onInput={e => {
-              set(computeColor(e.currentTarget.value))
-              setInputValue(hex())
-            }}
+          <Icon
+            icon={PenToSquare}
+            class="w-5 h-5 opacity-0 group-hover/swatch:opacity-100 transition-opacity"
+            classList={{ [fg()]: true }}
           />
-          <div
-            class="absolute inset-0 opacity-0 group-hover/palette:opacity-100 transition flex items-center justify-center">
-            <Icon icon={PenToSquare} class={`w-6 h-6 ${fg()}`} title="Edit Color" />
-          </div>
-        </div>
-        <div class="ml-4">
-          <h2 class="font-title font-bold text-lg">{label}</h2>
+        </button>
+
+        <div
+          class="absolute z-[300] bg-bg-0/90 backdrop-blur rounded-xl p-4 shadow-lg transition-opacity top-full mt-2 left-0"
+          classList={{
+            'opacity-0 pointer-events-none': !open(),
+            'opacity-100': open(),
+          }}
+        >
+          <div ref={pickerRef!} />
           <input
-            type="text"
-            class="bg-2 rounded-lg p-2 focus:outline-none"
-            value={(inputValue() ?? hex()) as any}
+            class="mt-3 w-full bg-bg-2 rounded-lg text-sm font-mono py-1 px-2 outline-none focus:ring-2 ring-accent"
+            value={hexInput()}
+            placeholder="#abcdef"
             onInput={(e) => {
-              let value = e.currentTarget.value
-              if (value.match(/^([0-9]{3,}|[0-9a-fA-F]{6})/)) value = '#' + value
-              set(computeColor(value))
-              setInputValue(value)
+              let val = e.currentTarget.value
+              setHexInput(val)
+              if (!val.startsWith('#')) val = '#' + val
+              if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+                set(hexToRgb(val))
+              }
             }}
+            maxLength={7}
           />
         </div>
       </div>
-    </>
+      <span class="text-xs text-fg/60 text-center leading-tight max-w-[3.5rem]">{label}</span>
+    </div>
   )
 }
 
 function PaletteGroup(props: ParentProps<{ title: string }>) {
   return (
-    <div class="relative flex flex-wrap gap-2 rounded-xl border-2 border-fg/10 p-4 m-4">
-      <div class="absolute -top-3.5 left-0 w-full flex justify-center">
-        <h2 class="bg-2 px-2 font-medium text-center text-fg/30">
-          {props.title}
-        </h2>
+    <div class="flex flex-col gap-2">
+      <h3 class="text-xs font-bold uppercase text-fg/40 tracking-wide">{props.title}</h3>
+      <div class="flex flex-wrap gap-3">
+        {props.children}
       </div>
-      {props.children}
     </div>
   )
 }
@@ -153,15 +206,15 @@ export default function Appearance() {
       <h2 class="font-bold px-4 pt-4 pb-2 text-fg/50 mobile:text-center">{t('settings.user.themes.preset.header')}</h2>
       <div>
         <div class="flex overflow-x-auto gap-4 mx-4 mobile:flex-col">
-        <PresetTheme name={t('settings.user.themes.preset.light')} theme={presets.light} />
-        <PresetTheme name={t('settings.user.themes.preset.dim')} theme={presets.dim} />
-        <PresetTheme name={t('settings.user.themes.preset.dark')} theme={presets.dark} />
+          <PresetTheme name={t('settings.user.themes.preset.light')} theme={presets.light} />
+          <PresetTheme name={t('settings.user.themes.preset.dim')} theme={presets.dim} />
+          <PresetTheme name={t('settings.user.themes.preset.dark')} theme={presets.dark} />
         </div>
       </div>
 
       <Details title={t('settings.user.themes.theme_colors')}>
         <div
-          class="flex flex-col items-center justify-center h-[min(50vw,400px)] overflow-hidden mx-4 mb-8 py-4 md:py-6
+          class="flex flex-col items-center justify-center h-[min(50vw,400px)] overflow-hidden mx-4 mb-6 py-4 md:py-6
             bg-bg-0/50 rounded-lg"
         >
           <div class="h-full rounded-xl border-2 border-fg/10 overflow-hidden">
@@ -169,52 +222,54 @@ export default function Appearance() {
           </div>
         </div>
 
-        <PaletteGroup title="Accent">
-          <PaletteColor key={["accent", "default"]} label="Accent" />
-          <PaletteColor key={["accent", "light"]} label="Light Accent" />
-        </PaletteGroup>
+        <div class="mx-4 mb-6 grid gap-6 grid-cols-1 sm:grid-cols-2">
+          <PaletteGroup title="Accent">
+            <PaletteColor key={["accent", "default"]} label="Accent" />
+            <PaletteColor key={["accent", "light"]} label="Light" />
+          </PaletteGroup>
 
-        <PaletteGroup title="Background">
-          <PaletteColor key={["bg", 0]} label="Background 0" />
-          <PaletteColor key={["bg", 1]} label="Background 1" />
-          <PaletteColor key={["bg", 2]} label="Background 2" />
-          <PaletteColor key={["bg", 3]} label="Background 3" />
-        </PaletteGroup>
+          <PaletteGroup title="Background">
+            <PaletteColor key={["bg", 0]} label="BG 0" />
+            <PaletteColor key={["bg", 1]} label="BG 1" />
+            <PaletteColor key={["bg", 2]} label="BG 2" />
+            <PaletteColor key={["bg", 3]} label="BG 3" />
+          </PaletteGroup>
 
-        <PaletteGroup title="Foreground">
-          <PaletteColor key="fg" label="Text" />
-          <PaletteColor key={["link", "default"]} label="Link" />
-          <PaletteColor key={["link", "hover"]} label="Link (Hover)" />
-          <PaletteColor key={["link", "visited"]} label="Link (Visited)" />
-        </PaletteGroup>
+          <PaletteGroup title="Foreground">
+            <PaletteColor key="fg" label="Text" />
+            <PaletteColor key={["link", "default"]} label="Link" />
+            <PaletteColor key={["link", "hover"]} label="Link Hover" />
+            <PaletteColor key={["link", "visited"]} label="Visited" />
+          </PaletteGroup>
 
-        <PaletteGroup title="Primary">
-          <PaletteColor key={["primary", "bg"]} label="Primary Button" />
-          <PaletteColor key={["primary", "hover"]} label="Primary Button (Hover)" />
-          <PaletteColor key={["primary", "fg"]} label="Primary Button (Text)" />
-        </PaletteGroup>
+          <PaletteGroup title="Primary">
+            <PaletteColor key={["primary", "bg"]} label="BG" />
+            <PaletteColor key={["primary", "hover"]} label="Hover" />
+            <PaletteColor key={["primary", "fg"]} label="Text" />
+          </PaletteGroup>
 
-        <PaletteGroup title="Secondary">
-          <PaletteColor key="secondary" label="Secondary Button" />
-        </PaletteGroup>
+          <PaletteGroup title="Secondary">
+            <PaletteColor key="secondary" label="BG" />
+          </PaletteGroup>
 
-        <PaletteGroup title="Success">
-          <PaletteColor key={["success", "bg"]} label="Success Button" />
-          <PaletteColor key={["success", "hover"]} label="Success Button (Hover)" />
-          <PaletteColor key={["success", "fg"]} label="Success Button (Text)" />
-        </PaletteGroup>
+          <PaletteGroup title="Success">
+            <PaletteColor key={["success", "bg"]} label="BG" />
+            <PaletteColor key={["success", "hover"]} label="Hover" />
+            <PaletteColor key={["success", "fg"]} label="Text" />
+          </PaletteGroup>
 
-        <PaletteGroup title="Danger">
-          <PaletteColor key={["danger", "bg"]} label="Danger Button" />
-          <PaletteColor key={["danger", "hover"]} label="Danger Button (Hover)" />
-          <PaletteColor key={["danger", "fg"]} label="Danger Button (Text)" />
-        </PaletteGroup>
+          <PaletteGroup title="Danger">
+            <PaletteColor key={["danger", "bg"]} label="BG" />
+            <PaletteColor key={["danger", "hover"]} label="Hover" />
+            <PaletteColor key={["danger", "fg"]} label="Text" />
+          </PaletteGroup>
 
-        <PaletteGroup title="Neutral">
-          <PaletteColor key={["neutral", "bg"]} label="Neutral Button" />
-          <PaletteColor key={["neutral", "hover"]} label="Neutral Button (Hover)" />
-          <PaletteColor key={["neutral", "fg"]} label="Neutral Button (Text)" />
-        </PaletteGroup>
+          <PaletteGroup title="Neutral">
+            <PaletteColor key={["neutral", "bg"]} label="BG" />
+            <PaletteColor key={["neutral", "hover"]} label="Hover" />
+            <PaletteColor key={["neutral", "fg"]} label="Text" />
+          </PaletteGroup>
+        </div>
       </Details>
 
       <Details title={t('settings.user.themes.custom_css')}>
