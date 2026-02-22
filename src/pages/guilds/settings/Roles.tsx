@@ -33,6 +33,7 @@ import ContextMenu, {ContextMenuButton, DangerContextMenuButton} from "../../../
 import Code from "../../../components/icons/svg/Code";
 import Trash from "../../../components/icons/svg/Trash";
 import {useSaveTask} from "../../settings/SettingsLayout";
+import {t} from "../../../i18n";
 
 interface SmallRolePreviewParams {
   guildId: bigint;
@@ -81,7 +82,7 @@ function SmallRolePreview<T extends SmallRolePreviewParams>(props: T) {
         <span class="flex items-center text-left text-fg/70" classList={{ "text-fg/100": active() }}>
           {props.role.name}
           <Show when={!managable()}>
-            <Icon icon={Lock} class="w-4 h-4 fill-fg/50 ml-2" tooltip="Locked" />
+            <Icon icon={Lock} class="w-4 h-4 fill-fg/50 ml-2" tooltip={t('settings.guild.roles.locked')} />
           </Show>
         </span>
       </div>
@@ -153,10 +154,10 @@ function LargeRolePreview(props: LargeRolePreviewParams) {
             <h3 class="text-lg font-title flex items-center">
               {props.role.name}
               <Show when={!showGripper() && !managable()}>
-                <Icon icon={Lock} class="w-4 h-4 fill-fg/50 ml-2" tooltip="Locked" />
+                <Icon icon={Lock} class="w-4 h-4 fill-fg/50 ml-2" tooltip={t('settings.guild.roles.locked')} />
               </Show>
             </h3>
-            <p class="text-fg/60 text-sm">{membersInRole()} members</p>
+            <p class="text-fg/60 text-sm">{t('settings.guild.roles.members', { count: membersInRole() })}</p>
           </div>
         </div>
         <Icon icon={ChevronRight} class="w-6 h-6 fill-fg/50" />
@@ -265,7 +266,7 @@ export function SortableRoles(props: Props) {
                 ref={searchRef!}
                 type="text"
                 class="w-full p-2 outline-none font-medium bg-transparent"
-                placeholder="Search Roles"
+                placeholder={t('settings.guild.roles.search')}
                 value={searchQuery()}
                 onInput={(event) => setSearchQuery(event.currentTarget.value)}
               />
@@ -285,17 +286,17 @@ export function SortableRoles(props: Props) {
               onClick={() => showModal(ModalId.CreateRole, props.guildId)}
             >
               <Icon icon={Plus} class="w-4 h-4 fill-fg"/>
-              <span class="mobile:hidden">Create Role</span>
+              <span class="mobile:hidden">{t('settings.guild.roles.create')}</span>
             </button>
           </div>
         ) : (
           <div class="flex justify-between items-center mx-1 mt-1 mb-2">
             <A class="group flex items-center gap-x-1" href={`/guilds/${props.guildId}/settings/roles`}>
               <Icon icon={ChevronLeft} class="w-3.5 h-3.5 fill-fg/50 group-hover:fill-fg/100 transition" />
-              <span class="uppercase font-bold text-sm text-fg/50 group-hover:text-fg/100 transition">Back</span>
+              <span class="uppercase font-bold text-sm text-fg/50 group-hover:text-fg/100 transition">{t('generic.back')}</span>
             </A>
             <button class="group" onClick={() => showModal(ModalId.CreateRole, props.guildId)}>
-              <Icon icon={Plus} class="w-4 h-4 fill-fg/50 group-hover:fill-fg/100 transition" tooltip="New Role" />
+              <Icon icon={Plus} class="w-4 h-4 fill-fg/50 group-hover:fill-fg/100 transition" tooltip={t('settings.guild.roles.new_role')} />
             </button>
           </div>
         )}
@@ -310,13 +311,13 @@ export function SortableRoles(props: Props) {
                   <ContextMenu>
                     <ContextMenuButton
                       icon={Code}
-                      label="Copy Role ID"
+                      label={t('copy.role_id.imperative')}
                       onClick={() => window.navigator.clipboard.writeText(roleId.toString())}
                     />
                     <Show when={cache.roles.get(roleId)!.position >= topRolePosition()}>
                       <DangerContextMenuButton
                         icon={Trash}
-                        label="Delete Role"
+                        label={t('settings.guild.roles.delete_role')}
                         onClick={() => showModal(ModalId.DeleteRole, cache.roles.get(roleId)!)}
                       />
                     </Show>
@@ -333,7 +334,7 @@ export function SortableRoles(props: Props) {
           >
             <div class="flex items-center gap-x-3 font-title">
               <Icon icon={Users} class="w-6 h-6 fill-fg/80"/>
-              Manage Default Permissions
+              {t('settings.guild.roles.default.large')}
             </div>
             <Icon icon={ChevronRight} class="w-5 h-5 fill-fg/50"/>
           </A>
@@ -344,7 +345,7 @@ export function SortableRoles(props: Props) {
             classList={{ "bg-fg/10": params.roleId === defaultRoleId.toString() }}
           >
             <Icon icon={Users} class="w-4 h-4 fill-fg/50"/>
-            <span class="text-fg/70 font-medium">All Members</span>
+            <span class="text-fg/70 font-medium">{t('settings.guild.roles.default.small')}</span>
           </A>
         )}
       </div>
@@ -371,7 +372,7 @@ export default function Roles() {
   const params = useParams()
 
   const api = getApi()!
-  const guildId = createMemo(() => BigInt(params.guildId))
+  const guildId = createMemo(() => BigInt(params.guildId!))
   const guild = createMemo(() => api.cache!.guilds.get(guildId())!)
 
   const defaultRoleId = createMemo(() => snowflakes.withModelType(guildId(), snowflakes.ModelType.Role))
@@ -383,9 +384,9 @@ export default function Roles() {
 
   return (
     <div class="px-3 pt-2 relative pb-16">
-      <Header>Roles</Header>
+      <Header>{t('settings.guild.roles.header')}</Header>
       <p class="mb-4 px-1 font-light text-sm text-fg/50">
-        Roles are used to group members in your server and grant them permissions.
+        {t('settings.guild.roles.description')}
       </p>
       <SortableRoles
         guildId={guildId()}

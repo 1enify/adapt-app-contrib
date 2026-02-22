@@ -15,6 +15,7 @@ import {ModalId, useModal} from "../../components/ui/Modal";
 import {displayName} from "../../utils";
 import {A} from "@solidjs/router";
 import {defaultAvatar} from "../../api/ApiCache";
+import {t} from "../../i18n";
 
 function ResourceCard(props: ParentProps<{ icon: IconElement, href: string }>) {
   return (
@@ -60,16 +61,22 @@ export default function Bots() {
 
   return (
     <div class="p-4">
-      <Header>Bots</Header>
+      <Header>{t("settings.user.bots.header")}</Header>
       <p class="text-sm font-light text-fg/60">
-        Bots are used to automate tasks and provide additional functionality throughout Adapt.
+        {t("settings.user.bots.description")}
       </p>
-      <h2 class="uppercase text-sm font-bold text-fg/70 mt-4 mb-1">Resources</h2>
+      <h2 class="uppercase text-sm font-bold text-fg/70 mt-4 mb-1">{t("settings.user.bots.resources.header")}</h2>
       <div class="grid grid-cols-2 mobile:grid-cols-1 gap-2">
-        <ResourceCard icon={Code} href="//github.com/AdaptChat/resources/blob/main/README.md">Developer Resources</ResourceCard>
-        <ResourceCard icon={Book} href="//api.adapt.chat/docs">Adapt API Reference</ResourceCard>
+        <ResourceCard icon={Code} href="//github.com/AdaptChat/resources/blob/main/README.md">
+          {t("settings.user.bots.resources.developer_resources")}
+        </ResourceCard>
+        <ResourceCard icon={Book} href="//api.adapt.chat/docs">
+          {t("settings.user.bots.resources.api_reference")}
+        </ResourceCard>
       </div>
-      <h2 class="uppercase text-sm font-bold text-fg/70 mt-4">My Bots</h2>
+      <h2 class="uppercase text-sm font-bold text-fg/70 mt-4">
+        {t("settings.user.bots.list.header")}
+      </h2>
       <Show when={error()}>
         <div class="rounded-xl bg-danger/20 text-danger p-4 w-full my-2">
           Error: {error()}

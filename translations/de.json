@@ -1,1 +1,722 @@
-{}
+{
+  "loading": {
+    "launching": "Start...",
+    "timeout": "Startet Adapt nicht? ",
+    "check_status": "Sie können auch einen Blick auf unsere werfen {{link}}.",
+    "status_page": "Statusseite"
+  },
+  "not_found": {
+    "header": "Nicht gefunden!",
+    "go_back": "Geh zurück"
+  },
+  "copy": {
+    "user_id": {
+      "imperative": "Benutzer-ID kopieren",
+      "success": "Benutzer-ID in Zwischenablage kopiert!"
+    },
+    "username": {
+      "imperative": "Benutzernamen kopieren",
+      "success": "Benutzername in die Zwischenablage kopiert!",
+      "error": "Fehler beim Kopieren des Benutzernamens"
+    },
+    "channel_id": {
+      "imperative": "Kanal-ID kopieren",
+      "success": "Kanal-ID in Zwischenablage kopiert!"
+    },
+    "message_id": {
+      "imperative": "Nachrichten-ID kopieren",
+      "success": "Nachrichten-ID in die Zwischenablage kopiert!"
+    },
+    "server_id": {
+      "imperative": "Server-ID kopieren"
+    },
+    "role_id": {
+      "imperative": "Rollen-ID kopieren"
+    },
+    "loading": "Kopieren...",
+    "error": "Kopieren in die Zwischenablage fehlgeschlagen!"
+  },
+  "dms": {
+    "delete_group": "Gruppe löschen",
+    "leave_group": "Gruppe verlassen",
+    "close_dm": "DM schließen",
+    "group_members_zero": "Keine Mitglieder",
+    "group_members_one": "{{count}} Mitglied",
+    "group_members_other": "{{count}} Mitglieder",
+    "no_messages": "Keine Nachrichten"
+  },
+  "status": {
+    "online": "Online",
+    "idle": "Leerlauf",
+    "dnd": "Bitte nicht stören",
+    "invisible": "Unsichtbar",
+    "offline": "Offline"
+  },
+  "sidebar": {
+    "main": {
+      "static": {
+        "home": "Heim",
+        "friends": "Freunde",
+        "discover": "Entdecken",
+        "global_search": "Suche anpassen...",
+        "quick_access": "Schnellzugriff",
+        "conversations": "Gespräche",
+        "all_servers": "Alle Server"
+      },
+      "quick_access": {
+        "new_messages": "Neue Nachrichten",
+        "recently_viewed": "Zuletzt angesehen",
+        "from_dms": "Direktnachrichten",
+        "from_group_dms": "Gruppennachrichten"
+      },
+      "conversations": {
+        "dms": "Direktnachrichten ({{count}})"
+      },
+      "all_servers": {
+        "servers": "Server ({{count}})"
+      }
+    },
+    "user": {
+      "edit_status": "Status ändern",
+      "custom_status": {
+        "header": "Benutzerdefinierter Status",
+        "fallback": "Legen Sie einen benutzerdefinierten Status fest"
+      },
+      "user_settings": "Einstellungen"
+    },
+    "guild": {},
+    "members": {
+      "collapse": "Mitglieder ausblenden",
+      "expand": "Mitglieder anzeigen"
+    },
+    "collapse": "Seitenleiste einklappen",
+    "expand": "Seitenleiste anzeigen",
+    "unknown_header": "Unbekannt"
+  },
+  "settings": {
+    "user": {
+      "header": "Einstellungen",
+      "sections": {
+        "root": "Benutzereinstellungen",
+        "client": "Kunde",
+        "developers": "Entwickler"
+      },
+      "account": {
+        "header": "Konto",
+        "username": "Benutzername",
+        "display_name": "Anzeigename",
+        "credentials": "Anmeldeinformationen",
+        "email": "E-Mail",
+        "show_email": "E-Mail anzeigen",
+        "hide_email": "E-Mail ausblenden"
+      },
+      "language": {
+        "header": "Sprache",
+        "description": "Wählen Sie die Sprache aus, die Sie in Adapt verwenden möchten."
+      },
+      "themes": {
+        "header": "Themen",
+        "preset": {
+          "header": "Voreingestellte Themen",
+          "light": "Licht",
+          "dim": "Schwach",
+          "dark": "Dunkel"
+        },
+        "theme_colors": "Themenfarben",
+        "custom_css": "Benutzerdefiniertes CSS"
+      },
+      "plugins": {
+        "header": "Plugins"
+      },
+      "bots": {
+        "header": "Bots",
+        "description": "Bots werden verwendet, um Aufgaben zu automatisieren und zusätzliche Funktionen in Adapt bereitzustellen.",
+        "resources": {
+          "header": "Ressourcen",
+          "developer_resources": "Entwicklerressourcen",
+          "api_reference": "API-Referenz anpassen"
+        },
+        "list": {
+          "header": "Meine Bots",
+          "search": "Such-Bots",
+          "new": "Neuer Bot"
+        }
+      },
+      "logout": "Abmelden",
+      "issue": "Melden Sie ein Problem"
+    },
+    "guild": {
+      "channel": {
+        "header": "Kanaleinstellungen",
+        "tabs": {},
+        "sections": {},
+        "delete": "Kanal löschen"
+      },
+      "header": "Servereinstellungen",
+      "sections": {
+        "management": "Management"
+      },
+      "overview": {
+        "header": "Überblick",
+        "name": "Servername",
+        "description": "Kurzbeschreibung",
+        "banner": {
+          "header": "Banner",
+          "description": "Dies wird oben in der Kanalseitenleiste und auf der Server-Homepage angezeigt.",
+          "upload": "Banner hochladen",
+          "remove": "Banner entfernen"
+        },
+        "description_placeholder_editing": "Geben Sie hier eine Beschreibung ein...",
+        "description_placeholder_not_editing": "Noch keine Beschreibung!",
+        "upload_placeholder": "Hochladen"
+      },
+      "roles": {
+        "header": "Rollen",
+        "description": "Rollen werden verwendet, um Mitglieder auf Ihrem Server zu gruppieren und ihnen Berechtigungen zu erteilen.",
+        "search": "Suchrollen",
+        "create": "Rolle erstellen",
+        "members_zero": "Keine Mitglieder",
+        "members_one": "{{count}} Mitglied",
+        "members_other": "{{count}} Mitglieder",
+        "default": {
+          "large": "Standardberechtigungen verwalten",
+          "small": "Alle Mitglieder",
+          "header": "Standardberechtigungen"
+        },
+        "role": {
+          "name_label": "Rollenname",
+          "color_label": "Rollenfarbe",
+          "preview_label": "Vorschau",
+          "pick_color": "Wählen Sie Farbe",
+          "remove_color": "Entfernen",
+          "dark_theme": "Dunkles Thema",
+          "light_theme": "Lichtthema",
+          "hoist": {
+            "label": "Heben Sie Mitglieder mit dieser Rolle an",
+            "description": "Mitglieder mit dieser Rolle separat in der Mitgliederliste anzeigen"
+          },
+          "mentionable": {
+            "label": "Erlauben Sie jedem, diese Rolle zu erwähnen",
+            "description": "Ermöglicht allen Mitgliedern, unabhängig von ihrer Berechtigung, alle Mitglieder in dieser Rolle gemeinsam zu erwähnen"
+          }
+        },
+        "locked": "Gesperrt",
+        "new_role": "Neue Rolle",
+        "delete_role": "Rolle löschen"
+      },
+      "emojis": {
+        "header": "Emojis",
+        "upload": {
+          "header": "Laden Sie Emojis hoch",
+          "description": "Fügen Sie Ihrem Server bis zu 50 benutzerdefinierte Emojis hinzu.",
+          "button": "Hochladen",
+          "search_results": "Suchergebnisse",
+          "search_placeholder": "Emojis suchen...",
+          "created_by": "Erstellt von {{username}}"
+        },
+        "no_permission": "Sie benötigen die Berechtigung „Emojis verwalten“, um Emojis zu ändern.",
+        "failed_delete": "Emoji konnte nicht gelöscht werden",
+        "deleted": "Emoji erfolgreich gelöscht",
+        "failed_rename": "Emoji konnte nicht umbenannt werden",
+        "renamed": "Emoji erfolgreich umbenannt"
+      },
+      "invites": {
+        "header": "Lädt ein",
+        "description": "Alle aktiven Einladungen für diesen Server anzeigen und verwalten.",
+        "search_placeholder": "Einladungscodes suchen...",
+        "columns": {
+          "code": "Code",
+          "inviter": "Einladender",
+          "created": "Erstellt",
+          "expires": "Läuft ab",
+          "uses": "Verwendungsmöglichkeiten"
+        },
+        "expiry_never": "Niemals",
+        "expiry_left": "{{delta}} links",
+        "all_inviters": "Alle Einladenden",
+        "search_users": "Benutzer suchen...",
+        "count_one": "{{count}} einladen",
+        "count_other": "{{count}} lädt ein",
+        "loading": "Laden...",
+        "none_found": "Keine Einladungen gefunden.",
+        "copy_link": "Einladungslink kopieren",
+        "revoke": "Einladung widerrufen",
+        "copying": {
+          "loading": "Einladungslink wird kopiert...",
+          "success": "Einladungslink kopiert!",
+          "error": "Der Einladungslink konnte nicht kopiert werden."
+        },
+        "failed_fetch": "Einladungen konnten nicht abgerufen werden",
+        "failed_revoke": "Die Einladung konnte nicht widerrufen werden",
+        "sort": {
+          "label": "Sortieren: {{option}}",
+          "code_asc": "Einladungscode (A-Z)",
+          "created_desc": "Erstellt (Neueste zuerst)",
+          "created_asc": "Erstellt (Älteste zuerst)",
+          "expiry_asc": "Ablauf (frühestes zuerst)",
+          "expiry_desc": "Ablauf (das Neueste zuerst)",
+          "uses_desc": "Verwendungen (höchste zuerst)",
+          "uses_asc": "Verwendungen (niedrigste zuerst)"
+        }
+      },
+      "members": {
+        "header": "Mitglieder",
+        "description": "Mitglieder auf Ihrem Server anzeigen und verwalten.",
+        "search_placeholder": "Mitglieder suchen...",
+        "search_roles": "Rollen suchen...",
+        "all_roles": "Alle Rollen",
+        "showing_all": "Alle anzeigen {{count}} Mitglieder",
+        "showing_filtered": "Zeigt {{filtered}} von {{total}} Mitglieder",
+        "columns": {
+          "member": "Mitglied",
+          "roles": "Rollen",
+          "created": "Erstellt",
+          "joined": "Beigetreten"
+        },
+        "roles_updating": "Rollen werden aktualisiert...",
+        "role_removed": "Rolle entfernt",
+        "actions": {
+          "edit_nickname": "Spitzname bearbeiten",
+          "edit_roles": "Rollen bearbeiten",
+          "add_edit_roles": "Rollen hinzufügen/bearbeiten",
+          "kick": "Kick-Mitglied",
+          "remove_role": "Rolle entfernen"
+        },
+        "sort": {
+          "label": "Sortieren: {{option}}",
+          "name": "Name",
+          "account_age_asc": "Kontoalter (aufsteigend)",
+          "account_age_desc": "Kontoalter (absteigend)",
+          "join_date_asc": "Beitrittsdatum (aufsteigend)",
+          "join_date_desc": "Beitrittsdatum (absteigend)"
+        }
+      },
+      "delete": "Server löschen"
+    },
+    "permissions": {
+      "categories": {
+        "all_channels": "Alle Kanäle",
+        "text_channels": "Textkanäle",
+        "voice_channels": "Sprachkanäle",
+        "member_customization": "Mitgliederanpassung",
+        "server_management": "Serververwaltung",
+        "danger_zone": "Gefahrenzone"
+      },
+      "options": {
+        "allow": "Erlauben",
+        "inherit": "Erben",
+        "deny": "Leugnen"
+      },
+      "view_channel": {
+        "label": "Kanäle anzeigen",
+        "description": "Mitglieder mit dieser Berechtigung können Kanäle anzeigen und Ereignisse von ihnen empfangen."
+      },
+      "modify_channels": {
+        "label": "Kanäle ändern",
+        "description": "Mitglieder mit dieser Berechtigung können die Einstellungen von Kanälen verwalten, einschließlich der Änderung von Namen, Thema, Symbol, Slowmode, NSFW-Status und Sperren/Entsperren."
+      },
+      "manage_channels": {
+        "label": "Kanäle verwalten",
+        "description": "Mitglieder mit dieser Berechtigung können Kanäle verwalten, einschließlich Erstellen, Löschen, Ändern von Positionen, Wechseln zwischen Kategorien und Überschreiben von Bearbeitungsrechten."
+      },
+      "view_message_history": {
+        "label": "Nachrichtenverlauf anzeigen",
+        "description": "Mitglieder mit dieser Berechtigung können den Nachrichtenverlauf von Textkanälen einsehen, auch wenn sie keine neuen Nachrichten senden oder empfangen können."
+      },
+      "send_messages": {
+        "label": "Senden Sie Nachrichten",
+        "description": "Mitglieder mit dieser Berechtigung können Nachrichten in textbasierten Kanälen senden. "
+      },
+      "manage_messages": {
+        "label": "Nachrichten verwalten",
+        "description": "Mitglieder mit dieser Berechtigung können von anderen gesendete Nachrichten verwalten, einschließlich Löschen, Entfernen von Reaktionen und Aufheben der Veröffentlichung in Ankündigungskanälen."
+      },
+      "attach_files": {
+        "label": "Dateien anhängen",
+        "description": "Mitglieder mit dieser Berechtigung können Dateien an Nachrichten in textbasierten Kanälen anhängen."
+      },
+      "send_embeds": {
+        "label": "Einbettungen senden",
+        "description": "Mitglieder mit dieser Berechtigung können umfangreiche Einbettungen senden oder Einbettungslinks automatisch in textbasierten Kanälen anzeigen lassen."
+      },
+      "use_external_emojis": {
+        "label": "Verwenden Sie externe Emojis",
+        "description": "Mitglieder mit dieser Berechtigung können Emojis von anderen Servern verwenden."
+      },
+      "add_reactions": {
+        "label": "Reaktionen hinzufügen",
+        "description": "Mitglieder mit dieser Berechtigung können neue Reaktionen auf Nachrichten in textbasierten Kanälen hinzufügen."
+      },
+      "pin_messages": {
+        "label": "Pin-Nachrichten",
+        "description": "Mitglieder mit dieser Berechtigung können Nachrichten in textbasierten Kanälen anheften und entfernen."
+      },
+      "star_messages": {
+        "label": "Sternbotschaften",
+        "description": "Mitglieder mit dieser Berechtigung können Nachrichten in textbasierten Kanälen markieren und die Markierung aufheben."
+      },
+      "publish_messages": {
+        "label": "Nachrichten veröffentlichen",
+        "description": "Mitglieder mit dieser Berechtigung können Nachrichten im Ankündigungskanal-Feed veröffentlichen."
+      },
+      "bulk_delete_messages": {
+        "label": "Massenlöschen von Nachrichten",
+        "description": "Mitglieder mit dieser Berechtigung können Nachrichten in Textkanälen in großen Mengen löschen oder löschen."
+      },
+      "privileged_mentions": {
+        "label": "Privilegierte Erwähnungen",
+        "description": "Mitglieder mit dieser Berechtigung können in textbasierten Kanälen große Gruppen von Personen erwähnen, darunter alle oder nicht erwähnbare Rollen."
+      },
+      "manage_webhooks": {
+        "label": "Webhooks verwalten",
+        "description": "Mitglieder mit dieser Berechtigung können Webhooks in textbasierten Kanälen erstellen, bearbeiten und löschen."
+      },
+      "connect": {
+        "label": "Verbinden",
+        "description": "Mitglieder mit dieser Berechtigung können sich mit Sprachkanälen verbinden."
+      },
+      "speak": {
+        "label": "Sprechen",
+        "description": "Mitglieder mit dieser Berechtigung können in Sprachkanälen sprechen."
+      },
+      "mute_members": {
+        "label": "Mitglieder stumm schalten",
+        "description": "Mitglieder mit dieser Berechtigung können andere Mitglieder in Sprachkanälen stummschalten."
+      },
+      "deafen_members": {
+        "label": "Gehörlose Mitglieder",
+        "description": "Mitglieder mit dieser Berechtigung können andere Mitglieder in Sprachkanälen betäuben."
+      },
+      "change_nickname": {
+        "label": "Spitznamen ändern",
+        "description": "Mitglieder mit dieser Berechtigung können ihren eigenen Spitznamen auf dem Server ändern."
+      },
+      "manage_nicknames": {
+        "label": "Spitznamen verwalten",
+        "description": "Mitglieder mit dieser Berechtigung können die Spitznamen anderer Mitglieder auf dem Server ändern."
+      },
+      "manage_emojis": {
+        "label": "Emojis verwalten",
+        "description": "Mitglieder mit dieser Berechtigung können Emojis für den Server erstellen, bearbeiten und löschen."
+      },
+      "manage_starboard": {
+        "label": "Steuerbord verwalten",
+        "description": "Mitglieder mit dieser Berechtigung können Steuerbordbeiträge löschen oder das Steuerbord für den Server deaktivieren."
+      },
+      "manage_guild": {
+        "label": "Server verwalten",
+        "description": "Mitglieder mit dieser Berechtigung können die Einstellungen des Servers verwalten, einschließlich der Änderung des Namens, des Symbols, der Sichtbarkeit und der Aktivierung/Deaktivierung des Steuerbords."
+      },
+      "manage_roles": {
+        "label": "Rollen verwalten",
+        "description": "Mitglieder mit dieser Berechtigung können die Rollen des Servers verwalten, Berechtigungen niedrigerer Rollen bearbeiten und anderen Mitgliedern Rollen zuweisen/entfernen."
+      },
+      "create_invites": {
+        "label": "Erstellen Sie Einladungen",
+        "description": "Mitglieder mit dieser Berechtigung können Einladungen zum Server erstellen."
+      },
+      "manage_invites": {
+        "label": "Einladungen verwalten",
+        "description": "Mitglieder mit dieser Berechtigung können Einladungen zu jedem Kanal auf dem Server widerrufen oder pausieren."
+      },
+      "timeout_members": {
+        "label": "Timeout-Mitglieder",
+        "description": "Mitglieder mit dieser Berechtigung können Mitglieder mit einer niedrigeren Rolle als sie selbst eine Zeitüberschreitung bzw. eine Zeitüberschreitung aufheben."
+      },
+      "kick_members": {
+        "label": "Kick-Mitglieder",
+        "description": "Mitglieder mit dieser Berechtigung können Mitglieder mit einer niedrigeren Rolle als sie vom Server werfen."
+      },
+      "ban_members": {
+        "label": "Mitglieder verbieten",
+        "description": "Mitglieder mit dieser Berechtigung können Mitglieder mit einer niedrigeren Rolle als sie vom Server sperren und die Sperrung aufheben."
+      },
+      "view_audit_log": {
+        "label": "Audit-Protokoll anzeigen",
+        "description": "Mitglieder mit dieser Berechtigung können ein Prüfprotokoll vergangener Moderationen oder anderer privilegierter Aktionen auf dem Server anzeigen."
+      },
+      "administrator": {
+        "label": "Administrator",
+        "description": "Mitglieder mit dieser Berechtigung haben die Möglichkeit, alle Berechtigungen und jeden Kanal auf dem Server zu überschreiben."
+      }
+    },
+    "save": "Änderungen speichern?",
+    "exit": "Beenden Sie die Einstellungen"
+  },
+  "home": {
+    "welcome": "Willkommen, {{username}}!",
+    "active_now": "Jetzt aktiv",
+    "all_friends": "Alle Freunde",
+    "ongoing_conversations": "Laufende Gespräche",
+    "message_not_loaded": "Nachricht noch nicht geladen. ",
+    "onboarding": {
+      "title": "Lernen Sie, sich anzupassen",
+      "edit_profile": {
+        "label": "Passen Sie Ihr Profil an",
+        "description": "Lassen Sie andere auf Adapt wissen, wer Sie sind. "
+      },
+      "add_friend": {
+        "label": "Verbinde dich mit Freunden",
+        "description": "Finden Sie Ihre Freunde auf Adapt, fügen Sie sie Ihrer Freundesliste hinzu und beginnen Sie mit ihnen zu chatten."
+      },
+      "join_guild": {
+        "label": "Treten Sie einer Community bei",
+        "description": "Erstellen, entdecken, beitreten und chatten Sie in Communities, die Ihren Interessen entsprechen {{server_link}}.",
+        "official_server_name": "Community anpassen"
+      }
+    }
+  },
+  "friends": {
+    "header": "Freunde",
+    "tabs": {
+      "all": "Freunde",
+      "pending": "Anfragen",
+      "pending_short": "Anf.",
+      "blocked": "Blockiert"
+    },
+    "add": "Freund hinzufügen",
+    "dividers": {
+      "all": "Alle Freunde ({{count}})",
+      "incoming": "Eingehende Anfragen ({{count}})",
+      "outgoing": "Ausgehende Anfragen ({{count}})"
+    },
+    "actions": {
+      "dm": "DM öffnen",
+      "unfriend": "Freund entfernen",
+      "unblock": "Benutzer entsperren",
+      "pending": {
+        "accept": "Anfrage annehmen",
+        "decline": "Anfrage ablehnen",
+        "revoke": "Anfrage widerrufen"
+      }
+    }
+  },
+  "time": {
+    "recently": "Soeben",
+    "past": "{{delta}} vor",
+    "future": "In {{delta}}",
+    "yesterday_at": "Gestern um {{time}}",
+    "weekday_at": "{{weekday}} bei {{time}}",
+    "date_at": "{{date}} bei {{time}}"
+  },
+  "generic": {
+    "remove": "Entfernen",
+    "save": "Speichern",
+    "cancel": "Stornieren",
+    "back": "Zurück",
+    "wip": "In Arbeit!",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "leave": "Verlassen",
+    "upload": "Hochladen",
+    "more": "Mehr",
+    "loading": "Laden...",
+    "unknown": "Unbekannt"
+  },
+  "error": {
+    "header": "Fehler: {{message}}",
+    "open_issue": "Wenn dieser Fehler weiterhin besteht, bitte {{link}} im GitHub-Repository.",
+    "open_issue_link": "ein Problem eröffnen",
+    "something_went_wrong": "Etwas ist schief gelaufen!"
+  },
+  "auth": {
+    "login": {
+      "title": "Melden Sie sich bei Ihrem Konto an",
+      "no_account": "Sie haben noch kein Konto?",
+      "sign_up": "Melden Sie sich an",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "remember_me": "Erinnere dich an mich",
+      "forgot_password": "Passwort vergessen?",
+      "submit": "anmelden",
+      "submitting": "Anmelden..."
+    },
+    "register": {
+      "title": "Ein Konto erstellen",
+      "have_account": "Sie haben bereits ein Konto?",
+      "sign_in": "anmelden",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "username": "Benutzername",
+      "remember_me": "Erinnere dich an mich",
+      "submit": "Registrieren",
+      "submitting": "Registrieren...",
+      "no_captcha": "Noch kein CAPTCHA-Token",
+      "username_checking": "Verfügbarkeit prüfen...",
+      "username_available": "Benutzername verfügbar!"
+    }
+  },
+  "chat": {
+    "message_input_placeholder": "Senden Sie eine Nachricht...",
+    "no_permission": "Sie sind nicht berechtigt, Nachrichten in diesem Kanal zu senden.",
+    "jump_to_newer": "Zu neueren Nachrichten springen",
+    "add_emoji": "Emoji hinzufügen",
+    "send": "Schicken",
+    "reply": "Antwort",
+    "add_reaction": "Reaktion hinzufügen",
+    "unknown_message": "Unbekannte Nachricht",
+    "mention_when_replying": "Erwähnen @{{name}} beim Antworten",
+    "do_not_mention_when_replying": "@ nicht erwähnen{{name}} beim Antworten",
+    "bot_badge": "BOT",
+    "typing_one": "{{user}} tippt...",
+    "typing_two": "{{user1}} Und {{user2}} schreibe...",
+    "typing_many": "{{users}} Und {{last}} schreibe...",
+    "typing_suffix_is": "tippt...",
+    "typing_suffix_are": "schreibe...",
+    "context_menu": {
+      "reply": "Antwort",
+      "mark_unread": "Als ungelesen markieren",
+      "copy_text": "Text kopieren",
+      "copy_text_loading": "Nachrichtentext wird kopiert...",
+      "copy_text_success": "In Ihre Zwischenablage kopiert!",
+      "copy_text_error": "Der Nachrichtentext konnte nicht kopiert werden. Versuchen Sie es später noch einmal.",
+      "copy_message_id": "Nachrichten-ID kopieren",
+      "copy_message_link": "Nachrichtenlink kopieren",
+      "copy_link_loading": "Nachrichtenlink wird kopiert...",
+      "copy_link_success": "In Ihre Zwischenablage kopiert!",
+      "copy_link_error": "Der Nachrichtenlink konnte nicht kopiert werden. Versuchen Sie es später noch einmal.",
+      "edit_message": "Nachricht bearbeiten",
+      "delete_message": "Nachricht löschen"
+    }
+  },
+  "modals": {
+    "close": "Modal schließen",
+    "new_guild": {
+      "title": "Neuer Server",
+      "create_server": {
+        "label": "Erstellen Sie einen Server",
+        "description": "Starten Sie eine neue Community. "
+      },
+      "join_server": {
+        "label": "Treten Sie einem Server bei",
+        "description": "Geben Sie einen Einladungscode ein, um einem bestehenden Server beizutreten."
+      },
+      "discover_servers": {
+        "label": "Entdecken Sie Server",
+        "description": "Sie wissen nicht, wo Sie anfangen sollen? "
+      }
+    },
+    "create_server": {
+      "title": "Erstellen Sie einen Server",
+      "description": "Bevor wir Ihren Server erstellen, geben wir ihm einen Namen.",
+      "description_note": "Sie können dies später jederzeit ändern.",
+      "submit": "Server erstellen"
+    },
+    "join_server": {
+      "title": "Treten Sie einem Server bei",
+      "placeholder": "Geben Sie einen Einladungscode ein...",
+      "description": "Geben Sie einen Einladungscode ein, um einem bestehenden Server beizutreten.",
+      "examples_header": "Beispiele für gültige Einladungscodes:",
+      "invalid_code": "Das sieht nicht nach einem gültigen Einladungscode aus.",
+      "submit": "Dem Server beitreten"
+    },
+    "create_channel": {
+      "title": "Kanal erstellen",
+      "description": "Über Kanäle kommunizieren Ihre Mitglieder.",
+      "type_label": "Welche Art von Kanal möchten Sie erstellen?",
+      "name_label": "Wie soll dieser Kanal heißen?",
+      "types": {
+        "text": {
+          "name": "Text",
+          "description": "Senden Sie Nachrichten und kommunizieren Sie in einem klassischen textbasierten Kanal."
+        },
+        "voice": {
+          "name": "Stimme",
+          "description": "Sprechen und streamen Sie mit Sprache und Video in einem Sprachkanal.",
+          "unsupported": "Sprachkanäle werden noch nicht unterstützt."
+        }
+      },
+      "submit": "Kanal erstellen"
+    },
+    "create_category": {
+      "title": "Kategorie erstellen",
+      "name_label": "Wie möchten Sie diese Kategorie benennen?",
+      "submit": "Kategorie erstellen"
+    },
+    "delete_message": {
+      "title": "Nachricht löschen",
+      "description": "Sind Sie sicher, dass Sie diese Nachricht löschen möchten?"
+    },
+    "delete_server": {
+      "title": "Server löschen",
+      "description": "Sind Sie sicher, dass Sie löschen möchten? {{name}}? ",
+      "name_label": "Geben Sie zur Bestätigung den Namen des Servers ein",
+      "password_label": "Geben Sie Ihr Passwort ein",
+      "password_placeholder": "Passwort",
+      "name_mismatch": "Der Gildenname stimmt nicht überein"
+    },
+    "leave_server": {
+      "title": "Verlassen Sie den Server",
+      "description": "Sind Sie sicher, dass Sie gehen möchten? {{name}}? "
+    },
+    "create_role": {
+      "title": "Rolle erstellen",
+      "name_label": "Rollenname",
+      "name_placeholder": "Rollenname",
+      "edit_color": "Farbe bearbeiten"
+    },
+    "invite_people": {
+      "title": "Leute einladen",
+      "description": "Laden Sie Leute ein, mitzumachen {{name}} indem Sie ihnen diesen Link senden:",
+      "loading": "Laden...",
+      "copy_to_clipboard": "In die Zwischenablage kopieren"
+    },
+    "add_friend": {
+      "title": "Freund hinzufügen",
+      "description": "Bitten Sie Ihren Freund, Ihnen seinen eindeutigen Benutzernamen zu geben, und geben Sie ihn unten ein.",
+      "your_username_is": "Ihr Benutzername ist",
+      "copied": "Kopiert!",
+      "username_placeholder": "Benutzername",
+      "invalid_username": "Ungültiges Benutzernamenformat. ",
+      "requested_to_add": "Zum Hinzufügen aufgefordert {{username}} als Freund."
+    },
+    "set_presence": {
+      "title": "Benutzerdefinierter Status",
+      "description": "Legen Sie einen benutzerdefinierten Status für Ihr Konto fest.",
+      "custom_status_label": "Benutzerdefinierter Status",
+      "custom_status_placeholder": "So schläfrig..."
+    },
+    "edit_nickname": {
+      "title": "Spitzname bearbeiten",
+      "description": "Du veränderst dich {{username}}'s Spitzname in {{guild}}.",
+      "visible_note": "Dies ist für alle Mitglieder auf diesem Server sichtbar.",
+      "placeholder": "Nickname eingeben..."
+    },
+    "edit_roles": {
+      "title": "Rollen bearbeiten",
+      "description": "Sie bearbeiten Rollen für {{username}} In {{guild}}.",
+      "save_note": "Die Rollen werden aktualisiert, sobald Sie auf „Speichern“ klicken."
+    },
+    "upload_emoji": {
+      "title": "Emoji hochladen",
+      "name_label": "Emoji-Name",
+      "name_placeholder": "Geben Sie den Emoji-Namen ein",
+      "preview_alt": "Emoji-Vorschau",
+      "submitting": "Hochladen...",
+      "success": "Emoji wurde erfolgreich hochgeladen",
+      "error": "Emoji konnte nicht hochgeladen werden"
+    },
+    "create_bot": {
+      "title": "Bot erstellen",
+      "name_label": "Name",
+      "name_placeholder": "Mein schicker Bot",
+      "handle_label": "Handhaben",
+      "handle_placeholder": "mein-fancy-bot",
+      "handle_description": "Bot-Handles werden verwendet, um Ihren Bot in Adapt eindeutig zu identifizieren.",
+      "submit": "Bot erstellen"
+    }
+  },
+  "guild": {
+    "context_menu": {
+      "invite_people": "Leute einladen",
+      "copy_server_id": "Server-ID kopieren",
+      "leave_server": "Verlassen Sie den Server",
+      "create_server": "Server erstellen",
+      "join_server": "Dem Server beitreten"
+    },
+    "new_server": "Neuer Server"
+  },
+  "avatar": {
+    "edit_title": "Avatar bearbeiten"
+  }
+}

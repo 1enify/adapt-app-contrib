@@ -11,6 +11,7 @@ import Envelope from "../../../components/icons/svg/Envelope";
 import {ModalId, useModal} from "../../../components/ui/Modal";
 import FaceSmile from "../../../components/icons/svg/FaceSmile";
 import Users from "../../../components/icons/svg/Users";
+import {t} from "../../../i18n";
 
 function GuildSettingsSidebar() {
   const params = useParams()
@@ -29,7 +30,7 @@ function GuildSettingsSidebar() {
         <span class="font-title">{guild().name}</span>
       </div>
       <SidebarButton large href={root() + '/overview'} svg={CircleInfo} disabled={!perms().has('MANAGE_GUILD')}>
-        Overview
+        {t('settings.guild.overview.header')}
       </SidebarButton>
       <SidebarButton
         large
@@ -38,18 +39,18 @@ function GuildSettingsSidebar() {
         svg={UserTag}
         disabled={!perms().has('MANAGE_ROLES')}
       >
-        Roles
+        {t('settings.guild.roles.header')}
       </SidebarButton>
       <SidebarButton large href={root() + '/emojis'} svg={FaceSmile} disabled={!perms().has('MANAGE_EMOJIS')}>
-        Emojis
+        {t('settings.guild.emojis.header')}
       </SidebarButton>
 
-      <SettingsSection>Management</SettingsSection>
+      <SettingsSection>{t('settings.guild.sections.management')}</SettingsSection>
       <SidebarButton large href={root() + '/invites'} svg={Envelope} disabled={!perms().has('MANAGE_INVITES')}>
-        Invites
+        {t('settings.guild.invites.header')}
       </SidebarButton>
       <SidebarButton large href={root() + '/members'} svg={Users}>
-        Members
+        {t('settings.guild.members.header')}
       </SidebarButton>
 
       <Show when={guild().owner_id == api.cache!.clientId}>
@@ -60,7 +61,7 @@ function GuildSettingsSidebar() {
           danger
           onClick={() => showModal(ModalId.DeleteGuild, guild())}
         >
-          Delete Server
+          {t('settings.guild.delete')}
         </SidebarButton>
       </Show>
     </>
@@ -69,7 +70,7 @@ function GuildSettingsSidebar() {
 
 export const [GuildSettingsRoot, GuildSettings] = generateSettingsComponents(
   {
-    name: 'Server Settings',
+    name: t('settings.guild.header'),
     root: ({ guildId }) => `/guilds/${guildId}/settings`,
     init: '/overview',
   },

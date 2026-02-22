@@ -10,7 +10,7 @@ import ChevronLeft from "../../../components/icons/svg/ChevronLeft";
 import Lock from "../../../components/icons/svg/Lock";
 
 function RoleInner(props: ParentProps) {
-  const params = useParams()
+  const params: any = useParams()
 
   const cache = getApi()!.cache!
   const guildId = createMemo(() => BigInt(params.guildId))
@@ -100,7 +100,7 @@ export default function Role(props: ParentProps) {
   const cache = getApi()!.cache!
 
   return (
-    <Show when={cache.roles.has(BigInt(params.roleId))} fallback="Loading...">
+    <Show when={cache.roles.has(BigInt(params.roleId!))} fallback="Loading...">
       <RoleInner {...props} />
     </Show>
   )

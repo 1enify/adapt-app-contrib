@@ -6,6 +6,7 @@ import Xmark from "../icons/svg/Xmark";
 import {Permissions} from "../../api/Bitflags";
 import Icon, {IconElement} from "../icons/Icon";
 import {GuildChannel} from "../../types/channel";
+import {t} from "../../i18n";
 
 type SignalLike<T> = [Accessor<T>, (value: T) => any]
 
@@ -45,8 +46,10 @@ export default function PermissionsView(props: Props) {
     <>
       {filtered().map((category, i) => (
         <div class="flex flex-col border-fg/10" classList={{ "border-b-[1px] mb-4": i != filtered().length - 1 }}>
-          <h3 class="font-bold text-sm uppercase text-fg/60 mt-2 mb-4">{category.name}</h3>
-          {category.permissions.map(({ flag, label, description }) => (
+          <h3 class="font-bold text-sm uppercase text-fg/60 mt-2 mb-4">
+            {t('settings.permissions.categories.' + category.key)}
+          </h3>
+          {category.permissions.map(({ flag }) => (
             <div
               class="flex justify-between items-center mb-6 gap-x-2"
               classList={{
@@ -54,8 +57,12 @@ export default function PermissionsView(props: Props) {
               }}
             >
               <div class="flex flex-col flex-shrink">
-                <h4 class="text-lg font-title">{label}</h4>
-                <p class="text-fg/60 text-sm font-light">{description}</p>
+                <h4 class="text-lg font-title">
+                  {t(`settings.permissions.${flag.toLowerCase()}.label`)}
+                </h4>
+                <p class="text-fg/60 text-sm font-light">
+                  {t(`settings.permissions.${flag.toLowerCase()}.description`)}
+                </p>
               </div>
               {props.checkbox ? (
                 <div class="flex overflow-hidden pl-2 flex-shrink-0">
@@ -77,7 +84,7 @@ export default function PermissionsView(props: Props) {
                   <PermissionButton
                     flag={flag}
                     icon={Check}
-                    tooltip="Allow"
+                    tooltip={t("settings.permissions.options.allow")}
                     active={allow().has(flag)}
                     onClick={() => {
                       setAllow(allow().toggle(flag).copy())
@@ -89,7 +96,7 @@ export default function PermissionsView(props: Props) {
                     <PermissionButton
                       flag={flag}
                       icon={Dash}
-                      tooltip="Inherit"
+                      tooltip={t("settings.permissions.options.inherit")}
                       active={!allow().has(flag) && !deny().has(flag)}
                       onClick={() => {
                         setAllow(allow().remove(flag).copy())
@@ -103,7 +110,7 @@ export default function PermissionsView(props: Props) {
                   <PermissionButton
                     flag={flag}
                     icon={Xmark}
-                    tooltip="Deny"
+                    tooltip={t("settings.permissions.options.deny")}
                     active={(props.noInherit ? !allow().has(flag) : false) || deny().has(flag)}
                     onClick={() => {
                       setAllow(allow().remove(flag).copy())

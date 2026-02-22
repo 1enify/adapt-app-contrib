@@ -1,6 +1,7 @@
 import {ComponentProps, JSX, onMount, ParentProps, Show} from "solid-js";
 import {A} from "@solidjs/router";
 import {capitalize} from "../../utils";
+import {t} from "../../i18n";
 
 export function FormInput({ id, label, ...props }: { label: string } & ComponentProps<'input'>) {
   return (
@@ -73,7 +74,7 @@ export default function Layout(props: ParentProps<Props>) {
           </p>
           <Show when={props.error}>
             <div class="text-red-500">
-              <p class="mt-4 font-bold">Something went wrong!</p>
+              <p class="mt-4 font-bold">{t('error.something_went_wrong')}</p>
               <p class="text-sm">{capitalize(props.error!)}</p>
             </div>
           </Show>

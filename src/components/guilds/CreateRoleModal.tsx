@@ -7,6 +7,7 @@ import Plus from "../icons/svg/Plus";
 import {getApi} from "../../api/Api";
 import Palette from "../icons/svg/Palette";
 import {useNavigate} from "@solidjs/router";
+import {t} from "../../i18n";
 
 interface Props {
   guildId: bigint
@@ -66,7 +67,7 @@ export default function CreateRoleModal(props: Props) {
   }
 
   return (
-    <ModalTemplate title="Create Role">
+    <ModalTemplate title={t("modals.create_role.title")}>
       <form onSubmit={onSubmit} class="flex flex-col gap-y-2 pt-6">
         <div class="flex items-center gap-x-2">
           <div
@@ -91,11 +92,13 @@ export default function CreateRoleModal(props: Props) {
             </div>
           </div>
           <div class="flex flex-col flex-grow gap-y-1">
-            <label class="text-fg/60 text-xs font-bold uppercase">Role Name</label>
+            <label class="text-fg/60 text-xs font-bold uppercase">
+              {t("modals.create_role.name_label")}
+            </label>
             <input
               type="text"
               class="input flex-grow"
-              placeholder="Role Name"
+              placeholder={t("modals.create_role.name_placeholder")}
               minLength={2}
               maxLength={32}
               required={true}
@@ -113,7 +116,7 @@ export default function CreateRoleModal(props: Props) {
           disabled={!currentName() || submitting()}
         >
           <Icon icon={Plus} class="fill-fg w-4 h-4 mr-2" />
-          <span>Create Role</span>
+          <span>{t("modals.create_role.title")}</span>
         </button>
       </form>
       <Show when={error()}>

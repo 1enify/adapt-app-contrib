@@ -12,6 +12,7 @@ import {
 import {useNavigate, useParams} from "@solidjs/router";
 import {getApi} from "../../../api/Api";
 import {useSaveTask} from "../../settings/SettingsLayout";
+import {t} from "../../../i18n";
 import iro from "@jaames/iro";
 import Icon from "../../../components/icons/Icon";
 import PenToSquare from "../../../components/icons/svg/PenToSquare";
@@ -128,7 +129,7 @@ export default function RoleOverview() {
 
   return (
     <>
-      <h2 class="font-bold uppercase text-fg/60 text-sm my-2">Role Name</h2>
+      <h2 class="font-bold uppercase text-fg/60 text-sm my-2">{t('settings.guild.roles.role.name_label')}</h2>
       <input
         class="input w-full disabled:opacity-50"
         placeholder="Member"
@@ -137,7 +138,7 @@ export default function RoleOverview() {
         minLength={1}
         maxLength={32}
       />
-      <h2 class="font-bold uppercase text-fg/60 text-sm mt-6 mb-2">Role Color</h2>
+      <h2 class="font-bold uppercase text-fg/60 text-sm mt-6 mb-2">{t('settings.guild.roles.role.color_label')}</h2>
       <div class="flex">
         <div ref={pickerAreaRef!} class="flex flex-col items-center self-start relative">
           <button
@@ -149,12 +150,12 @@ export default function RoleOverview() {
               icon={roleColor() ? PenToSquare : Palette}
               class="w-6 h-6 transition-opacity group-hover:opacity-100"
               classList={{ [fg()]: true, [roleColor() == null ? 'opacity-70' : 'opacity-25']: true }}
-              title="Pick Color"
+              title={t('settings.guild.roles.role.pick_color')}
             />
           </button>
           <Show when={roleColor() != null}>
             <button class="text-sm text-fg/50 hover:text-fg/100 transition mt-1" onClick={() => setRoleColor(null)}>
-              Remove
+              {t('settings.guild.roles.role.remove_color')}
             </button>
           </Show>
           <div
@@ -193,7 +194,7 @@ export default function RoleOverview() {
           ))}
         </div>
       </div>
-      <h2 class="font-bold uppercase text-fg/60 text-sm mt-6 mb-2">Preview</h2>
+      <h2 class="font-bold uppercase text-fg/60 text-sm mt-6 mb-2">{t('settings.guild.roles.role.preview_label')}</h2>
       <div class="rounded-xl overflow-hidden">
         <div class="bg-gray-800 text-white px-1 py-3">
           <MessageHeader
@@ -204,7 +205,7 @@ export default function RoleOverview() {
             class="[&_.timestamp]:!text-white/50"
             noHoverEffects
           >
-            <span class="text-sm text-white">Dark Theme</span>
+            <span class="text-sm text-white">{t('settings.guild.roles.role.dark_theme')}</span>
           </MessageHeader>
         </div>
         <div class="bg-white text-black px-1 py-3">
@@ -216,15 +217,15 @@ export default function RoleOverview() {
             class="[&_.timestamp]:!text-black/50"
             noHoverEffects
           >
-            <span class="text-sm text-black">Light Theme</span>
+            <span class="text-sm text-black">{t('settings.guild.roles.role.light_theme')}</span>
           </MessageHeader>
         </div>
       </div>
-      <FlagSetting signal={[roleFlags, setRoleFlags]} label="Hoist members with this role" flag="HOISTED">
-        Display members with this role separately in the members list
+      <FlagSetting signal={[roleFlags, setRoleFlags]} label={t('settings.guild.roles.role.hoist.label')} flag="HOISTED">
+        {t('settings.guild.roles.role.hoist.description')}
       </FlagSetting>
-      <FlagSetting signal={[roleFlags, setRoleFlags]} label="Allow everyone to mention this role" flag="MENTIONABLE">
-        Allows all members, regardless of permission, to collectively mention all members in this role
+      <FlagSetting signal={[roleFlags, setRoleFlags]} label={t('settings.guild.roles.role.mentionable.label')} flag="MENTIONABLE">
+        {t('settings.guild.roles.role.mentionable.description')}
       </FlagSetting>
     </>
   )

@@ -26,6 +26,7 @@ import {mapIterator} from "../../utils";
 import Robot from "../../components/icons/svg/Robot";
 import Plug from "../../components/icons/svg/Plug";
 import Globe from "../../components/icons/svg/Globe";
+import {t} from "../../i18n";
 void tooltip
 
 export interface Breadcrumb {
@@ -37,7 +38,7 @@ export interface Breadcrumb {
 function Exit() {
   const navigate = useNavigate()
   return (
-    <button onClick={() => navigate(previousPage())} class="group xl:hidden" use:tooltip="Exit Settings">
+    <button onClick={() => navigate(previousPage())} class="group xl:hidden" use:tooltip={t("settings.exit")}>
       <Icon icon={Xmark} class="fill-fg/70 w-5 h-5 transition group-hover:fill-fg/100"/>
     </button>
   )
@@ -46,7 +47,7 @@ function Exit() {
 export function generateSettingsRoot(breadcrumb: Breadcrumb, Sidebar: () => JSX.Element) {
   const isMobile = createMediaQuery("(max-width: 767px)")
   const navigate = useNavigate()
-  const params = useParams()
+  const params: any = useParams()
 
   createEffect(() => {
     if (!isMobile()) navigate(breadcrumb.root(params) + breadcrumb.init)
@@ -142,10 +143,10 @@ function SaveChanges() {
         "opacity-0 pointer-events-none": tasks.size === 0,
       }}
     >
-      <span class="font-title text-lg font-bold mx-4">Save Changes?</span>
+      <span class="font-title text-lg font-bold mx-4">{t("settings.save")}</span>
       <div class="grid grid-cols-2">
-        <button class="btn btn-ghost" onClick={cancelAll}>Cancel</button>
-        <button class="btn btn-success" onClick={saveHandler}>Save</button>
+        <button class="btn btn-ghost" onClick={cancelAll}>{t("generic.cancel")}</button>
+        <button class="btn btn-success" onClick={saveHandler}>{t("generic.save")}</button>
       </div>
     </div>
   )
@@ -154,7 +155,7 @@ function SaveChanges() {
 type SettingsLayoutProps = { breadcrumb: Breadcrumb, Sidebar: () => JSX.Element }
 export function SettingsLayout({ breadcrumb, Sidebar, children }: ParentProps<SettingsLayoutProps>) {
   const navigate = useNavigate()
-  const params = useParams()
+  const params: any = useParams()
 
   function handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') navigate(previousPage())
@@ -203,7 +204,7 @@ export function SettingsLayout({ breadcrumb, Sidebar, children }: ParentProps<Se
           <button
             onClick={() => navigate(previousPage())}
             class="rounded-full group hover:bg-fg/20 transition border-2 border-fg/20 w-12 h-12 flex items-center justify-center"
-            use:tooltip="Exit Settings"
+            use:tooltip={t("settings.exit")}
           >
             <Icon icon={Xmark} class="fill-fg/70 w-5 h-5 transition group-hover:fill-fg/100" />
           </button>
@@ -240,25 +241,25 @@ export function generateSettingsComponents(breadcrumb: Breadcrumb, sidebar: () =
 function SettingsSidebar() {
   return (
     <>
-      <SettingsSection>User Settings</SettingsSection>
+      <SettingsSection>{t("settings.user.sections.root")}</SettingsSection>
       <SidebarButton large href="/settings/account" svg={User}>
-        Account
+        {t("settings.user.account.header")}
       </SidebarButton>
 
-      <SettingsSection>Client</SettingsSection>
+      <SettingsSection>{t("settings.user.sections.client")}</SettingsSection>
       <SidebarButton large href="/settings/locales" svg={Globe}>
-        Language
+        {t("settings.user.language.header")}
       </SidebarButton>
       <SidebarButton large href="/settings/appearance" svg={Palette}>
-        Themes
+        {t("settings.user.themes.header")}
       </SidebarButton>
       <SidebarButton large href="/settings/plugins" svg={Plug}>
-        Plugins
+        {t("settings.user.plugins.header")}
       </SidebarButton>
 
-      <SettingsSection>Developers</SettingsSection>
+      <SettingsSection>{t("settings.user.sections.developers")}</SettingsSection>
       <SidebarButton large href="/settings/bots" active={p => p.startsWith('/settings/bots')} svg={Robot}>
-        Bots
+        {t("settings.user.bots.header")}
       </SidebarButton>
 
       <div class="bg-fg/10 h-[1px] mx-2 my-2"/>
@@ -271,7 +272,7 @@ function SettingsSidebar() {
           window.location.pathname = '/'
         }}
       >
-        Log Out
+        {t("settings.user.logout")}
       </SidebarButton>
 
       <div class="h-4" />
@@ -288,7 +289,7 @@ function SettingsSidebar() {
           class="flex items-center cursor-pointer group hover:text-fg/70 hover:underline underline-offset-2"
           href="//github.com/adaptchat/webclient/issues/new"
         >
-          Report an issue
+          {t("settings.user.issue")}
           <Icon icon={ArrowUpRightFromSquare} class="w-3 h-3 fill-fg/30 group-hover:fill-fg/70 ml-1.5" />
         </a>
       </p>

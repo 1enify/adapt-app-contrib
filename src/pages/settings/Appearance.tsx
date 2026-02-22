@@ -5,6 +5,7 @@ import Icon from "../../components/icons/Icon";
 import PenToSquare from "../../components/icons/svg/PenToSquare";
 import ChevronRight from "../../components/icons/svg/ChevronRight";
 import Header from "../../components/ui/Header";
+import {t} from "../../i18n";
 
 function PaletteColor<Key extends keyof Theme>({ key, label }: { key: Key | [Key, keyof Theme[Key]], label: string }) {
   function computeColor(color: string): Rgb {
@@ -148,17 +149,17 @@ export default function Appearance() {
 
   return (
     <div class="flex flex-col w-full h-full">
-      <Header>Theme</Header>
-      <h2 class="font-bold px-4 pt-4 pb-2 text-fg/50 mobile:text-center">Preset Themes</h2>
+      <Header>{t('settings.user.themes.header')}</Header>
+      <h2 class="font-bold px-4 pt-4 pb-2 text-fg/50 mobile:text-center">{t('settings.user.themes.preset.header')}</h2>
       <div>
         <div class="flex overflow-x-auto gap-4 mx-4 mobile:flex-col">
-        <PresetTheme name="Light" theme={presets.light} />
-        <PresetTheme name="Dim" theme={presets.dim} />
-        <PresetTheme name="Dark" theme={presets.dark} />
+        <PresetTheme name={t('settings.user.themes.preset.light')} theme={presets.light} />
+        <PresetTheme name={t('settings.user.themes.preset.dim')} theme={presets.dim} />
+        <PresetTheme name={t('settings.user.themes.preset.dark')} theme={presets.dark} />
         </div>
       </div>
 
-      <Details title="Theme Colors">
+      <Details title={t('settings.user.themes.theme_colors')}>
         <div
           class="flex flex-col items-center justify-center h-[min(50vw,400px)] overflow-hidden mx-4 mb-8 py-4 md:py-6
             bg-bg-0/50 rounded-lg"
@@ -216,7 +217,7 @@ export default function Appearance() {
         </PaletteGroup>
       </Details>
 
-      <Details title="Custom CSS">
+      <Details title={t('settings.user.themes.custom_css')}>
         <div class="flex w-full mb-4">
           <textarea
             class="flex-grow resize-none outline-none bg-0 focus:ring-2 focus:ring-accent font-mono rounded-lg p-4 mx-4 h-64"

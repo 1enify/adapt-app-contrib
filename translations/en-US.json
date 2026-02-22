@@ -303,6 +303,11 @@
         "server_management": "Server Management",
         "danger_zone": "Danger Zone"
       },
+      "options": {
+        "allow": "Allow",
+        "inherit": "Inherit",
+        "deny": "Deny"
+      },
       "view_channel": {
         "label": "View Channels",
         "description": "Members with this permission can view channels and receive events from them."

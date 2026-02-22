@@ -2,6 +2,7 @@
 import {render} from 'solid-js/web';
 
 import './index.css';
+import './i18n';
 import Entrypoint from './Entrypoint';
 import {ContextMenuProvider} from "./components/ui/ContextMenu";
 import {ThemeProvider} from "./client/themes";

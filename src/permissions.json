@@ -1,6 +1,7 @@
 [
   {
     "name": "All Channels",
+    "key": "all_channels",
     "permissions": [
       {
         "flag": "VIEW_CHANNEL",
@@ -24,6 +25,7 @@
   },
   {
     "name": "Text Channels",
+    "key": "text_channels",
     "permissions": [
       {
         "flag": "VIEW_MESSAGE_HISTORY",
@@ -107,6 +109,7 @@
   },
   {
     "name": "Voice Channels",
+    "key": "voice_channels",
     "permissions": [
       {
         "flag": "CONNECT",
@@ -136,6 +139,7 @@
   },
   {
     "name": "Member Customization",
+    "key": "member_customization",
     "permissions": [
       {
         "flag": "CHANGE_NICKNAME",
@@ -153,6 +157,7 @@
   },
   {
     "name": "Server Management",
+    "key": "server_management",
     "permissions": [
       {
         "flag": "MANAGE_EMOJIS",
@@ -218,6 +223,7 @@
   },
   {
     "name": "Danger Zone",
+    "key": "danger_zone",
     "permissions": [
       {
         "flag": "ADMINISTRATOR",

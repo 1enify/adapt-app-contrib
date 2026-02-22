@@ -4,6 +4,7 @@ import {Permissions} from "./api/Bitflags";
 import {User} from "./types/user";
 import {getApi} from "./api/Api";
 import {JSX} from "solid-js";
+import {t, locale} from "./i18n";
 
 /**
  * Utilities related to snowflakes.
@@ -203,27 +204,32 @@ export function humanizeTimestamp(timestamp: number | Date): string {
     timestamp = new Date(timestamp)
 
   const now = new Date()
+  const humanized = humanizeTime(timestamp)
+  let date
 
-  let prefix
   if (isSameDay(timestamp, now))
-    return humanizeTime(timestamp)
+    return humanized
   else if (isSameDay(timestamp, new Date(now.getTime() - 86_400_000)))
-    prefix = 'Yesterday'
-  else if (day(now).getTime() - day(timestamp).getTime() < 3 * 86_400_000)
-    prefix = timestamp.toLocaleDateString('en-US', { weekday: 'long' })
-  else if (timestamp.getFullYear() === now.getFullYear())
-    prefix = timestamp.toLocaleDateString('en-US', {
+    return t('time.yesterday_at', { time: humanized })
+  else if (day(now).getTime() - day(timestamp).getTime() < 3 * 86_400_000) {
+    const weekday = timestamp.toLocaleDateString(locale(), { weekday: 'long' })
+    return t('time.weekday_at', { weekday, time: humanized })
+  }
+  else if (timestamp.getFullYear() === now.getFullYear()) {
+    date = timestamp.toLocaleDateString(locale(), {
       month: 'short',
       day: 'numeric',
     })
-  else
-    prefix = timestamp.toLocaleDateString('en-US', {
+  }
+  else {
+    date = timestamp.toLocaleDateString(locale(), {
       year: 'numeric',
       month: 'short',
       day: '2-digit',
     })
+  }
 
-  return `${prefix} at ${humanizeTime(timestamp)}`
+  return t('time.date_at', { date, time: humanized })
 }
 
 /**
@@ -233,7 +239,7 @@ export function humanizeFullTimestamp(timestamp: number | Date): string {
   if (typeof timestamp === 'number')
     timestamp = new Date(timestamp)
 
-  return timestamp.toLocaleString('en-US', {
+  return timestamp.toLocaleString(locale(), {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -252,7 +258,7 @@ export function humanizeDate(timestamp: number | Date): string {
   if (typeof timestamp === 'number')
     timestamp = new Date(timestamp)
 
-  return timestamp.toLocaleDateString('en-US', {
+  return timestamp.toLocaleDateString(locale(), {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -266,7 +272,7 @@ export function humanizeTime(timestamp: number | Date): string {
   if (typeof timestamp === 'number')
     timestamp = new Date(timestamp)
 
-  return timestamp.toLocaleTimeString('en-US', {
+  return timestamp.toLocaleTimeString(locale(), {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,

@@ -25,7 +25,7 @@ export default function ChannelPermissions() {
   const cache = api.cache!
 
   const params = useParams()
-  const channelId = createMemo(() => BigInt(params.channelId))
+  const channelId = createMemo(() => BigInt(params.channelId!))
   const channel = createMemo(() => cache.channels.get(channelId())! as GuildChannel)
   const guild = createMemo(() => cache.guilds.get(channel().guild_id)!)
 
@@ -74,7 +74,7 @@ export default function ChannelPermissions() {
   }
   createEffect(() => {
     if (searching()) {
-      searchRef?.focus()
+      (searchRef as any)?.focus()
       document.addEventListener('click', listener)
     } else {
       document.removeEventListener('click', listener)
@@ -87,8 +87,8 @@ export default function ChannelPermissions() {
   const roleIndex = createMemo(() => new Fuse(guild().roles ?? [], { keys: ['name'] }))
   const members = createMemo(() => {
     const m = cache.memberReactor
-      .get(BigInt(params.guildId))
-      ?.map(u => ({ ...cache.users.get(u)!, ...cache.members.get(memberKey(BigInt(params.guildId), u)) }))
+      .get(BigInt(params.guildId!))
+      ?.map(u => ({ ...cache.users.get(u)!, ...cache.members.get(memberKey(BigInt(params.guildId!), u)) }))
       ?? []
     return m.filter((u): u is Member & User => !!u)
   })

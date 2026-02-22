@@ -15,6 +15,7 @@ import {Message} from "../types/message";
 import tooltip from "../directives/tooltip";
 import Header from "../components/ui/Header";
 import {ModalId, useModal} from "../components/ui/Modal";
+import {t, tJsx} from "../i18n";
 
 noop(tooltip)
 
@@ -124,35 +125,39 @@ export default function Home() {
         </div>
       </Show>
       <div class="p-5 bg-bg-0/60 backdrop-blur rounded-xl flex-grow xl:w-1/2">
-        <h1 class="font-title font-bold text-xl ml-1 mb-3">Learn Adapt</h1> {/* add onboarding and hide if user has fully onboarded */}
+        <h1 class="font-title font-bold text-xl ml-1 mb-3">{t('home.onboarding.title')}</h1> 
+        {/* TODO: add onboarding and hide if user has fully onboarded */}
         <div class="flex flex-col gap-y-2">
           <LearnAdaptSubcard
-            title="Customize your profile"
+            title={t('home.onboarding.edit_profile.label')}
             icon={UserTie}
             onClick={() => navigate('/settings')}
           >
-            Let others on Adapt know who you are. Give yourself a display name, change your avatar, and write a bio.
+            {t('home.onboarding.edit_profile.description')}
           </LearnAdaptSubcard>
           <LearnAdaptSubcard
-            title="Connect with friends"
+            title={t('home.onboarding.add_friend.label')}
             icon={UserGroup}
             onClick={() => navigate('/friends')}
           >
-            Find your friends on Adapt, add them to your friends list, and start chatting with them.
+            {t('home.onboarding.add_friend.description')}
           </LearnAdaptSubcard>
           <LearnAdaptSubcard
-            title="Join a community"
+            title={t('home.onboarding.join_guild.label')}
             icon={Server}
             onClick={() => showModal(ModalId.NewGuild)}
           >
-            Create, discover, join, and chat in communities that suit your interests. You may also join the official&nbsp;
-            <A
-              href="/invite/ozLGrKT9"
-              class="font-medium underline underline-offset-2"
-              onClick={(e) => e.stopPropagation()}
-            >
-              Adapt Community
-            </A>.
+            {tJsx('home.onboarding.join_guild.description', {
+              server_link: (
+                <A
+                  href="/invite/ozLGrKT9"
+                  class="font-medium underline underline-offset-2"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Adapt Community
+                </A>
+              )
+            })}
           </LearnAdaptSubcard>
         </div>
       </div>

@@ -32,6 +32,7 @@ import {
   snowflakes
 } from "../../utils";
 import TypingKeepAlive from "../../api/TypingKeepAlive";
+import { t } from "../../i18n";
 import tooltip from "../../directives/tooltip";
 import Icon, { IconElement } from "../icons/Icon";
 import ArrowDown from "../icons/svg/ArrowDown";
@@ -192,7 +193,7 @@ function MessageReferencePreview(props: { reference: MessageReference; grouper?:
       replace={true}
     >
       <Icon icon={Reference} class="w-4 h-4 mr-1 fill-none stroke-fg/20 mt-2" />
-      <Show when={refMsg()} fallback={<span>Unknown message</span>}>
+      <Show when={refMsg()} fallback={<span>{t('chat.unknown_message')}</span>}>
         <Show when={avatar()}>
           <img src={avatar()} alt="" class="inline-block w-5 h-5 rounded-full mr-1" />
         </Show>
@@ -266,53 +267,53 @@ function MessageContextMenu({ message, guildId, editing, onReply }: MessageConte
   return (
     <ContextMenu>
       <Show when={onReply && (!guildId || perms()?.hasAll("SEND_MESSAGES", "VIEW_MESSAGE_HISTORY"))}>
-        <ContextMenuButton icon={Reply} label="Reply" onClick={() => onReply!(message)} />
+        <ContextMenuButton icon={Reply} label={t('chat.context_menu.reply')} onClick={() => onReply!(message)} />
       </Show>
       <ContextMenuButton
         icon={BookmarkFilled}
-        label="Mark Unread"
+        label={t('chat.context_menu.mark_unread')}
         onClick={() => api.request("PUT", `/channels/${message.channel_id}/ack/${message.id - BigInt(1)}`)}
       />
       <Show when={message.content}>
         <ContextMenuButton
           icon={Clipboard}
-          label="Copy Text"
+          label={t('chat.context_menu.copy_text')}
           onClick={() =>
             toast.promise(navigator.clipboard.writeText(message.content!), {
-              loading: "Copying message text...",
-              success: "Copied to your clipboard!",
-              error: "Failed to copy message text, try again later.",
+              loading: t('chat.context_menu.copy_text_loading'),
+              success: t('chat.context_menu.copy_text_success'),
+              error: t('chat.context_menu.copy_text_error'),
             })
           }
         />
       </Show>
       <ContextMenuButton
         icon={Code}
-        label="Copy Message ID"
+        label={t('chat.context_menu.copy_message_id')}
         onClick={() => navigator.clipboard.writeText(message.id.toString())}
       />
       <ContextMenuButton
         icon={Link}
-        label="Copy Message Link"
+        label={t('chat.context_menu.copy_message_link')}
         onClick={() =>
           toast.promise(navigator.clipboard.writeText(getMessageLink()), {
-            loading: "Copying message link...",
-            success: "Copied to your clipboard!",
-            error: "Failed to copy message link, try again later.",
+            loading: t('chat.context_menu.copy_link_loading'),
+            success: t('chat.context_menu.copy_link_success'),
+            error: t('chat.context_menu.copy_link_error'),
           })
         }
       />
       <Show when={editing != null && message.author_id == api.cache!.clientId}>
         <ContextMenuButton
           icon={PenToSquare}
-          label="Edit Message"
+          label={t('chat.context_menu.edit_message')}
           onClick={() => editing!.add(message.id)}
         />
       </Show>
       <Show when={message.author_id == api.cache!.clientId || (guildId && perms()?.has("MANAGE_MESSAGES"))}>
         <DangerContextMenuButton
           icon={Trash}
-          label="Delete Message"
+          label={t('chat.context_menu.delete_message')}
           onClick={async (event) => {
             if (!event.shiftKey) return showModal(ModalId.DeleteMessage, message);
 
@@ -376,14 +377,14 @@ function QuickActions(props: QuickActionsProps) {
       style={{ top: `-${(props.offset ?? 4) * 4}px` }}
     >
       <Show when={!permissions() || permissions()!.has("ADD_REACTIONS")}>
-        <QuickActionButton icon={FaceSmile} tooltip="Add Reaction" />
+        <QuickActionButton icon={FaceSmile} tooltip={t('chat.add_reaction')} />
       </Show>
       <Show when={!permissions() || permissions()!.hasAll("SEND_MESSAGES", "VIEW_MESSAGE_HISTORY")}>
-        <QuickActionButton icon={Reply} tooltip="Reply" onClick={() => props.onReply(props.message)} />
+        <QuickActionButton icon={Reply} tooltip={t('chat.reply')} onClick={() => props.onReply(props.message)} />
       </Show>
       <QuickActionButton
         icon={EllipsisVertical}
-        tooltip="More"
+        tooltip={t('generic.more')}
         onClick={contextMenu?.getHandler(
           <MessageContextMenu
             message={props.message}
@@ -504,7 +505,7 @@ export function MessagePrimary(props: MessageRowProps) {
       authorAvatar={api.cache!.avatarOf(message().author_id!)}
       authorColor={authorColor()}
       authorName={displayName(author())}
-      badge={UserFlags.fromValue(author().flags).has("BOT") ? "BOT" : undefined}
+      badge={UserFlags.fromValue(author().flags).has("BOT") ? t('chat.bot_badge') : undefined}
       timestamp={snowflakes.timestamp(message().id)}
       quickActions={
         props.onReply && <QuickActions
@@ -1789,7 +1790,7 @@ export default function Chat(props: {
               onClick={scrollToBottom}
             >
               <Icon icon={ArrowDown} class="w-4 h-4 fill-white" />
-              Jump to Newer Messages
+              {t('chat.jump_to_newer')}
             </button>
           </div>
         </Show>
@@ -1935,7 +1936,7 @@ export default function Chat(props: {
         when={canSendMessages()}
         fallback={
           <div class="p-4 mx-2 -mb-3 text-fg/60 rounded-xl bg-bg-0/70">
-            You do not have permission to send messages in this channel.
+            {t('chat.no_permission')}
           </div>
         }
       >
@@ -1980,9 +1981,9 @@ export default function Chat(props: {
               input.click();
               messageInputRef?.focus();
             }}
-            use:tooltip="Upload"
+            use:tooltip={t('generic.upload')}
           >
-            <Icon icon={Plus} title="Upload" class="fill-fg w-[18px] h-[18px]" />
+            <Icon icon={Plus} title={t('generic.upload')} class="fill-fg w-[18px] h-[18px]" />
           </button>
           <div
             classList={{
@@ -2009,7 +2010,7 @@ export default function Chat(props: {
                         <button
                           class="p-1 rounded-full hover:bg-fg/10"
                           onClick={() => setMentionAuthor(msg, !mentionAuthor)}
-                          use:tooltip={`${mentionAuthor ? "Do not mention" : "Mention"} @${name} when replying`}
+                          use:tooltip={mentionAuthor ? t('chat.do_not_mention_when_replying', { name }) : t('chat.mention_when_replying', { name })}
                         >
                           <Icon
                             icon={At}
@@ -2020,7 +2021,7 @@ export default function Chat(props: {
                         <button
                           class="p-1 rounded-full hover:bg-fg/10"
                           onClick={() => removeReply(msg.id)}
-                          use:tooltip="Remove"
+                          use:tooltip={t('generic.remove')}
                         >
                           <Icon icon={Xmark} class="w-3 h-3 fill-fg/60" />
                         </button>
@@ -2092,7 +2093,7 @@ export default function Chat(props: {
               ref={messageInputRef!}
               class="mx-2 empty:before:content-[attr(data-placeholder)] text-sm empty:before:text-fg/50 outline-none break-words"
               contentEditable
-              data-placeholder="Send a message..."
+              data-placeholder={t('chat.message_input_placeholder')}
               spellcheck={false}
               onPaste={async (event) => {
                 event.preventDefault();
@@ -2186,7 +2187,7 @@ export default function Chat(props: {
               "bg-accent": emojiPickerVisible(),
               "bg-3": !emojiPickerVisible(),
             }}
-            use:tooltip="Add Emoji"
+            use:tooltip={t('chat.add_emoji')}
             onClick={() => setEmojiPickerVisible(!emojiPickerVisible())}
           >
             <Icon icon={FaceSmile} class="fill-fg w-[18px] h-[18px]" />
@@ -2198,13 +2199,13 @@ export default function Chat(props: {
               "hover:bg-accent": sendable(),
               hidden: !mobile,
             }}
-            use:tooltip="Send"
+            use:tooltip={t('chat.send')}
             onClick={async () => {
               if (messageInputFocused()) messageInputRef?.focus();
               await createMessage();
             }}
           >
-            <Icon icon={PaperPlaneTop} title="Send" class="fill-fg w-[18px] h-[18px]" />
+            <Icon icon={PaperPlaneTop} title={t('chat.send')} class="fill-fg w-[18px] h-[18px]" />
           </button>
         </div>
       </Show>
@@ -2227,7 +2228,7 @@ export default function Chat(props: {
           </For>
           <span class="text-fg/50 font-medium">
             {" "}
-            {typing().users.size === 1 ? "is" : "are"} typing...
+            {typing().users.size === 1 ? t('chat.typing_suffix_is') : t('chat.typing_suffix_are')}
           </span>
         </Show>
       </div>

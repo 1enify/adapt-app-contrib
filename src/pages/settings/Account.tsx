@@ -18,6 +18,7 @@ import Eye from "../../components/icons/svg/Eye";
 import EyeSlash from "../../components/icons/svg/EyeSlash";
 import {defaultAvatar} from "../../api/ApiCache";
 import CakeCandles from "../../components/icons/svg/CakeCandles";
+import {t} from "../../i18n";
 noop(tooltip)
 
 export enum EditingState {
@@ -43,8 +44,8 @@ export default function Account() {
   }
   const [changed, setChanged] = createSignal(initial)
   const updateChanged = () => setChanged({
-    username: usernameInputRef?.value !== clientUser().username,
-    displayName: displayNameInputRef?.value !== clientUser().display_name,
+    username: (usernameInputRef as any)?.value !== clientUser().username,
+    displayName: (displayNameInputRef as any)?.value !== clientUser().display_name,
     avatar: avatarData() !== undefined,
   })
   const anyChanged = () => Object.values(changed()).some(Boolean)
@@ -91,7 +92,7 @@ export default function Account() {
 
   return (
     <div class="flex flex-col w-full px-2 py-4">
-      <Header>Account</Header>
+      <Header>{t("settings.user.account.header")}</Header>
       <div class="relative flex flex-col items-center overflow-hidden rounded-xl w-full">
         <div class="flex items-center bg-bg-0/90 w-full">
           <div class="indicator m-4">
@@ -139,7 +140,7 @@ export default function Account() {
           <AccountField
             ref={usernameInputRef}
             name="username"
-            label="Username"
+            label={t("settings.user.account.username")}
             icon={At}
             autocomplete="username"
             value={clientUser().username}
@@ -154,7 +155,7 @@ export default function Account() {
           <AccountField
             ref={displayNameInputRef}
             name="display_name"
-            label="Display Name"
+            label={t("settings.user.account.display_name")}
             icon={IdCardClip}
             autocomplete="username"
             value={clientUser().display_name || ''}
@@ -168,18 +169,22 @@ export default function Account() {
           <p class="p-3 text-sm bg-danger/20 text-danger w-full">{error()}</p>
         </Show>
       </div>
-      <h2 class="pt-6 pb-3 px-2 font-title font-bold text-xl">Credentials</h2>
+      <h2 class="pt-6 pb-3 px-2 font-title font-bold text-xl">
+        {t("settings.user.account.credentials")}
+      </h2>
       <div class="flex items-center">
         <div class="p-4 rounded-full bg-bg-0/80">
           <Icon icon={Envelope} class="w-6 h-6 fill-fg/80" />
         </div>
         <div class="flex flex-col flex-grow">
-          <h3 class="px-2 font-bold text-sm uppercase text-fg/60">Email</h3>
+          <h3 class="px-2 font-bold text-sm uppercase text-fg/60">
+            {t("settings.user.account.email")}
+          </h3>
           <p class="px-2 text-fg/80 flex gap-x-2 items-center">
             {showEmail() ? clientUser().email : '********' + clientUser().email?.slice(clientUser().email?.lastIndexOf('@'))}
             <Icon
               icon={showEmail() ? Eye : EyeSlash}
-              tooltip={showEmail() ? 'Hide Email' : 'Show Email'}
+              tooltip={t(showEmail() ? 'settings.user.account.hide_email' : 'settings.user.account.show_email')}
               class="w-5 h-5 fill-fg/50 cursor-pointer"
               onClick={() => setShowEmail(p => !p)}
             />
@@ -252,6 +257,10 @@ interface SaveCancelProps {
 }
 
 export function SaveCancel(props: SaveCancelProps) {
+  const tSave = () => t('generic.save');
+  const tCancel = () => t('generic.cancel');
+  const tEdit = () => t('generic.edit');
+
   return (
     <div class="flex absolute right-4 top-4 gap-x-2">
       <Show when={props.editing() != EditingState.NotEditing && props.anyChanged()}>
@@ -264,8 +273,8 @@ export function SaveCancel(props: SaveCancelProps) {
           <Icon
             icon={props.editing() == EditingState.Saving ? Spinner : Check}
             class="w-6 h-6 fill-fg"
-            title="Save"
-            tooltip={{content: "Save", placement: 'left'}}
+            title={tSave()}
+            tooltip={{content: tSave(), placement: 'left'}}
           />
         </button>
       </Show>
@@ -281,8 +290,8 @@ export function SaveCancel(props: SaveCancelProps) {
         <Icon
           icon={props.editing() ? Xmark : PenToSquare}
           class="w-6 h-6 fill-fg"
-          title={props.editing() ? "Cancel" : "Edit"}
-          tooltip={{content: props.editing() ? "Cancel" : "Edit", placement: 'left'}}
+          title={props.editing() ? tCancel() : tEdit()}
+          tooltip={{content: props.editing() ? tCancel() : tEdit(), placement: 'left'}}
         />
       </button>
     </div>

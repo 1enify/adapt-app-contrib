@@ -12,7 +12,7 @@ import ArrowUpFromBracket from "../../../components/icons/svg/ArrowUpFromBracket
 export default function Overview() {
   const api = getApi()!
   const params = useParams()
-  const guildId = createMemo(() => BigInt(params.guildId))
+  const guildId = createMemo(() => BigInt(params.guildId!))
   const guild = createMemo(() => api.cache!.guilds.get(guildId())!)
 
   const [editing, setEditing] = createSignal(EditingState.NotEditing)

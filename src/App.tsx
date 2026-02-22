@@ -20,6 +20,7 @@ import {A, useLocation, useNavigate, useParams} from "@solidjs/router";
 import {createMediaQuery} from "@solid-primitives/media";
 
 import {getApi} from "./api/Api";
+import {t, tJsx} from "./i18n";
 import {
   ChannelDisplayMetadata,
   displayChannel,
@@ -184,9 +185,9 @@ function DirectMessageButton({ channelId }: { channelId: bigint }) {
   const deleteMessage = () =>
     group
       ? (channel() as GroupDmChannel).owner_id == user()?.id
-        ? 'Delete Group'
-        : 'Leave Group'
-      : 'Close DM'
+        ? t('dms.delete_group')
+        : t('dms.leave_group')
+      : t('dms.close_dm')
 
   const hasUnread = createMemo(() => !!(
     api.cache?.isChannelUnread(channelId) || api.cache?.countDmMentionsIn(channelId)
@@ -209,17 +210,17 @@ function DirectMessageButton({ channelId }: { channelId: bigint }) {
       onContextMenu={contextMenu?.getHandler(
         <ContextMenu>
           <ContextMenuButton
-            icon={Code} label="Copy User ID"
+            icon={Code} label={t('copy.user_id.imperative')}
             onClick={() => navigator.clipboard.writeText(user()?.id?.toString() ?? '0')}
           />
           <ContextMenuButton
-            icon={Code} label="Copy Channel ID"
+            icon={Code} label={t('copy.channel_id.imperative')}
             onClick={() => navigator.clipboard.writeText(channelId.toString())}
           />
           <DangerContextMenuButton
             icon={Xmark}
-            label="Close DM"
-            onClick={() => toast.error('Work in progress!')}
+            label={t('dms.close_dm')}
+            onClick={() => toast.error(t('generic.wip'))}
           />
         </ContextMenu>
       )}
@@ -255,15 +256,15 @@ function DirectMessageButton({ channelId }: { channelId: bigint }) {
           }}>
             <span class="truncate min-w-0">
               {group
-                ? channel().recipient_ids.length + ' members'
+                ? t('dms.group_members_other', { count: channel().recipient_ids.length })
                 : (
                   lastMessage() ? (
-                    (deltaMs()! > 30_000 ? humanizeTimeDeltaShort(deltaMs()!) + ' ago' : 'Just now')
+                    (deltaMs()! > 30_000 ? t('time.past', { delta: humanizeTimeDeltaShort(deltaMs()!) }) : t('time.recently'))
                     + ((lastMessage() as any)?.content
                       ? ': ' + (lastMessage() as any).content.slice(0, 150).replace(/\s/g, ' ')
                       : ''
                     )
-                  ) : 'No messages'
+                  ) : t('dms.no_messages')
                 )
               }
             </span>
@@ -280,7 +281,7 @@ function DirectMessageButton({ channelId }: { channelId: bigint }) {
             event.stopPropagation()
             event.preventDefault()
 
-            toast.error('Work in progress!')
+            toast.error(t('generic.wip'))
           }}
         />
       }>
@@ -439,7 +440,7 @@ function HomeSidebar(props: { tabSignal: Signal<Tab> }) {
               {channel.type === 'text' ? '#' : ''}{'name' in channel ? channel.name : displayName(user!)}
             </h2>
             <p class="text-xs text-fg/40">
-              {guild ? guild.name : user ? 'Direct Messages' : 'Group Messages'}
+              {guild ? guild.name : user ? t('sidebar.main.quick_access.from_dms') : t('sidebar.main.quick_access.from_group_dms')}
             </p>
           </div>
         </div>
@@ -463,16 +464,16 @@ function HomeSidebar(props: { tabSignal: Signal<Tab> }) {
         "h-16 opacity-100 p-2": searchQuery().length <= 0,
       }}>
         <SidebarTopPageButton
-          href="/" label="Home" icon={HomeIcon}
+          href="/" label={t('sidebar.main.static.home')} icon={HomeIcon}
           expand={(path) => !path.startsWith('/friends') && !path.startsWith('/discover')}
         />
         <SidebarTopPageButton
-          href="/friends" label="Friends" icon={UserGroup}
+          href="/friends" label={t('sidebar.main.static.friends')} icon={UserGroup}
           check={(path) => path.startsWith('/friends')}
           indicator={incomingFriends()?.length}
         />
         <SidebarTopPageButton
-          href="/discover" label="Discover" icon={Compass}
+          href="/discover" label={t('sidebar.main.static.discover')} icon={Compass}
           check={(path) => path.startsWith('/discover')}
         />
       </div>
@@ -482,7 +483,7 @@ function HomeSidebar(props: { tabSignal: Signal<Tab> }) {
           ref={searchRef!}
           type="text"
           class="w-full text-sm p-2 outline-none font-medium bg-transparent"
-          placeholder="Search Adapt..."
+          placeholder={t('sidebar.main.static.global_search')}
           value={searchQuery()}
           onInput={(event) => setSearchQuery(event.currentTarget.value)}
         />
@@ -498,20 +499,20 @@ function HomeSidebar(props: { tabSignal: Signal<Tab> }) {
         </Show>
       </div>
       <div class="flex py-2 px-2 gap-2">
-        <SidebarTopNavButton tab={Tab.Quick} icon={Bolt} label="Quick Access" signal={props.tabSignal} />
+        <SidebarTopNavButton tab={Tab.Quick} icon={Bolt} label={t('sidebar.main.static.quick_access')} signal={props.tabSignal} />
         <SidebarTopNavButton
-          tab={Tab.Conversations} icon={Messages} label="Conversations" signal={props.tabSignal}
+          tab={Tab.Conversations} icon={Messages} label={t('sidebar.main.static.conversations')} signal={props.tabSignal}
           unread={anyDmsUnread()} pings={totalDmMentions()}
         />
         <SidebarTopNavButton
-          tab={Tab.Servers} icon={ServerIcon} label="All Servers" signal={props.tabSignal}
+          tab={Tab.Servers} icon={ServerIcon} label={t('sidebar.main.static.all_servers')} signal={props.tabSignal}
           unread={anyGuildsUnread()} pings={totalGuildMentions()}
         />
       </div>
       <Switch>
         <Match when={tab() === Tab.Quick}>
           <Show when={mentions().length + unreadMessages().length}>
-            <Section>New Messages</Section>
+            <Section>{t('sidebar.main.quick_access.new_messages')}</Section>
             <div class="px-2 flex flex-col gap-y-2">
               <For each={[...mentions(), ...unreadMessages()]}>
                 {(metadata) => <ChannelPreview metadata={metadata} />}
@@ -519,7 +520,7 @@ function HomeSidebar(props: { tabSignal: Signal<Tab> }) {
             </div>
           </Show>
           <Show when={recentlyViewed().length}>
-            <Section>Recently Viewed</Section>
+            <Section>{t('sidebar.main.quick_access.recently_viewed')}</Section>
             <div class="px-2 flex flex-col gap-y-2">
               <For each={recentlyViewed()}>
                 {(metadata) => <ChannelPreview metadata={metadata} />}
@@ -530,12 +531,12 @@ function HomeSidebar(props: { tabSignal: Signal<Tab> }) {
 
         <Match when={tab() === Tab.Conversations}>
           <h2 class="font-title font-medium text-fg/50 text-sm mx-3.5 mt-2 mb-1 flex items-center justify-between">
-            <span>Direct Messages</span>
+            <span>{t('sidebar.main.conversations.dms', { count: cache.dmChannelOrder[0]().length })}</span>
             <button class="group">
               <Icon
                 icon={Plus}
                 class="w-4 h-4 fill-fg/50 group-hover:fill-fg/100 transition"
-                tooltip="New Conversation"
+                tooltip={t('sidebar.main.static.conversations')}
                 onClick={() => showModal(ModalId.NewConversation)}
               />
             </button>
@@ -551,12 +552,12 @@ function HomeSidebar(props: { tabSignal: Signal<Tab> }) {
 
         <Match when={tab() === Tab.Servers}>
           <h2 class="font-title font-medium text-fg/50 text-sm mx-3.5 mt-2 mb-1 flex items-center justify-between">
-            <span>Servers ({cache.guildList.length})</span>
+            <span>{t('sidebar.main.all_servers.servers', { count: cache.guildList.length })}</span>
             <button class="group">
               <Icon
                 icon={Plus}
                 class="w-4 h-4 fill-fg/50 group-hover:fill-fg/100 transition"
-                tooltip="New Server"
+                tooltip={t('guild.new_server')}
                 onClick={() => showModal(ModalId.NewGuild, ModalPage.New)}
                 onContextMenu={contextMenu.getHandler(<NewGuildModalContextMenu />)}
               />
@@ -576,10 +577,10 @@ function HomeSidebar(props: { tabSignal: Signal<Tab> }) {
 function StatusSelectDropdown() {
   return (
     <ul tabIndex="0" class="w-full">
-      <StatusSelect label="Online" status="online" />
-      <StatusSelect label="Idle" status="idle" />
-      <StatusSelect label="Do Not Disturb" status="dnd" />
-      <StatusSelect label="Invisible" status="offline" />
+      <StatusSelect label={t('status.online')} status="online" />
+      <StatusSelect label={t('status.idle')} status="idle" />
+      <StatusSelect label={t('status.dnd')} status="dnd" />
+      <StatusSelect label={t('status.invisible')} status="offline" />
     </ul>
   )
 }
@@ -651,9 +652,9 @@ export function Sidebar({ signal }: { signal: Signal<Tab> }) {
           <ContextMenu>
             <ContextMenuButton
               icon={Code}
-              label="Copy User ID"
+              label={t('copy.user_id.imperative')}
               onClick={() => {
-                navigator.clipboard.writeText(clientUser().id.toString()).then(() => toast.success('Copied User ID!'))
+                navigator.clipboard.writeText(clientUser().id.toString()).then(() => toast.success(t('copy.user_id.success')))
               }}
             />
           </ContextMenu>
@@ -664,26 +665,26 @@ export function Sidebar({ signal }: { signal: Signal<Tab> }) {
           classList={{ "hidden": !showStatusSettings() }}
         >
           <StatusSelectDropdown />
-          <h3 class="mx-2 mt-3 text-fg/60 text-xs font-bold uppercase">Custom Status</h3>
+          <h3 class="mx-2 mt-3 text-fg/60 text-xs font-bold uppercase">{t('sidebar.user.custom_status.header')}</h3>
           <button
             class="mx-2 mt-1 mb-2 text-sm font-light group text-fg/60 hover:text-fg/100 transition"
             onClick={() => showModal(ModalId.UpdatePresence)}
           >
-            {presence()?.custom_status || 'Set a custom status'}
+            {presence()?.custom_status || t('sidebar.user.custom_status.fallback')}
             <Icon icon={PenToSquare} class="ml-1 w-4 h-4 fill-fg/60 group-hover:fill-fg/100 transition inline-block align-top" />
           </button>
         </div>
         <div class="flex gap-2">
-          <button class="indicator" use:tooltip="Change Status" onClick={() => setShowStatusSettings(p => !p)}>
+          <button class="indicator" use:tooltip={t('sidebar.user.edit_status')} onClick={() => setShowStatusSettings(p => !p)}>
             <img src={cache.clientAvatar} alt="" class="w-10 h-10 rounded-xl" />
             <StatusIndicator status={status()} tailwind="m-1 w-3 h-3" indicator />
           </button>
           <button
             class="flex flex-col items-start justify-center"
-            use:tooltip="Copy Username"
+            use:tooltip={t('copy.username.imperative')}
             onClick={() => toast.promise(
               navigator.clipboard.writeText(clientUser().username),
-              { loading: "Copying...", success: "Copied username!", error: "Error while copying username" }
+              { loading: t('copy.loading'), success: t('copy.username.success'), error: t('copy.username.error') }
             )}
           >
             <h3 class="text-fg/80 font-title font-bold text-left">{displayName(clientUser())}</h3>
@@ -695,7 +696,7 @@ export function Sidebar({ signal }: { signal: Signal<Tab> }) {
         <button
           onClick={() => navigate('/settings')}
           class="bg-1 hover:bg-3 transition rounded-full w-10 h-10 flex items-center justify-center"
-          use:tooltip="Settings"
+          use:tooltip={t('sidebar.user.user_settings')}
         >
           <Icon icon={GearIcon} class="w-4 h-4 fill-fg/80" />
         </button>
@@ -812,7 +813,7 @@ export default function App(props: ParentProps) {
         <div class="flex flex-grow w-full gap-x-2 pt-2 px-2">
           <div class="flex flex-grow items-center bg-bg-0/80 backdrop-blur h-14 rounded-xl">
             <button
-              use:tooltip={showSidebar() ? "Collapse Sidebar" : "Show Sidebar"}
+              use:tooltip={showSidebar() ? t('sidebar.collapse') : t('sidebar.expand')}
               class="inline-flex py-2 mx-4 transition-transform duration-200 group"
               style={{"transform": showSidebar() ? "rotate(0deg)" : "rotate(180deg)"}}
               onClick={() => setShowSidebar(prev => !prev)}
@@ -823,7 +824,7 @@ export default function App(props: ParentProps) {
               />
             </button>
             <span class="font-title font-bold">
-              {headers()[headers().length - 1] ?? 'Unknown'}
+              {headers()[headers().length - 1] ?? t('sidebar.unknown_header')}
             </span>
           </div>
           <Switch>
@@ -835,7 +836,7 @@ export default function App(props: ParentProps) {
                 onClick={() => setShowRightSidebar(prev => !prev)}
                 icon={UserGroup}
                 active={actualShowRightSidebar()}
-                label={actualShowRightSidebar() ? "Hide Members" : "Show Members"}
+                label={actualShowRightSidebar() ? t('sidebar.members.collapse') : t('sidebar.members.expand')}
               />
             </Match>
           </Switch>
@@ -855,14 +856,14 @@ export default function App(props: ParentProps) {
           >
             <ErrorBoundary fallback={(err) => (
               <div class="text-red-900 bg-red-300 rounded-lg p-4 m-2 flex flex-col">
-                <p class="font-bold">Error: {err.message}</p>
+                <p class="font-bold">{t('error.header', { message: err.message })}</p>
                 <p class="font-light text-sm">
-                  If this error persists, please&nbsp;
-                  <a class="underline underline-offset-2"
-                     href="https://github.com/adaptchat/webclient/issues/new/choose">
-                    open an issue
-                  </a>
-                  &nbsp;in the GitHub repository.
+                  {tJsx('error.open_issue', { link:
+                    <a class="underline underline-offset-2"
+                       href="https://github.com/adaptchat/webclient/issues/new/choose">
+                      {t('error.open_issue_link')}
+                    </a>
+                  })}
                 </p>
                 <pre class="whitespace-pre-wrap break-words mt-2">{err.stack}</pre>
               </div>
