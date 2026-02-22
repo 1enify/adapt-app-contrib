@@ -622,7 +622,7 @@
     },
     "delete_server": {
       "title": "删除服务器",
-      "description": "确定要删除 <b>{{name}}</b> 吗？此操作无法撤销。该服务器的所有数据将被永久删除，无法恢复。",
+      "description": "确定要删除 {{name}} 吗？此操作无法撤销。该服务器的所有数据将被永久删除，无法恢复。",
       "name_label": "请输入服务器名称以确认",
       "password_label": "请输入您的密码",
       "password_placeholder": "密码",
@@ -630,7 +630,7 @@
     },
     "leave_server": {
       "title": "离开服务器",
-      "description": "确定要离开 <b>{{name}}</b> 吗？离开后，您需要重新获得邀请才能加入。"
+      "description": "确定要离开 {{name}} 吗？离开后，您需要重新获得邀请才能加入。"
     },
     "create_role": {
       "title": "创建身份组",
@@ -640,7 +640,7 @@
     },
     "invite_people": {
       "title": "邀请成员",
-      "description": "通过以下链接邀请好友加入 <b>{{name}}</b>：",
+      "description": "通过以下链接邀请好友加入 {{name}}：",
       "loading": "正在加载…",
       "copy_to_clipboard": "复制到剪贴板"
     },
@@ -667,7 +667,7 @@
     },
     "edit_roles": {
       "title": "编辑身份组",
-      "description": "您正在编辑 <b>{{username}}</b> 在 <b>{{guild}}</b> 中的身份组。",
+      "description": "您正在编辑 {{username}} 在 {{guild}} 中的身份组。",
       "save_note": "点击《保存》后身份组将更新。"
     },
     "upload_emoji": {
