@@ -13,6 +13,7 @@ import Code from "../../components/icons/svg/Code";
 import StatusIndicator from "../../components/users/StatusIndicator";
 import Header from "../../components/ui/Header";
 import {FriendsNav} from "./Friends";
+import {t} from "../../i18n";
 noop(tooltip)
 
 export function relationshipFilterFactory(api: Api, targetType: RelationshipType): Accessor<[bigint, RelationshipType][]> {
@@ -50,7 +51,7 @@ export function FriendEntry({ api, id, index, children }: ParentProps<{ api: Api
           <ContextMenu>
             <ContextMenuButton
               icon={Code}
-              label="Copy User ID"
+              label={t('copy.user_id.imperative')}
               onClick={() => navigator.clipboard.writeText(id.toString())}
             />
           </ContextMenu>
@@ -94,12 +95,12 @@ export default function Requests() {
       </Header>
       <Show when={!outgoing().length && !incoming().length} keyed={false}>
         <p class="text-center font-medium text-fg/60 p-4">
-          You currently have no incoming or outgoing friend requests.
+          {t('friends.no_requests')}
         </p>
       </Show>
       <Show when={incoming().length} keyed={false}>
         <div class="divider font-title font-medium text-fg/60 mx-2 my-2">
-          Incoming Requests ({incoming().length})
+          {t('friends.dividers.incoming', { count: incoming().length })}
         </div>
         <For each={incoming()}>
           {([id, _], index) => (
@@ -107,11 +108,11 @@ export default function Requests() {
               <button
                 class="p-2 rounded-full bg-bg-3/70 hover:bg-success transition duration-200"
                 onClick={() => api.request('PUT', `/relationships/friends/${id}`)}
-                use:tooltip={{content: "Accept Request", placement: 'left'}}
+                use:tooltip={{content: t('friends.actions.pending.accept'), placement: 'left'}}
               >
-                <Icon icon={Check} title="Accept Request" class="w-4 h-4 fill-fg"/>
+                <Icon icon={Check} title={t('friends.actions.pending.accept')} class="w-4 h-4 fill-fg"/>
               </button>
-              <RelationshipDeleteButton api={api} id={id} label="Deny Request" />
+              <RelationshipDeleteButton api={api} id={id} label={t('friends.actions.pending.decline')} />
             </FriendEntry>
           )}
         </For>
@@ -119,12 +120,12 @@ export default function Requests() {
       </Show>
       <Show when={outgoing().length} keyed={false}>
         <div class="divider font-title font-medium text-fg/60 mx-2 my-2">
-          Outgoing Requests ({outgoing().length})
+          {t('friends.dividers.outgoing', { count: outgoing().length })}
         </div>
         <For each={outgoing()}>
           {([id, _], index) => (
             <FriendEntry api={api} id={id} index={index}>
-              <RelationshipDeleteButton api={api} id={id} label="Revoke Request" />
+              <RelationshipDeleteButton api={api} id={id} label={t('friends.actions.pending.revoke')} />
             </FriendEntry>
           )}
         </For>

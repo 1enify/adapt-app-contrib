@@ -5,6 +5,7 @@ import {getApi} from "../../api/Api";
 import type {Props} from "./ConfirmGuildLeaveModal"
 import Trash from "../icons/svg/Trash";
 import Icon from "../icons/Icon";
+import {t, tJsx} from "../../i18n";
 
 export default function ConfirmGuildDeleteModal(props: Props) {
   const [confirmGuildLeaveModalError, setConfirmGuildLeaveModalError] = createSignal<string>()
@@ -19,17 +20,16 @@ export default function ConfirmGuildDeleteModal(props: Props) {
   let submitButton: HTMLButtonElement | null = null
 
   return (
-    <ModalTemplate title="Delete Server">
+    <ModalTemplate title={t('modals.delete_server.title')}>
       <p class="text-fg/70 text-center text-sm mt-4">
-        Are you sure you want to delete <b>{props.guild.name}</b>? You will not be able to undo this action.
-        All data associated with this server will be deleted and you will not be able to recover them in the future.
+        {tJsx('modals.delete_server.description', { name: <b>{props.guild.name}</b> })}
       </p>
       <form
         class="flex flex-wrap justify-end"
         onSubmit={async (event) => {
           event.preventDefault()
-          if (guildNameInput?.value !== props.guild.name)
-            setConfirmGuildLeaveModalError("Guild name does not match")
+          if ((guildNameInput as any)?.value !== props.guild.name)
+            setConfirmGuildLeaveModalError(t('modals.delete_server.name_mismatch'))
 
           submitButton!.disabled = true
 
@@ -37,7 +37,7 @@ export default function ConfirmGuildDeleteModal(props: Props) {
           try {
             response = await api.request('DELETE', `/guilds/${props.guild.id}`, {
               json: {
-                password: passwordInput?.value,
+                password: (passwordInput as any)?.value,
               },
             })
           } finally {
@@ -57,7 +57,7 @@ export default function ConfirmGuildDeleteModal(props: Props) {
             class="flex flex-col mt-4 pl-1 text-sm font-medium text-fg/60 "
             for="guild-name"
           >
-            Type the name of the server to confirm
+            {t('modals.delete_server.name_label')}
           </label>
           <input
             class="input outline-none w-full bg-0 mt-2 focus:outline-none focus:ring-2 focus:ring-accent"
@@ -78,7 +78,7 @@ export default function ConfirmGuildDeleteModal(props: Props) {
             class="flex flex-col mt-4 pl-1 text-sm font-medium text-fg/60 w-full"
             for="password"
           >
-            Enter your password
+            {t('modals.delete_server.password_label')}
           </label>
           <input
             class="input outline-none w-full bg-0 mt-2 focus:outline-none focus:ring-2 focus:ring-accent"
@@ -86,7 +86,7 @@ export default function ConfirmGuildDeleteModal(props: Props) {
             id="password"
             name="password"
             type="text"
-            placeholder="Password"
+            placeholder={t('modals.delete_server.password_placeholder')}
             minLength={6}
             required
             onKeyUp={(event) => {
@@ -99,7 +99,7 @@ export default function ConfirmGuildDeleteModal(props: Props) {
         </Show>
         {/* Use a div to prevent it being treated as the target when pressing enter */}
         <div class="btn border-none btn-ghost mt-4" onClick={() => hideModal()}>
-          Cancel
+          {t('generic.cancel')}
         </div>
         <button
           ref={submitButton!}
@@ -108,7 +108,7 @@ export default function ConfirmGuildDeleteModal(props: Props) {
           disabled={!guildNameIsCorrect()}
         >
           <Icon icon={Trash} class="fill-fg w-4 h-4 mr-2" />
-          Delete Server
+          {t('modals.delete_server.title')}
         </button>
       </form>
     </ModalTemplate>

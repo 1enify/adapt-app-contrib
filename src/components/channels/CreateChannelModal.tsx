@@ -8,6 +8,7 @@ import Volume from "../icons/svg/Volume";
 import {getApi} from "../../api/Api";
 import {useNavigate} from "@solidjs/router";
 import {snowflakes} from "../../utils";
+import {t} from "../../i18n";
 
 type Props = { guildId: bigint, parentId?: bigint | null }
 
@@ -68,7 +69,7 @@ export default function CreateChannelModal(props: Props) {
   const [isSubmitting, setIsSubmitting] = createSignal<boolean>(false)
 
   return (
-    <ModalTemplate title="Create Channel">
+    <ModalTemplate title={t('modals.create_channel.title')}>
       <form
         class="flex flex-col justify-end"
         onSubmit={async (event) => {
@@ -77,9 +78,9 @@ export default function CreateChannelModal(props: Props) {
           const type = channelType()
 
           if (type === 'voice') {
-            return setError('Voice channels are not supported yet.')
+            return setError(t('modals.create_channel.types.voice.unsupported'))
           }
-
+          
           setIsSubmitting(true)
           const removeListener = api.ws!.on('channel_create', (data, remove) => {
             if (data.nonce === nonce) {
@@ -103,27 +104,27 @@ export default function CreateChannelModal(props: Props) {
         }}
       >
         <p class="text-fg/70 text-center text-sm mt-4">
-          Channels are where your members communicate.
+          {t('modals.create_channel.description')}
         </p>
         <label class="mt-5 mb-2 text-fg/50 text-xs ml-0.5" for="type">
-          What type of channel do you want to create?
+          {t('modals.create_channel.type_label')}
         </label>
         <div class="flex flex-col gap-2">
           <ChannelTypeButton
             type="text"
-            name="Text"
-            description="Send messages and communicate in a classic text-based channel."
+            name={t('modals.create_channel.types.text.name')}
+            description={t('modals.create_channel.types.text.description')}
             signal={signal}
           />
           <ChannelTypeButton
             type="voice"
-            name="Voice"
-            description="Talk and stream with voice and video in a voice channel."
+            name={t('modals.create_channel.types.voice.name')}
+            description={t('modals.create_channel.types.voice.description')}
             signal={signal}
           />
         </div>
         <label class="mt-5 mb-2 text-fg/50 text-xs ml-0.5" for="name">
-          What do you want to name this channel?
+          {t('modals.create_channel.name_label')}
         </label>
         <div classList={{
           "flex rounded-lg overflow-hidden ring-2 transition": true,
@@ -153,7 +154,7 @@ export default function CreateChannelModal(props: Props) {
         <div class="flex gap-3 mt-3">
           <div class="flex gap-x-2 btn btn-neutral" onClick={hideModal}>
             <Icon icon={ChevronLeft} class="fill-neutral-content/60 select-none w-4 h-4" />
-            Back
+            {t('generic.back')}
           </div>
           <button
             type="submit"
@@ -161,7 +162,7 @@ export default function CreateChannelModal(props: Props) {
             disabled={isSubmitting()}
           >
             <Icon icon={Plus} class="fill-primary-content/80 w-4 h-4 mr-2" />
-            <span>Create Channel</span>
+            <span>{t('modals.create_channel.submit')}</span>
           </button>
         </div>
       </form>

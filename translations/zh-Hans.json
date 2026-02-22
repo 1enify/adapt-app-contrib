@@ -647,7 +647,7 @@
     "add_friend": {
       "title": "添加好友",
       "description": "请您的好友告知其唯一用户名，然后在下方输入。",
-      "your_username_is": "您的用户名是",
+      "your_username_is": "您的用户名是{{username}}。",
       "copied": "已复制！",
       "username_placeholder": "用户名",
       "invalid_username": "用户名格式无效。请确认输入的是用户名而非显示名称。",

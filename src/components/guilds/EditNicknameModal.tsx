@@ -1,6 +1,7 @@
 import { ModalTemplate, useModal } from "../ui/Modal";
 import { getApi } from "../../api/Api";
 import { createMemo, createSignal, onMount } from "solid-js";
+import { t, tJsx } from "../../i18n";
 
 export default function EditNicknameModal(props: { guildId: bigint, memberId: bigint, current: string }) {
   const api = getApi()!;
@@ -36,27 +37,30 @@ export default function EditNicknameModal(props: { guildId: bigint, memberId: bi
   onMount(() => setTimeout(() => input!.focus(), 200));
 
   return (
-    <ModalTemplate title="Edit Nickname">
+    <ModalTemplate title={t('modals.edit_nickname.title')}>
       <p class="block font-light text-sm text-fg/60 text-center mt-4">
-        You are changing {user().username}'s nickname in {guild().name}.
+        {tJsx('modals.edit_nickname.description', {
+          username: <b>{user().username}</b>,
+          guild: <b>{guild().name}</b>
+        })}
         <br />
-        This will be visible to all members in this server.
+        {t('modals.edit_nickname.visible_note')}
       </p>
       <form onSubmit={save}>
         <input
           ref={input!}
           type="text"
           class="w-full bg-0 rounded-lg text-sm font-medium p-3 mt-4 outline-none focus:ring-2 ring-accent"
-          placeholder="Enter nickname..."
+          placeholder={t('modals.edit_nickname.placeholder')}
           value={props.current}
           required
         />
         <div class="flex justify-end gap-2 mt-4">
           <button class="btn btn-ghost" type="button" onClick={() => hideModal()}>
-            Cancel
+            {t('generic.cancel')}
           </button>
           <button class="btn btn-primary" type="submit" disabled={isSubmitting()}>
-            Save
+            {t('generic.save')}
           </button>
         </div>
       </form>

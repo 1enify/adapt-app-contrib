@@ -21,6 +21,7 @@
     },
     "channel_id": {
       "imperative": "Copy Channel ID",
+      "category": "Copy Category ID",
       "success": "Channel ID copied to clipboard!"
     },
     "message_id": {
@@ -87,6 +88,7 @@
     "guild": {
     },
     "members": {
+      "title": "Members",
       "collapse": "Hide Members",
       "expand": "Show Members"
     },
@@ -490,7 +492,12 @@
         "decline": "Decline Request",
         "revoke": "Revoke Request"
       }
-    }
+    },
+    "no_friends": {
+      "remark": "You currently have no friends (just like Cryptex).",
+      "action": "Add some?"
+    },
+    "no_requests": "You currently have no incoming or outgoing friend requests."
   },
   "time": {
     "recently": "Just now",
@@ -511,6 +518,8 @@
     "leave": "Leave",
     "upload": "Upload",
     "more": "More",
+    "copied": "Copied!",
+    "copy_to_clipboard": "Copy to clipboard",
     "loading": "Loading...",
     "unknown": "Unknown"
   },
@@ -629,6 +638,11 @@
       },
       "submit": "Create Channel"
     },
+    "delete_channel": {
+      "title": "Delete Channel",
+      "description": "Are you sure you want to delete {{channel}} in {{guild}}? You will not be able to undo this action. All data and messages associated with this channel will be deleted and you will not be able to recover them in the future.",
+      "submit": "Delete {{channel}}"
+    },
     "create_category": {
       "title": "Create Category",
       "name_label": "What do you want to name this category?",
@@ -656,20 +670,29 @@
       "name_placeholder": "Role Name",
       "edit_color": "Edit Color"
     },
+    "delete_role": {
+      "title": "Delete Role",
+      "description": "Are you sure you want to delete the role {{role_name}} in {{guild_name}}? You will not be able to undo this action."
+    },
     "invite_people": {
       "title": "Invite People",
-      "description": "Invite people to join {{name}} by sending them this link:",
-      "loading": "Loading...",
-      "copy_to_clipboard": "Copy to clipboard"
+      "description": "Invite people to join {{name}} by sending them this link:"
     },
     "add_friend": {
       "title": "Add Friend",
       "description": "Ask your friend to give you their unique username, and enter it below.",
-      "your_username_is": "Your username is",
-      "copied": "Copied!",
+      "your_username_is": "Your username is {{username}}.",
       "username_placeholder": "Username",
       "invalid_username": "Invalid username format. Make sure this is the username (not display name).",
       "requested_to_add": "Requested to add {{username}} as a friend."
+    },
+    "new_conversation": {
+      "title": "New Conversation",
+      "description": "Select friends to start a new conversation with.",
+      "group_name": "Group Name",
+      "submit": "Start Conversation",
+      "submit_dm": "Open DM",
+      "submit_group": "Create Group"
     },
     "set_presence": {
       "title": "Custom Status",
@@ -708,9 +731,8 @@
     }
   },
   "guild": {
-    "context_menu": {
+    "actions": {
       "invite_people": "Invite People",
-      "copy_server_id": "Copy Server ID",
       "leave_server": "Leave Server",
       "create_server": "Create Server",
       "join_server": "Join Server"

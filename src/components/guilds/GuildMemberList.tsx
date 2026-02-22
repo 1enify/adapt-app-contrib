@@ -22,6 +22,7 @@ import EyeSlash from "../icons/svg/EyeSlash";
 import Crown from "../icons/svg/Crown";
 import Robot from "../icons/svg/Robot";
 import UserMinus from "../icons/svg/UserMinus";
+import {t} from "../../i18n";
 
 export function GuildMemberGroup(props: { members: Iterable<User | bigint>, offline?: boolean }) {
   const api = getApi()!
@@ -287,13 +288,13 @@ export default function GuildMemberList() {
           </For>
           <Show when={noRoles().length} keyed={false}>
             <SidebarSection badge={() => noRoles().length}>
-              Online
+              {t('status.online')}
             </SidebarSection>
             <GuildMemberGroup members={noRoles()} />
           </Show>
           <Show when={offline.size} keyed={false}>
             <SidebarSection badge={() => offline.size}>
-              Offline
+              {t('status.offline')}
             </SidebarSection>
             <GuildMemberGroup members={offline} offline />
           </Show>
@@ -301,7 +302,7 @@ export default function GuildMemberList() {
       }>
         <Show when={memberResults()}>
           <SidebarSection badge={() => memberResults()!.length}>
-            Members
+            {t('sidebar.members.title')}
           </SidebarSection>
           <GuildMemberGroup members={memberResults()!} />
         </Show>

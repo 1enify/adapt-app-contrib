@@ -5,6 +5,7 @@ import {useNavigate} from "@solidjs/router";
 import {getApi} from "../../api/Api";
 import RightFromBracket from "../icons/svg/RightFromBracket";
 import Icon from "../icons/Icon";
+import {t, tJsx} from "../../i18n";
 
 export interface Props {
   guild: Guild,
@@ -18,16 +19,16 @@ export default function ConfirmGuildLeaveModal(props: Props) {
   const navigate = useNavigate()
 
   return (
-    <ModalTemplate title="Leave Server">
+    <ModalTemplate title={t('modals.leave_server.title')}>
       <p class="text-fg/80 mt-4 text-center">
-        Are you sure you want to leave <b>{props.guild.name}</b>? You will be unable to rejoin unless you are re-invited.
+        {tJsx('modals.leave_server.description', { name: <b>{props.guild.name}</b> })}
       </p>
       <Show when={confirmGuildLeaveModalError()} keyed={false}>
         <p class="text-danger mt-2">{confirmGuildLeaveModalError()}</p>
       </Show>
       <div class="flex justify-end mt-4 gap-x-4">
         <button class="btn border-none btn-ghost" onClick={hideModal}>
-          Cancel
+          {t('generic.cancel')}
         </button>
         <button
           class="btn btn-danger border-none"
@@ -47,7 +48,7 @@ export default function ConfirmGuildLeaveModal(props: Props) {
           }}
         >
           <Icon icon={RightFromBracket} class="fill-fg w-4 h-4 mr-2" />
-          Leave
+          {t('generic.leave')}
         </button>
       </div>
     </ModalTemplate>

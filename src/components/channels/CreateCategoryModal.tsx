@@ -7,6 +7,7 @@ import {getApi} from "../../api/Api";
 import {useNavigate} from "@solidjs/router";
 import {snowflakes} from "../../utils";
 import ListTree from "../icons/svg/ListTree";
+import {t} from "../../i18n";
 
 type Props = { guildId: bigint, parentId?: bigint }
 
@@ -21,7 +22,7 @@ export default function CreateCategoryModal(props: Props) {
   const [isSubmitting, setIsSubmitting] = createSignal<boolean>(false)
 
   return (
-    <ModalTemplate title="Create Category">
+    <ModalTemplate title={t('modals.create_category.title')}>
       <form
         class="flex flex-col justify-end"
         onSubmit={async (event) => {
@@ -51,7 +52,7 @@ export default function CreateCategoryModal(props: Props) {
         }}
       >
         <label class="mt-5 mb-2 text-fg/50 text-xs ml-0.5 w-96 mobile:w-full" for="name">
-          What do you want to name this category?
+          {t('modals.create_category.name_label')}
         </label>
         <div classList={{
           "flex rounded-lg overflow-hidden ring-2 transition": true,
@@ -81,7 +82,7 @@ export default function CreateCategoryModal(props: Props) {
         <div class="flex gap-3 mt-3">
           <div class="flex gap-x-2 btn btn-neutral" onClick={hideModal}>
             <Icon icon={ChevronLeft} class="fill-neutral-content/60 select-none w-4 h-4" />
-            Back
+            {t('generic.back')}
           </div>
           <button
             type="submit"
@@ -89,7 +90,7 @@ export default function CreateCategoryModal(props: Props) {
             disabled={isSubmitting()}
           >
             <Icon icon={Plus} class="fill-primary-content/80 w-4 h-4 mr-2" />
-            <span>Create Category</span>
+            <span>{t('modals.create_category.submit')}</span>
           </button>
         </div>
       </form>

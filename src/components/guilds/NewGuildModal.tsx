@@ -11,6 +11,7 @@ import ChevronLeft from "../icons/svg/ChevronLeft";
 import RocketLaunch from "../icons/svg/RocketLaunch";
 import ContextMenu, {ContextMenuButton} from "../ui/ContextMenu";
 import UserPlus from "../icons/svg/UserPlus";
+import {t} from "../../i18n";
 
 export enum ModalPage { New, Create, Join }
 
@@ -126,20 +127,19 @@ function NewGuild(props: Props) {
   const navigate = useNavigate()
   const {hideModal} = useModal()
   return (
-    <ModalTemplate title="New Server">
+    <ModalTemplate title={t('modals.new_guild.title')}>
       <div class="flex flex-col pt-2">
-        <Card title="Create a server" onClick={() => props.setPage(ModalPage.Create)}>
-          Start a new community. It can be a place for you and your friends, or you can grow it into a large community.
+        <Card title={t('modals.new_guild.create_server.label')} onClick={() => props.setPage(ModalPage.Create)}>
+          {t('modals.new_guild.create_server.description')}
         </Card>
-        <Card title="Join a server" onClick={() => props.setPage(ModalPage.Join)}>
-          Enter an invite code to join an existing server.
+        <Card title={t('modals.new_guild.join_server.label')} onClick={() => props.setPage(ModalPage.Join)}>
+          {t('modals.new_guild.join_server.description')}
         </Card>
-        <Card title="Discover servers" onClick={() => {
+        <Card title={t('modals.new_guild.discover_servers.label')} onClick={() => {
           navigate('/discover')
           hideModal()
         }}>
-          Not sure where to start? Check out the server discovery page where you can browse public servers you
-          might be interested in.
+          {t('modals.new_guild.discover_servers.description')}
         </Card>
       </div>
     </ModalTemplate>
@@ -159,7 +159,7 @@ export function NewGuildModal(srcProps: { pageSignal?: ModalPage }) {
       <Match when={page() == ModalPage.Create} keyed={false}>
         <Base
           {...props}
-          title="Create a Server"
+          title={t('modals.create_server.title')}
           placeholder={`${api.cache!.clientUser?.username}'s server`}
           onSubmit={async (name, nonce) => {
             const response = await api.request<Guild>('POST', '/guilds', { json: { name, nonce } })
@@ -167,25 +167,25 @@ export function NewGuildModal(srcProps: { pageSignal?: ModalPage }) {
               return response.errorJsonOrThrow().message
           }}
           buttonIcon={RocketLaunch}
-          buttonLabel="Create Server"
+          buttonLabel={t('modals.create_server.submit')}
           minLength={2}
           maxLength={50}
         >
           <p class="flex flex-col text-fg/70 text-center text-sm mt-2 mx-2">
-            <span>Before we create your server, let's give it a name.</span>
-            <span class="text-fg/50">You can always change this later.</span>
+            <span>{t('modals.create_server.description')}</span>
+            <span class="text-fg/50">{t('modals.create_server.description_note')}</span>
           </p>
         </Base>
       </Match>
       <Match when={page() == ModalPage.Join} keyed={false}>
         <Base
           {...props}
-          title="Join a Server"
-          placeholder="Enter an invite code..."
+          title={t('modals.join_server.title')}
+          placeholder={t('modals.join_server.placeholder')}
           onSubmit={async (code, nonce, acker) => {
             const matches = code.match(/(?:(?:https?:\/\/(?:www\.)?)?adapt\.chat\/invite\/)?(\w{6,12})\/?/) ?? code
             if (!matches || matches.length < 1)
-              return "That doesn't look like a valid invite code."
+              return t('modals.join_server.invalid_code')
 
             const response = await api.request<Member>('POST', `/invites/${matches[1]}`, { params: { nonce } })
             if (!response.ok)
@@ -200,8 +200,8 @@ export function NewGuildModal(srcProps: { pageSignal?: ModalPage }) {
           maxLength={38}
         >
           <div class="mt-2 mx-2 text-fg/70">
-            <span class="block text-center">Enter an invite code to join an existing server.</span>
-            <h2 class="font-bold mt-2 text-sm">Examples of valid invite codes:</h2>
+            <span class="block text-center">{t('modals.join_server.description')}</span>
+            <h2 class="font-bold mt-2 text-sm">{t('modals.join_server.examples_header')}</h2>
             <ul class="text-sm list-disc pl-4">
               <li>https://adapt.chat/invite/Dv6a7c2t</li>
               <li>adapt.chat/invite/Dv6a7c2t</li>
@@ -220,13 +220,13 @@ export function NewGuildModalContextMenu() {
     <ContextMenu>
       <ContextMenuButton
         icon={RocketLaunch}
-        label="Create Server"
+        label={t('modals.create_server.submit')}
         buttonClass="hover:bg-accent"
         onClick={() => showModal(ModalId.NewGuild, ModalPage.Create)}
       />
       <ContextMenuButton
         icon={UserPlus}
-        label="Join Server"
+        label={t('modals.join_server.submit')}
         onClick={() => showModal(ModalId.NewGuild, ModalPage.Join)}
       />
     </ContextMenu>

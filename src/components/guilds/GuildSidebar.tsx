@@ -21,7 +21,7 @@ import {ReactiveSet} from "@solid-primitives/set";
 import ChevronRight from "../icons/svg/ChevronRight";
 import tooltip from "../../directives/tooltip";
 import {setShowSidebar} from "../../App";
-
+import {t} from "../../i18n";
 void tooltip
 
 interface GuildDropdownButtonProps {
@@ -60,7 +60,7 @@ function Channel(props: ChannelProps) {
 
   const params = useParams()
   const navigate = useNavigate()
-  const guildId = createMemo(() => BigInt(params.guildId))
+  const guildId = createMemo(() => BigInt(params.guildId!))
   const contextMenu = useContextMenu()!
 
   const isUnread = createMemo(() => cache.isChannelUnread(props.channel.id))
@@ -91,7 +91,7 @@ function Channel(props: ChannelProps) {
           </Show>
           <ContextMenuButton
             icon={Code}
-            label="Copy Channel ID"
+            label={t("copy.channel_id.imperative")}
             onClick={() => window.navigator.clipboard.writeText(props.channel.id.toString())}
           />
           <Show when={permissions().has('MODIFY_CHANNELS')}>
@@ -170,7 +170,7 @@ function GuildMajorLink(props: { icon: IconElement, label: string, href: string,
 export default function GuildSidebar() {
   const params = useParams()
   const navigate = useNavigate()
-  const guildId = createMemo(() => BigInt(params.guildId))
+  const guildId = createMemo(() => BigInt(params.guildId!))
   const channelId = createMemo(() => params.channelId && BigInt(params.channelId))
   const contextMenu = useContextMenu()!
   const {showModal} = useModal()
@@ -261,7 +261,7 @@ export default function GuildSidebar() {
             <ContextMenu>
               <ContextMenuButton
                 icon={Code}
-                label="Copy Category ID"
+                label={t("copy.channel_id.category")}
                 onClick={() => window.navigator.clipboard.writeText(props.id.toString())}
               />
               <Show when={guildPermissions()?.has('MANAGE_CHANNELS')}>

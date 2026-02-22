@@ -1,10 +1,11 @@
 import {ModalTemplate, useModal} from "../ui/Modal";
-import {createSignal, onMount} from "solid-js";
+import {createSignal} from "solid-js";
 import {getApi} from "../../api/Api";
 import Icon from "../icons/Icon";
 import Trash from "../icons/svg/Trash";
 import {Message} from "../../types/message";
 import {MessagePrimary} from "../messaging/Chat";
+import {t} from "../../i18n";
 
 type Props = {
   message: Message,
@@ -28,9 +29,9 @@ export default function ConfirmMessageDeleteModal(props: Props) {
   }
 
   return (
-    <ModalTemplate title="Delete Message">
+    <ModalTemplate title={t('modals.delete_message.title')}>
       <p class="text-fg/70 text-sm mt-4 text-center">
-        Are you sure you want to delete this message?
+        {t('modals.delete_message.description')}
       </p>
       <div class="rounded-xl overflow-y-auto max-h-[50lvh] bg-bg-3/30 mt-2 py-4">
         <MessagePrimary message={props.message} noHoverEffects />
@@ -43,11 +44,11 @@ export default function ConfirmMessageDeleteModal(props: Props) {
         }}
       >
         <button type="button" class="btn border-none btn-ghost" onClick={hideModal}>
-          Cancel
+          {t('generic.cancel')}
         </button>
         <button type="submit" class="btn btn-danger border-none" disabled={isDeleting()}>
           <Icon icon={Trash} class="fill-fg w-4 h-4 mr-2" />
-          Delete Message
+          {t('modals.delete_message.title')}
         </button>
       </form>
     </ModalTemplate>

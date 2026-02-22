@@ -96,8 +96,8 @@ export default function Home() {
       <Show when={activeFriends().length}>
         <div class="p-5 bg-bg-0/60 backdrop-blur rounded-xl w-full">
           <div class="flex justify-between">
-            <h1 class="font-title font-bold text-xl ml-1">Active Now</h1>
-            <A href="/friends" class="btn btn-sm btn-neutral">All Friends</A>
+            <h1 class="font-title font-bold text-xl ml-1">{t('home.active_now')}</h1>
+            <A href="/friends" class="btn btn-sm btn-neutral">{t('home.all_friends')}</A>
           </div>
           <div class="flex gap-x-3 mt-2 overflow-x-auto pb-1">
             <For each={activeFriends()}>
@@ -154,7 +154,7 @@ export default function Home() {
                   class="font-medium underline underline-offset-2"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  Adapt Community
+                  {t('home.onboarding.join_guild.official_server_name')}
                 </A>
               )
             })}
@@ -163,7 +163,9 @@ export default function Home() {
       </div>
       <Show when={activeConversations().length}>
         <div class="p-5 bg-bg-0/60 backdrop-blur rounded-xl flex-grow max-w-1/3">
-          <h1 class="font-title font-bold text-xl ml-1 mb-3">Ongoing Conversations</h1>
+          <h1 class="font-title font-bold text-xl ml-1 mb-3">
+            {t('home.ongoing_conversations')}
+          </h1>
           <div class="flex flex-col gap-y-2">
             <For each={activeConversations().slice(0, 5)}>
               {({ channel, user, guild, icon, lastMessage }) => (
@@ -198,9 +200,7 @@ export default function Home() {
                           </span>&nbsp;
                           {lastMessage.content?.slice(0, 100)}{(lastMessage.content?.length ?? 0) > 100 && '...'}
                         </>
-                      ) : (
-                        'Message not loaded yet. (Message data will be provided in a future update)'
-                      )}
+                      ) : t('home.ongoing_conversations.message_not_loaded')}
                     </div>
                   </div>
                   <Icon icon={ChevronRight} class="fill-fg/60 w-4 h-4 mx-1" />

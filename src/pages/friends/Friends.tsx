@@ -6,6 +6,7 @@ import {ActionButton} from "../../App";
 import {createMediaQuery} from "@solid-primitives/media";
 import {relationshipFilterFactory} from "./Requests";
 import {getApi} from "../../api/Api";
+import {t} from "../../i18n";
 
 export interface NavEntryProps {
   href: string,
@@ -42,11 +43,14 @@ export function FriendsNav() {
 
   return (
     <span class="flex items-center">
-      Friends
+      {t('friends.header')}
       <div class="bg-fg/20 w-0.5 h-full mx-4 rounded-full select-none">&nbsp;</div>
       <div class="flex items-center gap-2 max-w-sm overflow-x-auto">
-        <NavEntry href="/friends" label="Friends" />
-        <NavEntry href="/friends/requests" label={isXs() ? "Req." : "Requests"} ping={!!incoming()?.length} />
+        <NavEntry href="/friends" label={t('friends.tabs.all')} />
+        <NavEntry
+          href="/friends/requests" 
+          label={t(isXs() ? "friends.tabs.pending_short" : "friends.tabs.pending")} ping={!!incoming()?.length} 
+        />
       </div>
     </span>
   )
@@ -58,7 +62,7 @@ export function FriendActions() {
   return (
     <ActionButton
       id="add-friend"
-      onClick={() => showModal(ModalId.AddFriend)} icon={UserPlus} label="Add Friend"
+      onClick={() => showModal(ModalId.AddFriend)} icon={UserPlus} label={t('friends.add')}
     />
   )
 }

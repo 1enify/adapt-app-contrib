@@ -8,6 +8,7 @@ import Check from "../icons/svg/Check";
 import Plus from "../icons/svg/Plus";
 import {displayName} from "../../utils";
 import At from "../icons/svg/At";
+import {t, tJsx} from "../../i18n";
 
 export default function AddFriendModal() {
   let inputRef: HTMLInputElement | null = null
@@ -37,31 +38,31 @@ export default function AddFriendModal() {
   onCleanup(() => unsubscribe()?.())
 
   return (
-    <ModalTemplate title="Add Friend">
-      <p class="mt-2 text-fg/50 text-center text-sm">
-        Ask your friend to give you their unique username, and enter it below.
-      </p>
+    <ModalTemplate title={t('modals.add_friend.title')}>
+      <p class="mt-2 text-fg/50 text-center text-sm">{t('modals.add_friend.description')}</p>
       <p class="flex items-center mt-1 text-sm w-full justify-center text-fg/70">
-        <span>Your username is</span>
-        <button
-          class="font-medium font-mono bg-0 rounded-lg py-0.5 px-1 ml-1 text-fg/80 hover:bg-3"
-          onClick={() => {
-            setCopyingUsername(true)
-            navigator.clipboard.writeText(api.cache?.clientUser?.username!).then(() => {
-              setTimeout(() => setCopyingUsername(false), 1000)
-            })
-          }}
-        >
-          <Show when={!copyingUsername()} fallback={(
-            <span class="text-success flex items-center gap-x-1">
-              <Icon icon={Check} class="w-4 h-4 mr-1 fill-success" />
-              Copied!
-            </span>
-          )}>
-            @{api.cache?.clientUser?.username}
-          </Show>
-        </button>
-        .
+        {tJsx('modals.add_friend.your_username_is', {
+          username: (
+            <button
+              class="font-medium font-mono bg-0 rounded-lg py-0.5 px-1 ml-1 text-fg/80 hover:bg-3"
+              onClick={() => {
+                setCopyingUsername(true)
+                navigator.clipboard.writeText(api.cache?.clientUser?.username!).then(() => {
+                  setTimeout(() => setCopyingUsername(false), 1000)
+                })
+              }}
+            >
+              <Show when={!copyingUsername()} fallback={(
+                <span class="text-success flex items-center gap-x-1">
+                  <Icon icon={Check} class="w-4 h-4 mr-1 fill-success" />
+                  {t('generic.copied')}
+                </span>
+              )}>
+                @{api.cache?.clientUser?.username}
+              </Show>
+            </button>
+          )
+        })}
       </p>
       <form
         class="mt-4 flex rounded-lg overflow-hidden"
@@ -70,7 +71,7 @@ export default function AddFriendModal() {
           const username = inputRef!.value
 
           if (!/^[a-zA-Z0-9][a-zA-Z0-9.\-_]{0,30}[a-zA-Z0-9]$/.test(username)) {
-            setError("Invalid username format. Make sure this is the username (not display name).")
+            setError(t('modals.add_friend.invalid_username'))
             return
           }
 
@@ -98,7 +99,7 @@ export default function AddFriendModal() {
           name="tag"
           autocomplete="off"
           class="flex-1 px-1.5 py-2 bg-0 focus:outline-none"
-          placeholder="Username"
+          placeholder={t('modals.add_friend.username_placeholder')}
           onInput={() => setError()}
           required
         />
@@ -113,7 +114,7 @@ export default function AddFriendModal() {
         >
           <Icon
             icon={added() ? Check : Plus}
-            title="Copy to clipboard"
+            title={t('generic.copy_to_clipboard')}
             class="w-4 h-4 fill-fg"
           />
         </button>
@@ -127,16 +128,18 @@ export default function AddFriendModal() {
             {(user: User) => (
               <span class="inline-flex items-center flex-wrap text-fg/70">
                 <Icon icon={Check} class="w-4 h-4 mr-2 fill-fg opacity-70 select-none" />
-                Requested to add
-                <span class="flex bg-0 rounded-lg p-1 mx-1">
-                  <img
-                    src={api.cache?.avatarOf(user.id)}
-                    alt=""
-                    class="w-6 h-6 rounded-full mr-1 select-none"
-                  />
-                  {displayName(user)}
-                </span>
-                as a friend.
+                {tJsx('modals.add_friend.requested_to_add', {
+                  username: (
+                    <span class="flex bg-0 rounded-lg p-1 mx-1">
+                      <img
+                        src={api.cache?.avatarOf(user.id)}
+                        alt=""
+                        class="w-6 h-6 rounded-full mr-1 select-none"
+                      />
+                      {displayName(user)}
+                    </span>
+                  )
+                })}
               </span>
             )}
           </For>

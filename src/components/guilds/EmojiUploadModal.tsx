@@ -5,6 +5,7 @@ import { useParams } from "@solidjs/router";
 import { toast } from "solid-toast";
 import ArrowUpFromBracket from "../icons/svg/ArrowUpFromBracket";
 import Icon from "../icons/Icon";
+import { t } from "../../i18n"; 
 
 type Props = {
   file: File;
@@ -49,35 +50,35 @@ export default function EmojiUploadModal(props: Props) {
       });
 
       if (!response.ok) {
-        toast.error("Failed to upload emoji");
+        toast.error(t('modals.upload_emoji.error'));
         return;
       }
 
       const newEmoji = response.jsonOrThrow();
       api.cache?.updateEmoji(newEmoji);
-      toast.success("Emoji uploaded successfully");
+      toast.success(t('modals.upload_emoji.success'));
       hideModal();
     } catch (error) {
-      toast.error("Failed to upload emoji");
+      toast.error(t('modals.upload_emoji.error'));
     } finally {
       setUploading(false);
     }
   };
 
   return (
-    <ModalTemplate title="Upload Emoji">
+    <ModalTemplate title={t('modals.upload_emoji.title')}>
       <form onSubmit={handleUpload} class="mt-4 w-[300px] flex flex-col">
         <div class="flex flex-col items-center gap-4">
           <div class="w-32 h-32 bg-bg-1 rounded-lg flex items-center justify-center">
             <img
               src={previewUrl()}
-              alt="Emoji preview"
+              alt={t('modals.upload_emoji.preview_alt')}
               class="max-w-full max-h-full object-contain"
             />
           </div>
           <div class="w-full">
             <label for="emoji-name" class="px-1 block text-sm font-bold uppercase text-fg/70 mb-2">
-              Emoji Name
+              {t('modals.upload_emoji.name_label')}
             </label>
             <input
               id="emoji-name"
@@ -85,7 +86,7 @@ export default function EmojiUploadModal(props: Props) {
               class="w-full bg-bg-1 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
               value={name()}
               onInput={(e) => setName(e.currentTarget.value)}
-              placeholder="Enter emoji name"
+              placeholder={t('modals.upload_emoji.name_placeholder')}
             />
           </div>
         </div>
@@ -96,7 +97,7 @@ export default function EmojiUploadModal(props: Props) {
             onClick={() => hideModal()}
             disabled={uploading()}
           >
-            Cancel
+            {t('generic.cancel')}
           </button>
           <button
             type="submit"
@@ -104,7 +105,7 @@ export default function EmojiUploadModal(props: Props) {
             disabled={!name() || uploading()}
           >
             <Icon icon={ArrowUpFromBracket} class="w-4 h-4 fill-fg mr-2" />
-            {uploading() ? "Uploading..." : "Upload"}
+            {uploading() ? t('modals.upload_emoji.submitting') : t('generic.upload')}
           </button>
         </div>
       </form>

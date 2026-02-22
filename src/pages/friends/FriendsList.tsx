@@ -10,6 +10,7 @@ import MessageIcon from "../../components/icons/svg/Message";
 import Icon from "../../components/icons/Icon";
 import Header from "../../components/ui/Header";
 import {FriendsNav} from "./Friends";
+import {t} from "../../i18n";
 noop(tooltip)
 
 export async function openDms(api: Api, navigate: Navigator, userId: bigint, effect?: () => void) {
@@ -43,27 +44,29 @@ export default function FriendsList() {
       </Header>
       <Show when={friends().length} fallback={(
         <div class="text-center font-medium text-fg/60 p-4">
-          You currently have no friends (just like Cryptex).
+          {t('friends.no_friends.remark')}
           <button
             class="ml-2 btn btn-sm btn-primary"
             onClick={() => document.getElementById('add-friend')?.click()}
           >
-            Add some?
+            {t('friends.no_friends.action')}
           </button>
         </div>
       )}>
-        <div class="divider font-title font-medium text-fg/60 mx-2 my-2">All Friends ({friends().length})</div>
+        <div class="divider font-title font-medium text-fg/60 mx-2 my-2">
+          {t('friends.dividers.all', { count: friends().length })}
+        </div>
         <For each={friends()}>
           {([id, _], index) => (
             <FriendEntry api={api} id={id} index={index}>
               <button
                 class="p-2.5 rounded-full bg-bg-3/70 hover:bg-accent transition duration-200"
                 onClick={() => openDms(api, navigate, id)}
-                use:tooltip={{ content: "Open DM", placement: 'left' }}
+                use:tooltip={{ content: t('friends.actions.dm'), placement: 'left' }}
               >
-                <Icon icon={MessageIcon} title="Open DM" class="w-3.5 h-3.5 fill-fg"/>
+                <Icon icon={MessageIcon} title={t('friends.actions.dm')} class="w-3.5 h-3.5 fill-fg"/>
               </button>
-              <RelationshipDeleteButton api={api} id={id} label="Remove Friend" />
+              <RelationshipDeleteButton api={api} id={id} label={t('friends.actions.unfriend')} />
             </FriendEntry>
           )}
         </For>

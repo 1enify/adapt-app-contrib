@@ -6,6 +6,7 @@ import Icon from "../icons/Icon";
 import Trash from "../icons/svg/Trash";
 import {Role} from "../../types/guild";
 import {snowflakes} from "../../utils";
+import {t, tJsx} from "../../i18n";
 
 type Props = {
   role: Role,
@@ -21,10 +22,12 @@ export default function ConfirmRoleDeleteModal(props: Props) {
   const [isDeleting, setIsDeleting] = createSignal<boolean>(false)
 
   return (
-    <ModalTemplate title="Delete Role">
+    <ModalTemplate title={t('modals.delete_role.title')}>
       <p class="text-fg/70 text-center text-sm mt-4">
-        Are you sure you want to delete the role <b>{props.role.name}</b> in {guild()?.name}?
-        You will not be able to undo this action.
+        {tJsx('modals.delete_role.description', {
+          role_name: <b>{props.role.name}</b>,
+          guild_name: guild()?.name
+        })}
       </p>
       <form
         class="flex flex-wrap justify-end mt-4 gap-x-4"
@@ -46,11 +49,11 @@ export default function ConfirmRoleDeleteModal(props: Props) {
         }}
       >
         <button class="btn border-none btn-ghost" onClick={hideModal}>
-          Cancel
+          {t('generic.cancel')}
         </button>
         <button type="submit" class="btn btn-danger border-none" disabled={isDeleting()}>
           <Icon icon={Trash} class="fill-fg w-4 h-4 mr-2" />
-          Delete Role
+          {t('modals.delete_role.title')}
         </button>
       </form>
     </ModalTemplate>

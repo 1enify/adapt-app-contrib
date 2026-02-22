@@ -7,6 +7,7 @@ import { Navigator, useNavigate } from "@solidjs/router";
 import { openDms } from "../../pages/friends/FriendsList";
 import { Channel } from "../../types/channel";
 import { ChannelCreateEvent } from "../../types/ws";
+import { t } from "../../i18n";
 
 export async function createGroupDm(
   api: Api, navigate: Navigator, name: string,recipientIds: bigint[], effect?: () => void
@@ -79,9 +80,9 @@ export default function NewConversationModal() {
   }
 
   return (
-    <ModalTemplate title="New Conversation">
+    <ModalTemplate title={t('modals.new_conversation.title')}>
       <p class="text-sm mt-2 text-fg/60 text-center font-light">
-        Select friends to start a new conversation with.
+        {t('modals.new_conversation.description')}
       </p>
       <form class="mt-4" onSubmit={onSubmit}>
         <div class="mb-4 max-h-80 sm:min-w-[320px] w-full overflow-auto pr-1">
@@ -108,7 +109,9 @@ export default function NewConversationModal() {
           </For>
         </div>
         <Show when={selected().length > 1}>
-          <label class="text-fg/60 text-xs font-bold uppercase">Group Name</label>
+          <label class="text-fg/60 text-xs font-bold uppercase">
+            {t('modals.new_conversation.group_name')}
+          </label>
           <input
             ref={nameInputRef!}
             type="text"
@@ -120,10 +123,15 @@ export default function NewConversationModal() {
         </Show>
         <div class="flex justify-end gap-2 mt-4">
           <button type="button" class="btn btn-ghost" onClick={() => hideModal()}>
-            Cancel
+            {t('generic.cancel')}
           </button>
           <button type="submit" disabled={isCreating() || !selected().length} class="btn btn-primary">
-            {selected().length === 0 ? 'Start Conversation' : selected().length === 1 ? 'Open DM' : 'Create Group'}
+            {t(selected().length === 0 
+              ? 'modals.new_conversation.submit' 
+              : selected().length === 1 
+              ? 'modals.new_conversation.submit_dm' 
+              : 'modals.new_conversation.submit_group'
+            )}
           </button>
         </div>
       </form>

@@ -19,6 +19,7 @@ import UserPlus from "../icons/svg/UserPlus";
 import {ModalPage, NewGuildModalContextMenu} from "./NewGuildModal";
 import {DmChannel} from "../../types/channel";
 import {Tab} from "../../App";
+import {t} from "../../i18n";
 
 noop(tooltip)
 
@@ -49,19 +50,19 @@ export function GuildContextMenu(props: { guild: Guild }) {
     <ContextMenu>
       <ContextMenuButton
         icon={UserPlus}
-        label="Invite People"
+        label={t('guild.actions.invite_people')}
         buttonClass="hover:bg-accent"
         onClick={() => showModal(ModalId.CreateInvite, props.guild)}
       />
       <ContextMenuButton
         icon={Code}
-        label="Copy Server ID"
+        label={t('copy.server_id.imperative')}
         onClick={() => window.navigator.clipboard.writeText(props.guild.id.toString())}
       />
       <Show when={api.cache!.clientId !== props.guild.owner_id}>
         <DangerContextMenuButton
           icon={RightFromBracket}
-          label="Leave Server"
+          label={t('guild.actions.leave_server')}
           onClick={() => showModal(ModalId.LeaveGuild, props.guild)}
         />
       </Show>
@@ -81,7 +82,7 @@ export default function GuildSideSelect() {
     <div class="h-full overflow-y-auto hide-scrollbar">
       <div class="flex flex-col p-2 gap-y-2 min-h-full">
         <div class="flex flex-col items-center">
-          <BasicButton icon={HomeIcon} alt="Home" href="/" />
+          <BasicButton icon={HomeIcon} alt={t('sidebar.main.static.home')} href="/" />
         </div>
         <For each={dmChannelOrder()}>
           {(channelId) => {

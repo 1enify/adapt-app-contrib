@@ -3,6 +3,7 @@ import { getApi } from "../../api/Api";
 import { ModalTemplate, useModal } from "../ui/Modal";
 import { extendedColor } from "../../utils";
 import { memberKey } from "../../api/ApiCache";
+import { t, tJsx } from "../../i18n";
 
 export default function EditMemberRolesModal(props: { guildId: bigint, memberId: bigint }) {
   const api = getApi()!;
@@ -31,10 +32,14 @@ export default function EditMemberRolesModal(props: { guildId: bigint, memberId:
   const guildName = createMemo(() => guild()?.name ?? 'Unknown Guild');
 
   return (
-    <ModalTemplate title="Edit Roles">
+    <ModalTemplate title={t('modals.edit_roles.title')}>
       <p class="text-sm mt-2 text-fg/60 text-center font-light">
-        You are editing roles for <b>{username()}</b> in <b>{guildName()}</b>.<br />
-        Roles will be updated once you press "Save".
+        {tJsx('modals.edit_roles.description', {
+          username: <b>{username()}</b>,
+          guild: <b>{guildName()}</b>
+        })}
+        <br />
+        {t('modals.edit_roles.save_note')}
       </p>
       <div class="mt-4 max-h-80 sm:min-w-[320px] w-full overflow-auto pr-1">
         <For each={allRoles()}>
@@ -62,10 +67,10 @@ export default function EditMemberRolesModal(props: { guildId: bigint, memberId:
       </div>
       <div class="flex justify-end gap-2 mt-4">
         <button type="button" class="btn btn-ghost" onClick={() => hideModal()}>
-          Cancel
+          {t('generic.cancel')}
         </button>
         <button type="button" class="btn btn-primary" onClick={() => void save()}>
-          Save
+          {t('generic.save')}
         </button>
       </div>
     </ModalTemplate>

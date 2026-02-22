@@ -5,6 +5,7 @@ import {getApi} from "../../api/Api";
 import {useNavigate, useParams} from "@solidjs/router";
 import Icon from "../icons/Icon";
 import Trash from "../icons/svg/Trash";
+import {t, tJsx} from "../../i18n";
 
 type Props = {
   channel: GuildChannel,
@@ -21,10 +22,12 @@ export default function ConfirmChannelDeleteModal(props: Props) {
   const colloquial = () => props.channel.type === 'text' ? `#${props.channel.name}` : props.channel.name
 
   return (
-    <ModalTemplate title="Delete Channel">
+    <ModalTemplate title={t('modals.delete_channel.title')}>
       <p class="text-fg/70 text-center text-sm mt-4">
-        Are you sure you want to delete <b>{colloquial()}</b> in {guild()?.name}? You will not be able to undo this action.
-        All data and messages associated with this channel will be deleted and you will not be able to recover them in the future.
+        {tJsx('modals.delete_channel.description', {
+          channel: <b>{colloquial()}</b>,
+          guild: guild()?.name
+        })}
       </p>
       <form
         class="flex flex-wrap justify-end mt-4 gap-x-4"
@@ -43,11 +46,11 @@ export default function ConfirmChannelDeleteModal(props: Props) {
         }}
       >
         <button type="button" class="btn border-none btn-ghost" onClick={hideModal}>
-          Cancel
+          {t('generic.cancel')}
         </button>
         <button type="submit" class="btn btn-danger border-none" disabled={isDeleting()}>
           <Icon icon={Trash} class="fill-fg w-4 h-4 mr-2" />
-          Delete #{props.channel.name}
+          {t('modals.delete_channel.submit', {channel: '#' + props.channel.name})}
         </button>
       </form>
     </ModalTemplate>

@@ -5,6 +5,7 @@ import {ModalId, ModalTemplate, useModal} from "../ui/Modal";
 import Check from "../icons/svg/Check";
 import Icon from "../icons/Icon";
 import ClipboardIcon from "../icons/svg/Clipboard";
+import {t, tJsx} from "../../i18n";
 
 export default function GuildInviteModal(props: { guild: Guild }) {
   let inputRef: HTMLInputElement | null = null
@@ -33,16 +34,18 @@ export default function GuildInviteModal(props: { guild: Guild }) {
   })
 
   return (
-    <ModalTemplate title="Invite People">
+    <ModalTemplate title={t('modals.invite_people.title')}>
       <p class="text-fg/70 text-center mt-2">
-        Invite people to join <b>{props.guild.name}</b> by sending them this link:
+        {tJsx('modals.invite_people.description', {
+          guild: <b>{props.guild.name}</b>
+        })}
       </p>
       <div class="flex items-center justify-between bg-0 mt-4 rounded-lg box-border overflow-hidden">
         <input
           ref={inputRef!}
           type="text"
           class="bg-transparent p-2 text-fg flex-grow outline-none focus:text-accent-light transition"
-          value={code() ? `https://adapt.chat/invite/${code()}` : 'Loading...'}
+          value={code() ? `https://adapt.chat/invite/${code()}` : t('generic.loading')}
           readonly
         />
         <button
@@ -60,7 +63,7 @@ export default function GuildInviteModal(props: { guild: Guild }) {
         >
           <Icon
             icon={copied() ? Check : ClipboardIcon}
-            title="Copy to clipboard"
+            title={t('generic.copy_to_clipboard')}
             class="w-4 h-4 fill-fg"
           />
         </button>
