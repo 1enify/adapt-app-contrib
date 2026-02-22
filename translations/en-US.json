@@ -175,8 +175,8 @@
         "description": "Roles are used to group members in your server and grant them permissions.",
         "search": "Search Roles",
         "create": "Create Role",
-        "members_one": "{{count}} Member",
         "members_zero": "No Members",
+        "members_one": "{{count}} Member",
         "members_other": "{{count}} Members",
         "default": {
           "large": "Manage Default Permissions",
@@ -201,7 +201,8 @@
           }
         },
         "locked": "Locked",
-        "new_role": "New Role"
+        "new_role": "New Role",
+        "delete_role": "Delete Role"
       },
       "emojis": {
         "header": "Emojis",
@@ -214,11 +215,6 @@
           "created_by": "Created by {{username}}"
         },
         "no_permission": "You need the Manage Emojis permission to modify emojis.",
-        "actions": {
-          "save": "Save",
-          "cancel": "Cancel",
-          "delete": "Delete"
-        },
         "failed_delete": "Failed to delete emoji",
         "deleted": "Emoji deleted successfully",
         "failed_rename": "Failed to rename emoji",
@@ -439,7 +435,8 @@
         "description": "Members with this permission have the ability to override all permissions and any channel on the server."
       }
     },
-    "save": "Save Changes?"
+    "save": "Save Changes?",
+    "exit": "Exit Settings"
   },
   "home": {
     "welcome": "Welcome, {{username}}!",
@@ -598,8 +595,7 @@
       "title": "Create a Server",
       "description": "Before we create your server, let's give it a name.",
       "description_note": "You can always change this later.",
-      "submit": "Create Server",
-      "back": "Back"
+      "submit": "Create Server"
     },
     "join_server": {
       "title": "Join a Server",
@@ -607,8 +603,7 @@
       "description": "Enter an invite code to join an existing server.",
       "examples_header": "Examples of valid invite codes:",
       "invalid_code": "That doesn't look like a valid invite code.",
-      "submit": "Join Server",
-      "back": "Back"
+      "submit": "Join Server"
     },
     "create_channel": {
       "title": "Create Channel",
@@ -626,19 +621,16 @@
           "unsupported": "Voice channels are not supported yet."
         }
       },
-      "submit": "Create Channel",
-      "back": "Back"
+      "submit": "Create Channel"
     },
     "create_category": {
       "title": "Create Category",
       "name_label": "What do you want to name this category?",
-      "submit": "Create Category",
-      "back": "Back"
+      "submit": "Create Category"
     },
     "delete_message": {
       "title": "Delete Message",
       "description": "Are you sure you want to delete this message?",
-      "cancel": "Cancel",
       "submit": "Delete Message"
     },
     "delete_server": {
@@ -648,13 +640,11 @@
       "password_label": "Enter your password",
       "password_placeholder": "Password",
       "name_mismatch": "Guild name does not match",
-      "cancel": "Cancel",
       "submit": "Delete Server"
     },
     "leave_server": {
       "title": "Leave Server",
       "description": "Are you sure you want to leave <b>{{name}}</b>? You will be unable to rejoin unless you are re-invited.",
-      "cancel": "Cancel",
       "submit": "Leave"
     },
     "create_role": {
@@ -683,31 +673,24 @@
       "title": "Custom Status",
       "description": "Set a custom status for your account.",
       "custom_status_label": "Custom Status",
-      "custom_status_placeholder": "So sleepy...",
-      "submit": "Save"
+      "custom_status_placeholder": "So sleepy..."
     },
     "edit_nickname": {
       "title": "Edit Nickname",
       "description": "You are changing {{username}}'s nickname in {{guild}}.",
       "visible_note": "This will be visible to all members in this server.",
-      "placeholder": "Enter nickname...",
-      "cancel": "Cancel",
-      "submit": "Save"
+      "placeholder": "Enter nickname..."
     },
     "edit_roles": {
       "title": "Edit Roles",
       "description": "You are editing roles for <b>{{username}}</b> in <b>{{guild}}</b>.",
-      "save_note": "Roles will be updated once you press \"Save\".",
-      "cancel": "Cancel",
-      "submit": "Save"
+      "save_note": "Roles will be updated once you press \"Save\"."
     },
     "upload_emoji": {
       "title": "Upload Emoji",
       "name_label": "Emoji Name",
       "name_placeholder": "Enter emoji name",
       "preview_alt": "Emoji preview",
-      "cancel": "Cancel",
-      "submit": "Upload",
       "submitting": "Uploading...",
       "success": "Emoji uploaded successfully",
       "error": "Failed to upload emoji"
@@ -733,7 +716,6 @@
     "new_server": "New Server"
   },
   "avatar": {
-    "edit": "Edit",
     "edit_title": "Edit Avatar"
   }
 }
