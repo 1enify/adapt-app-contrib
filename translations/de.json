@@ -651,15 +651,12 @@
     },
     "invite_people": {
       "title": "Leute einladen",
-      "description": "Laden Sie Leute ein, mitzumachen {{name}} indem Sie ihnen diesen Link senden:",
-      "loading": "Laden...",
-      "copy_to_clipboard": "In die Zwischenablage kopieren"
+      "description": "Laden Sie Leute ein, mitzumachen {{name}} indem Sie ihnen diesen Link senden:"
     },
     "add_friend": {
       "title": "Freund hinzufügen",
       "description": "Bitten Sie Ihren Freund, Ihnen seinen eindeutigen Benutzernamen zu geben, und geben Sie ihn unten ein.",
       "your_username_is": "Ihr Benutzername ist",
-      "copied": "Kopiert!",
       "username_placeholder": "Benutzername",
       "invalid_username": "Ungültiges Benutzernamenformat. ",
       "requested_to_add": "Zum Hinzufügen aufgefordert {{username}} als Freund."
@@ -701,13 +698,6 @@
     }
   },
   "guild": {
-    "context_menu": {
-      "invite_people": "Leute einladen",
-      "copy_server_id": "Server-ID kopieren",
-      "leave_server": "Verlassen Sie den Server",
-      "create_server": "Server erstellen",
-      "join_server": "Dem Server beitreten"
-    },
     "new_server": "Neuer Server"
   },
   "avatar": {
