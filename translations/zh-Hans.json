@@ -474,6 +474,9 @@
         "decline": "拒绝请求",
         "revoke": "撤回请求"
       }
+    },
+    "no_friends": {
+      "remark": "您目前（像Cryptex）是没有好友。"
     }
   },
   "time": {
