@@ -40,7 +40,6 @@
     "delete_group": "删除群组",
     "leave_group": "离开群组",
     "close_dm": "关闭私信",
-    "group_members_one": "{{count}} 位成员",
     "group_members_other": "{{count}} 位成员",
     "no_messages": "暂无消息"
   },
@@ -82,8 +81,6 @@
         "fallback": "设置自定义状态"
       },
       "user_settings": "设置"
-    },
-    "guild": {
     },
     "members": {
       "collapse": "隐藏成员列表",
@@ -148,8 +145,6 @@
     "guild": {
       "channel": {
         "header": "频道设置",
-        "tabs": {},
-        "sections": {},
         "delete": "删除频道"
       },
       "header": "服务器设置",
@@ -175,8 +170,6 @@
         "description": "身份组用于对服务器成员进行分组并授予相应权限。",
         "search": "搜索身份组",
         "create": "创建身份组",
-        "members_one": "{{count}} 位成员",
-        "members_zero": "暂无成员",
         "members_other": "{{count}} 位成员",
         "default": {
           "large": "管理默认权限",
@@ -201,8 +194,7 @@
           }
         },
         "locked": "已锁定",
-        "new_role": "新建身份组",
-        "back": "返回"
+        "new_role": "新建身份组"
       },
       "emojis": {
         "header": "表情",
@@ -240,7 +232,6 @@
         "expiry_left": "剩余 {{delta}}",
         "all_inviters": "全部邀请人",
         "search_users": "搜索用户…",
-        "count_one": "{{count}} 个邀请",
         "count_other": "{{count}} 个邀请",
         "loading": "正在加载…",
         "none_found": "未找到邀请链接。",
@@ -296,8 +287,7 @@
           "join_date_desc": "加入时间（降序）"
         }
       },
-      "delete": "删除服务器",
-      "delete_server": "删除服务器"
+      "delete": "删除服务器"
     },
     "permissions": {
       "categories": {
@@ -546,36 +536,19 @@
       "username_available": "用户名可用！"
     }
   },
-  "account": {
-    "header": "账户",
-    "username": "用户名",
-    "display_name": "显示名称",
-    "credentials": "登录凭据",
-    "email": "邮箱",
-    "show_email": "显示邮箱",
-    "hide_email": "隐藏邮箱",
-    "save": "保存",
-    "cancel": "取消",
-    "edit": "编辑"
-  },
   "chat": {
     "message_input_placeholder": "发送消息…",
     "no_permission": "您没有在此频道发送消息的权限。",
     "jump_to_newer": "跳转至最新消息",
-    "upload": "上传",
     "add_emoji": "添加表情",
     "send": "发送",
     "reply": "回复",
-    "more": "更多",
     "add_reaction": "添加表情回应",
     "unknown_message": "未知消息",
     "mention_when_replying": "回复时提及 @{{name}}",
     "do_not_mention_when_replying": "回复时不提及 @{{name}}",
-    "remove_reply": "移除",
     "bot_badge": "机器人",
-    "typing_one": "{{user}} 正在输入…",
-    "typing_two": "{{user1}} 和 {{user2}} 正在输入…",
-    "typing_many": "{{users}}、{{last}} 等人正在输入…",
+    "typing_other": "",
     "typing_suffix_is": "正在输入…",
     "typing_suffix_are": "正在输入…",
     "context_menu": {
@@ -694,8 +667,7 @@
       "copied": "已复制！",
       "username_placeholder": "用户名",
       "invalid_username": "用户名格式无效。请确认输入的是用户名而非显示名称。",
-      "requested_to_add": "已请求添加",
-      "as_a_friend": "为好友。"
+      "requested_to_add": "已请求添加"
     },
     "set_presence": {
       "title": "自定义状态",
@@ -749,23 +721,6 @@
       "join_server": "加入服务器"
     },
     "new_server": "新建服务器"
-  },
-  "role": {
-    "name_label": "身份组名称",
-    "color_label": "身份组颜色",
-    "preview_label": "预览",
-    "pick_color": "选择颜色",
-    "remove_color": "移除",
-    "dark_theme": "深色主题",
-    "light_theme": "浅色主题",
-    "hoist": {
-      "label": "独立显示此身份组成员",
-      "description": "在成员列表中将拥有此身份组的成员单独分组显示"
-    },
-    "mentionable": {
-      "label": "允许所有人提及此身份组",
-      "description": "允许所有成员无论权限如何，均可集体提及拥有此身份组的全体成员"
-    }
   },
   "avatar": {
     "edit": "编辑",

@@ -78,8 +78,6 @@
       },
       "user_settings": "Налады"
     },
-    "guild": {
-    },
     "members": {
       "collapse": "Схвавць удзельнікаў",
       "expand": "Паказаць удзельнікаў"
@@ -91,12 +89,6 @@
   "settings": {
     "user": {
       "header": "Налады",
-      "tabs": {
-        "account": "Уліковы запіс",
-        "themes": "Тэмы",
-        "plugins": "Убудовы",
-        "bots": "Боты"
-      },
       "sections": {
         "root": "Налады карыстача",
         "client": "Кліент",
@@ -108,18 +100,9 @@
     "guild": {
       "channel": {
         "header": "Налады канала",
-        "tabs": {},
-        "sections": {},
         "delete": "Выдаліць канал"
       },
       "header": "Налады сэрвэра",
-      "tabs": {
-        "overview": "Агульныя",
-        "roles": "Ролі",
-        "emojis": "Эмодзі",
-        "invites": "Запрашэньні",
-        "members": "Удзельнікі"
-      },
       "sections": {
         "management": "Кіраваньне"
       },
@@ -139,7 +122,6 @@
         "description": "Ролі выкарыстоўваюцца для групаваньня й выдачы дазволаў удзельнікам вашага сэрвэра.",
         "search": "Пошук роляў",
         "create": "Стварыць ролю",
-        "members_zero": "Няма ўдзельнікаў",
         "members_one": "{{count}} удзельнік",
         "members_few": "{{count}} удзельніка",
         "members_many": "{{count}} удзельнікаў",
